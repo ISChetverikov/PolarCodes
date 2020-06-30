@@ -1,0 +1,433 @@
+SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 3
+# 	k: 4
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+1, 4.0103, 0.63021, 0.00976563, 100, 10240, 114
+1.5, 4.5103, 0.594956, 0.00543154, 100, 18411, 154
+2, 5.0103, 0.561675, 0.00272814, 100, 36655, 304
+2.5, 5.5103, 0.530255, 0.00123776, 100, 80791, 670
+3, 6.0103, 0.500593, 0.000497763, 100, 200899, 1737
+3.5, 6.5103, 0.472591, 0.000177728, 100, 562659, 5136
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SC
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 3
+# 	k: 4
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+1, 4.0103, 0.63021, 0.00936417, 100, 10679, 71
+1.5, 4.5103, 0.594956, 0.0050158, 100, 19937, 134
+2, 5.0103, 0.561675, 0.00248707, 100, 40208, 288
+2.5, 5.5103, 0.530255, 0.00157468, 100, 63505, 444
+3, 6.0103, 0.500593, 0.000490733, 100, 203777, 1438
+3.5, 6.5103, 0.472591, 0.000199876, 100, 500310, 3399
+
+# Fano
+1, 4.0103, 0.63021, 0.0100837, 100, 9917, 87
+1.5, 4.5103, 0.594956, 0.00593542, 100, 16848, 140
+2, 5.0103, 0.561675, 0.00256555, 100, 38978, 326
+2.5, 5.5103, 0.530255, 0.00129431, 100, 77261, 656
+3, 6.0103, 0.500593, 0.000508839, 100, 196526, 1670
+3.5, 6.5103, 0.472591, 0.000183603, 100, 544653, 5025
+Error was ocurred:
+Sequence length does not match with code length
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+1, 2.24939, 0.63021, 0.884956, 100, 113, 37
+1.5, 2.74939, 0.594956, 0.900901, 100, 111, 31
+2, 3.24939, 0.561675, 0.826446, 100, 121, 41
+2.5, 3.74939, 0.530255, 0.884956, 100, 113, 44
+3, 4.24939, 0.500593, 0.952381, 100, 105, 29
+3.5, 4.74939, 0.472591, 0.862069, 100, 116, 48
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+1, 2.24939, 0.63021, 0.840336, 100, 119, 38
+1.5, 2.74939, 0.594956, 0.862069, 100, 116, 34
+2, 3.24939, 0.561675, 0.862069, 100, 116, 33
+2.5, 3.74939, 0.530255, 0.884956, 100, 113, 33
+3, 4.24939, 0.500593, 0.862069, 100, 116, 32
+3.5, 4.74939, 0.472591, 0.877193, 100, 114, 31
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 2
+# 	k: 3
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\4.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 3
+# 	k: 4
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+1, 4.0103, 0.63021, 0.925926, 100, 108, 3
+1.5, 4.5103, 0.594956, 0.952381, 100, 105, 0
+2, 5.0103, 0.561675, 0.943396, 100, 106, 0
+2.5, 5.5103, 0.530255, 0.934579, 100, 107, 0
+3, 6.0103, 0.500593, 0.952381, 100, 105, 0
+3.5, 6.5103, 0.472591, 0.934579, 100, 107, 0
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 3
+# 	k: 4
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+1, 4.0103, 0.63021, 0.980392, 100, 102, 2
+1.5, 4.5103, 0.594956, 0.970874, 100, 103, 0
+2, 5.0103, 0.561675, 0.925926, 100, 108, 1
+2.5, 5.5103, 0.530255, 0.925926, 100, 108, 0
+3, 6.0103, 0.500593, 0.934579, 100, 107, 1
+3.5, 6.5103, 0.472591, 0.917431, 100, 109, 1
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 3
+# 	k: 4
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	maxTestsCount: 10000000
+# 	maxRejectionsCount: 100
+# Decoder type: SCFano
+# Decoder params:
+# 	T: -30.0
+# 	delta: 1.0
+# Code type: Polar
+# Code params:
+# 	m: 3
+# 	k: 4
+# 	sequenceFile: C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt
+# 
+# SNR: 1, 1.5, 2, 2.5, 3, 3.5, 
+# ############################################################
+1, 4.0103, 0.63021, 0.00853825, 100, 11712, 102
+1.5, 4.5103, 0.594956, 0.00520779, 100, 19202, 163
+2, 5.0103, 0.561675, 0.00281825, 100, 35483, 327
+2.5, 5.5103, 0.530255, 0.00101553, 100, 98471, 922
+3, 6.0103, 0.500593, 0.000483524, 100, 206815, 2093
+3.5, 6.5103, 0.472591, 0.000164508, 100, 607873, 6576
