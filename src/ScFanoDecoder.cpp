@@ -109,13 +109,13 @@ void ScFanoDecoder::PassDown(size_t iter) {
 
 	std::vector<int> binaryIter(m - level, 0);
 	size_t iterCopy = iter;
-	for (int i = binaryIter.size() - 1; i >= 0; i--)
+	for (int i = (int)binaryIter.size() - 1; i >= 0; i--)
 	{
 		binaryIter[i] = iterCopy % 2;
 		iterCopy = iterCopy >> 1;
 	}
 	
-	size_t length = 1 << (m - level - 1);
+	size_t length = (size_t)1 << (m - level - 1);
 	for (size_t i = level; i < m; i++)
 	{
 		size_t ones = ~0u;
@@ -173,25 +173,23 @@ void UpdateT(double & T, double & delta, double & tau) {
 		T += delta;
 }
 
-void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::vector<int> & mask, int & i, double & T, double & delta, bool & B, int & firstInfoBit) {
+void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::vector<int> & mask, int & i, double & T, double & delta, bool & B, size_t & firstInfoBit) {
 
 	while (true) {
-		
-		if (i == firstInfoBit) {
-			B = false;
-			T = T - delta;
-			return;
-		}
-		double mu = beta[i - 1];
 
-		if (mu >= T) {
+		double mu = 0;
+		if (i != 0) {
+			mu = beta[i - 1];
+		}
+
+		if (mu >= T && i != firstInfoBit) {
 			bool gammaPrevious = gamma[i];
 			// Find the previous info bit
 			i--;
 			while (!mask[i])
 				i--;
 
-			if (!gammaPrevious) {
+			if (!gamma[i]) {
 				B = true;
 				return;
 			}
@@ -216,7 +214,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 		_beliefTree[0][i] = inP1[i];
 	}
 
-	GaussianApproximation ga(0.707);
+	GaussianApproximation ga(_sigma);
 	std::vector<double> p(n, 0);
 	for (size_t i = 0; i < n; i++)
 	{
@@ -230,7 +228,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 	double T = _T;
 	double delta = _delta;
 
-	int firstInfoBit = 0;
+	size_t firstInfoBit = 0;
 	for (size_t i = 0; i < n; i++)
 	{
 		if (_mask[i]) {
@@ -265,17 +263,17 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 					gamma[i] = false;
 
 					double mu = 0;
-					if (i != firstInfoBit) {
-						int previousInfoBit = i;
+					if (i != 0) {
+					//if (i != firstInfoBit) {
+						/*int previousInfoBit = i;
 						previousInfoBit--;
 						while (!_mask[previousInfoBit])
-							previousInfoBit--;
-
-						mu = beta[previousInfoBit];
+							previousInfoBit--;*/
+						mu = beta[i-1];
 					}
 
 					if (mu < T + delta) 
-						UpdateT(T, delta, beta[i]);
+						UpdateT(T, delta, mu);
 					i++;
 				}
 				else {
@@ -289,7 +287,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 						i++;
 					}
 					else {
-						if (i = firstInfoBit) {
+						if (i == firstInfoBit) {
 							T = T - delta;
 							B = false;
 						}
@@ -300,17 +298,27 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 				}
 			}
 			else {
-				BackwardMove(beta, gamma, _mask, i, T, delta, B, firstInfoBit);
+				if (i == firstInfoBit) {
+					T = T - delta;
+				}
+				else
+					BackwardMove(beta, gamma, _mask, i, T, delta, B, firstInfoBit);
 			}
 		}
 		else {
 			_x[i] = 0;
 			_uhatTree[m][i] = _x[i];
-			if (i != 0)
+			PassUp(i);
+			if (i != 0) {
 				beta[i] = beta[i - 1];
-			else
+				gamma[i] = gamma[i - 1];
+			}
+			else {
 				beta[i] = 0;
-			gamma[i] = 0;
+				gamma[i] = 0;
+			}
+				
+			
 			i++;
 		}
 	}

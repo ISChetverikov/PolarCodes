@@ -24,11 +24,11 @@ double LlrToP1(double llr) {
 }
 
 double InputToLlr(double input, double sigma) {
-	return -2 * input / (sigma * sigma);
+	return 2 * input / (sigma * sigma);
 }
 
 int ModulateBpsk(int input) {
-	return 2 * input - 1;
+	return 1 - 2 * input;
 }
 
 SimulationIterationResults MonteCarloSimulator::Run(double snr)
@@ -65,10 +65,10 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 			beliefs[i] = InputToLlr(beliefs[i], sigma);
 		}
 
-		beliefs = { 1.4137,  2.3165, -1.5069, 1.3098 };
+		/*beliefs = { 1.4137, 2.3165, -1.5069, 1.3098 };
 		for (size_t i = 0; i < n; i++) {
 			beliefs[i] = InputToLlr(beliefs[i], sigma);
-		}
+		}*/
 
 		auto domain = _decoderPtr->GetDomain();
 		if (domain == P1) {
@@ -78,6 +78,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 			}
 		}
 		
+		// beliefs = { 0.56908250371344349, 0.77123177444132707, 0.40779883857703486, 0.29787121467476890 };
 		decoded = _decoderPtr->Decode(beliefs);
 		if (decoded != word)
 			wrong_dec += 1;
