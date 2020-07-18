@@ -177,17 +177,25 @@ void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::ve
 
 	while (true) {
 
-		double mu = 0;
-		if (i != 0) {
-			mu = beta[i - 1];
+		if (i == firstInfoBit) {
+			B = false;
+			T = T - delta;
+			return;
 		}
 
-		if (mu >= T && i != firstInfoBit) {
-			bool gammaPrevious = gamma[i];
-			// Find the previous info bit
-			i--;
-			while (!mask[i])
-				i--;
+		double mu = 0;
+		// Find the previous info bit
+		int j = i;
+		j--;
+		while (!mask[j])
+			j--;
+
+		if (j != 0) {
+			mu = beta[j - 1];
+		}
+
+		if (mu >= T) {
+			i = j;
 
 			if (!gamma[i]) {
 				B = true;
@@ -273,7 +281,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 					}
 
 					if (mu < T + delta) 
-						UpdateT(T, delta, mu);
+						UpdateT(T, delta, beta[i]);
 					i++;
 				}
 				else {
