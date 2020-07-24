@@ -1,9 +1,9 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\SC_clean.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\SCFano_vs_SC.results</ResultFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">1000000</Param>
-        <Param name="maxRejectionsCount">100</Param>
+        <Param name="maxRejectionsCount">10000</Param>
       </Simulator>
       <SnrRange start="1.0" stop="4.5" step="0.5"></SnrRange>
       <SnrArray>
@@ -14,7 +14,7 @@
         <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\128.txt</Param>
       </Code>
       <Decoder type="SCFano">
-        <Param name="T">1.0</Param>
+        <Param name="T">0.0</Param>
         <Param name="delta">1.0</Param>
       </Decoder>
     </Simulation>
