@@ -49,7 +49,7 @@
     <ClCompile Include="src\ScFanoDecoder.cpp" />
     <ClCompile Include="src\Simulate.cpp" />
     <ClCompile Include="src\SimulationType.cpp" />
-    <ClCompile Include="src\source.cpp" />
+    <ClCompile Include="src\gaTe.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
