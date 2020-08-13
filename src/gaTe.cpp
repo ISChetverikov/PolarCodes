@@ -57,7 +57,7 @@ std::vector<int> SortProb1(std::vector<double> p) {
 	return indices;
 }
 
-int main1(int argc, char* argv[]) {
+int main2(int argc, char* argv[]) {
 
 	int n = 16;
 	GaussianApproximation ga(1);

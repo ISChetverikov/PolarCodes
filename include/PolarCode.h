@@ -8,6 +8,7 @@ protected:
 	size_t _N = 0;
 	size_t _k = 0;
 	std::vector<int> _bitsMask;
+	std::vector<int> _unfrozenBits;
 
 public:
 	PolarCode();
@@ -17,6 +18,7 @@ public:
 	size_t N();
 	size_t k();
 	std::vector<int> BitsMask();
+	std::vector<int> UnfrozenBits();
 
 	~PolarCode() {};
 };

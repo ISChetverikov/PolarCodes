@@ -1,6 +1,6 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\SCFano_tedt.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\SCFano_clean.results</ResultFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">100000</Param>
         <Param name="maxRejectionsCount">1000</Param>
@@ -9,9 +9,9 @@
       <SnrArray>
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">2</Param>
-        <Param name="k">2</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\16.txt</Param>
+        <Param name="m">7</Param>
+        <Param name="k">64</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\128.txt</Param>
       </Code>
       <Decoder type="SCFano">
         <Param name="T">0.0</Param>

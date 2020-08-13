@@ -77,10 +77,6 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 				beliefs[i] = LlrToP1(beliefs[i]);
 			}
 		}
-		
-		//beliefs = { 0.0037797778435317330 , 0.37351998021616545 , 0.29295513051231054 , 0.94634988513096230 ,
-			//0.10720504223171166, 0.090606999867382465, 0.0076651897316822567, 0.25121546230851954 };
-		// beliefs = { 0.56908250371344349, 0.77123177444132707, 0.40779883857703486, 0.29787121467476890 };
 		decoded = _decoderPtr->Decode(beliefs);
 		if (decoded != word)
 			wrong_dec += 1;

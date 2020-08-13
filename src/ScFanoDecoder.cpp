@@ -173,44 +173,32 @@ void UpdateT(double & T, double & delta, double & tau) {
 		T += delta;
 }
 
-void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::vector<int> & mask, int & i, double & T, double & delta, bool & B, size_t & firstInfoBit) {
+void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::vector<int> & mask, int & i, double & T, double & delta, bool & B, int & j) {
 
 	while (true) {
-
-		if (i == firstInfoBit) {
-			B = false;
-			T = T - delta;
-			return;
-		}
-
 		double mu = 0;
-		// Find the previous info bit
-		int j = i;
-		j--;
-		while (!mask[j])
-			j--;
 
-		if (j != 0) {
+		if (j <= -1)
+			mu = -1000;
+
+		if (j >= 1)
 			mu = beta[j - 1];
-		}
 
 		if (mu >= T) {
-			i = j;
-
-			if (!gamma[i]) {
+			j--;
+			if (!gamma[j + 1])
+			{
 				B = true;
 				return;
 			}
 		}
 		else {
+			T -= delta;
 			B = false;
-			T = T - delta;
 			return;
 		}
+			
 	}
-
-	return;
-
 }
 
 std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
@@ -230,9 +218,12 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 	}
 
 	int i = 0;
+	int j = -1;
 	bool B = false;
-	std::vector<double> beta(n, 0.0);
-	std::vector<bool> gamma(n, 0);
+	std::vector<double> beta(k, 0.0); // only for frozen bits
+	std::vector<double> metrics(n, 0); // for all bits
+	std::vector<bool> gamma(k, 0);
+	std::vector<int> A = _codePtr->UnfrozenBits(); // info set
 	double T = _T;
 	double delta = _delta;
 
@@ -247,13 +238,12 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 	while (i < n)
 	{
 		PassDown(i); // get p1 metric in _beliefTree[m][i]
+		double p0 = 1 - _beliefTree[m][i];
+		double p1 = _beliefTree[m][i];
+		
 		if (_mask[i]) {
-
-			double p0 = 1 - _beliefTree[m][i];
-			double previous = (i == 0) ? 0 : beta[i - 1];
+			double previous = (i == 0) ? 0 : metrics[i - 1];
 			double m0 = previous + log(p0 / (1 - p[i]));
-
-			double p1 = _beliefTree[m][i];
 			double m1 = previous + log(p1 / (1 - p[i]));
 
 			double max = (m1 > m0) ? m1 : m0 ;
@@ -267,80 +257,82 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 					_x[i] = argmax;
 					_uhatTree[m][i] = _x[i];
 					PassUp(i);
-					beta[i] = max;
-					gamma[i] = false;
+
+					metrics[i] = max;
+					beta[j + 1] = max;
+					gamma[j + 1] = false;
 
 					double mu = 0;
-					if (i != 0) {
-					//if (i != firstInfoBit) {
-						/*int previousInfoBit = i;
-						previousInfoBit--;
-						while (!_mask[previousInfoBit])
-							previousInfoBit--;*/
-						mu = beta[i-1];
-					}
+					if (j != -1) 
+						mu = beta[j];
 
 					if (mu < T + delta) 
-						UpdateT(T, delta, beta[i]);
+						UpdateT(T, delta, beta[j+1]);
 					i++;
+					j++;
 				}
 				else {
 					if (min > T) {
 						_x[i] = argmin;
 						_uhatTree[m][i] = _x[i];
 						PassUp(i);
-						beta[i] = min;
-						gamma[i] = true;
+
+						metrics[i] = min;
+						beta[j + 1] = min;
+						gamma[j + 1] = true;
 						B = false;
+
 						i++;
+						j++;
 					}
 					else {
-						if (i == firstInfoBit) {
+						if (j == -1) {
 							T = T - delta;
 							B = false;
 						}
 						else {
-							BackwardMove(beta, gamma, _mask, i, T, delta, B, firstInfoBit);
+							BackwardMove(beta, gamma, _mask, i, T, delta, B, j);
+							i = A[j + 1];
 						}
 					}
 				}
 			}
 			else {
-				if (i == firstInfoBit) {
+				if (j == -1)
 					T = T - delta;
+
+				else {
+					BackwardMove(beta, gamma, _mask, i, T, delta, B, j);
+					i = A[j + 1];
 				}
-				else
-					BackwardMove(beta, gamma, _mask, i, T, delta, B, firstInfoBit);
+					
 			}
 		}
 		else {
-			_x[i] = 0;
+			_x[i] = FROZEN_VALUE;
 			_uhatTree[m][i] = _x[i];
 			PassUp(i);
-			if (i != 0) {
-				beta[i] = beta[i - 1];
-				gamma[i] = gamma[i - 1];
-			}
-			else {
-				beta[i] = 0;
-				gamma[i] = 0;
-			}
-				
-			
+
+			double currentMetric = log(p0) - log(1 - p[i]);
+			// cumulative
+			metrics[i] = currentMetric;
+			if (i != 0)
+				metrics[i] += metrics[i - 1];
+
 			i++;
 		}
 	}
 	
 	// Get info bits
 	std::vector<int> result(k, 0);
-	size_t j = 0;
+	size_t l = 0;
 	for (size_t i = 0; i < n; i++)
 	{
 		if (_mask[i] == 0)
 			continue;
 
-		result[j] = _x[i];
-		j++;
+		result[l] = _x[i];
+		l++;
 	}
 
 	return result;

@@ -44,8 +44,8 @@
     <ClCompile Include="src\GaussianApproximation.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MonteCarloSimulator.cpp" />
-    <ClCompile Include="src\ScDecoder.cpp" />
     <ClCompile Include="src\PolarCode.cpp" />
+    <ClCompile Include="src\ScDecoder.cpp" />
     <ClCompile Include="src\ScFanoDecoder.cpp" />
     <ClCompile Include="src\Simulate.cpp" />
     <ClCompile Include="src\SimulationType.cpp" />

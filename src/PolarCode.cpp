@@ -1,6 +1,6 @@
 #include "../include/PolarCode.h"
 #include "../include/Exceptions.h"
-
+#include <algorithm>
 PolarCode::PolarCode() {
 
 }
@@ -13,10 +13,14 @@ PolarCode::PolarCode(int m, int k, std::vector<int> reliabilitySequence) {
 		throw IncorrectSequenceSizeException("Sequence length does not match with code length");
 
 	_bitsMask = std::vector<int>(_N, 0);
-	for (size_t i = sequenceLength - k; i < sequenceLength; i++)
+	_unfrozenBits = std::vector<int>(k, 0);
+	int j = 0;
+	for (size_t i = sequenceLength - k; i < sequenceLength; i++, j++)
 	{
 		_bitsMask[reliabilitySequence[i]] = 1;
+		_unfrozenBits[j] = reliabilitySequence[i];
 	}
+	sort(_unfrozenBits.begin(), _unfrozenBits.end());
 }
 
 size_t PolarCode::m() {
@@ -30,4 +34,8 @@ size_t PolarCode::k() {
 }
 std::vector<int> PolarCode::BitsMask() {
 	return _bitsMask;
+}
+
+std::vector<int> PolarCode::UnfrozenBits() {
+	return _unfrozenBits;
 }

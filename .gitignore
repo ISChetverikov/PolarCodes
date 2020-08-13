@@ -6,3 +6,5 @@
 /.vs/PolarSimulate/v15
 /results_plotting/.ipynb_checkpoints
 /results
+/src/trash.cpp
+/src/ScFanoTrashDecoder.cpp
