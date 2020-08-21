@@ -47,6 +47,7 @@
     <ClCompile Include="src\PolarCode.cpp" />
     <ClCompile Include="src\ScDecoder.cpp" />
     <ClCompile Include="src\ScFanoDecoder.cpp" />
+    <ClCompile Include="src\ScFlipDecoder.cpp" />
     <ClCompile Include="src\Simulate.cpp" />
     <ClCompile Include="src\SimulationType.cpp" />
     <ClCompile Include="src\gaTe.cpp" />

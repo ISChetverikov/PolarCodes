@@ -1,6 +1,6 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\SCFano_clean.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\SCFano_fixed_ga.results</ResultFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">100000</Param>
         <Param name="maxRejectionsCount">1000</Param>

@@ -15,6 +15,8 @@ private:
 	double _T;
 	double _delta;
 
+	std::vector<double> _p; // channel error probabilities 
+
 	double f(double p1, double p2);
 	double g(double p1, double p2);
 	int L(double p1);

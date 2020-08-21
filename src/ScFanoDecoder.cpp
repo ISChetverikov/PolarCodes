@@ -34,6 +34,14 @@ ScFanoDecoder::ScFanoDecoder(PolarCode * codePtr, double T, double delta) : Base
 	_x = std::vector<int>(n, -1);
 	_T = T;
 	_delta = delta;
+
+	double approximationSigma = sqrt(pow(10, -1.0 / 10.0));
+	GaussianApproximation ga(approximationSigma);
+	_p = std::vector<double>(n, 0);
+	for (size_t i = 0; i < n; i++)
+	{
+		_p[i] = ga.GetChannelErrorProbability(i + 1, n);
+	}
 }
 
 domain ScFanoDecoder::GetDomain() {
@@ -210,12 +218,13 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 		_beliefTree[0][i] = inP1[i];
 	}
 
-	GaussianApproximation ga(_sigma);
+	std::vector<double> p = _p;
+	/*GaussianApproximation ga(_sigma);
 	std::vector<double> p(n, 0);
 	for (size_t i = 0; i < n; i++)
 	{
 		p[i] = ga.GetChannelErrorProbability(i + 1, n);
-	}
+	}*/
 
 	int i = 0;
 	int j = -1;
