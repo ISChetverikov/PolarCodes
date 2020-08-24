@@ -12,6 +12,7 @@
 #include "../include/Encoder.h"
 #include "../include/ScDecoder.h"
 #include "../include/ScFanoDecoder.h"
+#include "../include/ScFlipDecoder.h"
 #include "../include/BaseSimulator.h"
 #include "../include/ConfigReading.h"
 #include "../include/Exceptions.h"
@@ -106,6 +107,10 @@ BaseDecoder * BuildDecoder(
 		double T = ExtractDouble(decoderParams, "T", "SCFano decoder");
 		double delta = ExtractDouble(decoderParams, "delta", "SCFano decoder");
 		decoderPtr = new ScFanoDecoder(codePtr, T, delta);
+	}
+	case decoderType::SCFlip: {
+		int T = ExtractInt(decoderParams, "T", "SCFano decoder");
+		decoderPtr = new ScFlipDecoder(codePtr, T);
 	}
 		break;
     default:

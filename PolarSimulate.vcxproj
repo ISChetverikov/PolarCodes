@@ -31,6 +31,7 @@
     <ClInclude Include="include\MonteCarloSimulator.h" />
     <ClInclude Include="include\ScDecoder.h" />
     <ClInclude Include="include\ScFanoDecoder.h" />
+    <ClInclude Include="include\ScFlipDecoder.h" />
     <ClInclude Include="include\Simulate.h" />
     <ClInclude Include="include\SimulationParameters.h" />
     <ClInclude Include="include\SimulationType.h" />

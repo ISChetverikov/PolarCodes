@@ -3,7 +3,8 @@
 decoderType decoderTypeFromString(std::string str) {
 	std::unordered_map<std::string, decoderType> decoderTypeResolver = {
 		{"SC", decoderType::SC},
-		{"SCFano", decoderType::SCFano}
+		{"SCFano", decoderType::SCFano},
+		{"SCFlip", decoderType::SCFlip}
 	};
 
 	if (decoderTypeResolver.count(str) > 0)
@@ -17,6 +18,7 @@ std::string decoderTypeToString(decoderType type) {
 	std::unordered_map<decoderType, std::string> decoderTypeStringResolver = {
 		{decoderType::SC, "SC"},
 		{decoderType::SCFano, "SCFano"},
+		{decoderType::SCFlip, "SCFlip"}
 	};
 
 	return decoderTypeStringResolver[type];

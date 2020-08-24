@@ -90,7 +90,7 @@ void ScFanoDecoder::FillRightMessageInTree(std::vector<double>::iterator leftIt,
 }
 
 
-size_t log2(size_t n) {
+size_t ScFanoDecoder::log2(size_t n) {
 	size_t m = 0;
 	while (n > 0)
 	{

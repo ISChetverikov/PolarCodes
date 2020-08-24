@@ -65,11 +65,6 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 			beliefs[i] = InputToLlr(beliefs[i], sigma);
 		}
 
-		/*beliefs = { 1.4137, 2.3165, -1.5069, 1.3098 };
-		for (size_t i = 0; i < n; i++) {
-			beliefs[i] = InputToLlr(beliefs[i], sigma);
-		}*/
-
 		auto domain = _decoderPtr->GetDomain();
 		if (domain == P1) {
 			for (size_t i = 0; i < n; i++)

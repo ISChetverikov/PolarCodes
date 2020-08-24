@@ -1,10 +1,9 @@
 #pragma once
 
-
-
 #include "BaseDecoder.h"
+#include "Domain.h"
 
-class ScFanoDecoder : public BaseDecoder {
+class ScFlipDecoder : public BaseDecoder {
 
 private:
 	std::vector<std::vector<double>> _beliefTree;
@@ -13,13 +12,10 @@ private:
 	std::vector<int> _mask;
 	std::vector<int> _x;
 	double _T;
-	double _delta;
 
-	std::vector<double> _p; // channel error probabilities 
-
-	double f(double p1, double p2);
-	double g(double p1, double p2);
-	int L(double p1);
+	double f(double llr1, double llr2);
+	double g(double llr1, double llr2, int u1);
+	int L(double llr1);
 	size_t log2(size_t n);
 
 	void FillLeftMessageInTree(std::vector<double>::iterator leftIt,
@@ -36,10 +32,10 @@ private:
 	void PassUp(size_t iter);
 
 public:
-	ScFanoDecoder(PolarCode * code, double T, double delta);
-	
-	domain GetDomain() override;
-	std::vector<int> Decode(std::vector<double> llr) override;
+	ScFlipDecoder(PolarCode * code, int T);
 
-	~ScFanoDecoder() {};
+	std::vector<int> Decode(std::vector<double> llr) override;
+	domain GetDomain() override;
+
+	~ScFlipDecoder() {};
 };
