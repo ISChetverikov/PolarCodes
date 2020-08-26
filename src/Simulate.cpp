@@ -279,5 +279,6 @@ void Simulate(std::string configFilename) {
 
 	delete simulatorPtr;
 	delete decoderPtr;
+	delete encoderPtr;
 	delete codePtr;
 }

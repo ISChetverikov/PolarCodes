@@ -7,6 +7,11 @@
 
 Encoder::Encoder(PolarCode * codePtr) {
 	_codePtr = codePtr;
+	_crcPtr = new CRC(_codePtr->CrcPoly());
+}
+
+Encoder::~Encoder() {
+	delete _crcPtr;
 }
 
 void PolarTransform(std::vector<int>::iterator begin, size_t n) {
@@ -32,7 +37,13 @@ std::vector<int> Encoder::Encode(std::vector<int> word) {
 
 	size_t n = _codePtr->N();
 	std::vector<int> codeword(n, 0);
-	std::vector<int> mask = _codePtr->BitsMask();
+	std::vector<int> mask;
+	if (_codePtr->IsCrcUsed()) {
+		mask = _codePtr->BitsMaskExtended();
+		word = _crcPtr->Add(word);
+	}
+	else
+		mask = _codePtr->BitsMask();
 
 	size_t j = 0;
 	for (size_t i = 0; i < n; i++)

@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 
-int main() {
+int main1() {
 	std::vector<int> poly = { 1, 1, 1, 0, 0, 0, 0, 0, 1};
 	//std::vector<int> input = { 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	std::vector<int> input = { 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 };
