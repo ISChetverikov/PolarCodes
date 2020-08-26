@@ -42,6 +42,7 @@
     <ClCompile Include="src\BaseDecoder.cpp" />
     <ClCompile Include="src\ConfigReading.cpp" />
     <ClCompile Include="src\CRC.cpp" />
+    <ClCompile Include="src\crcTest.cpp" />
     <ClCompile Include="src\DecoderType.cpp" />
     <ClCompile Include="src\Encoder.cpp" />
     <ClCompile Include="src\GaussianApproximation.cpp" />

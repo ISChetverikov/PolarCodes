@@ -12,7 +12,7 @@
         <Param name="m">7</Param>
         <Param name="k">64</Param>
         <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\128.txt</Param>
-        <Param name="CRC">11001101</Param>
+        <Param name="CRC">00000111</Param>
       </Code>
       <Decoder type="SCFlip">
         <Param name="T">5</Param>
