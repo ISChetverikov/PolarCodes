@@ -58,17 +58,3 @@ std::vector<int> CRC::Calculate(std::vector<int> bits) {
 	
 	return crc;
 }
-
-std::vector<int> CRC::Add(std::vector<int> bits) {
-	std::vector<int> crc = Calculate(bits);
-	bits.insert(bits.end(), crc.begin(), crc.end());
-	return bits;
-}
-
-bool CRC::Check(std::vector<int> bitsWithCrc) {
-	std::vector<int> crcInput(bitsWithCrc.end() - _deg, bitsWithCrc.end());
-	std::vector<int> bits(bitsWithCrc.begin(), bitsWithCrc.end() - _deg);
-	std::vector<int> crc = Calculate(bits);
-
-	return crc == crcInput;
-}

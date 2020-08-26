@@ -14,7 +14,7 @@
         <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\128.txt</Param>
         <Param name="CRC">00000111</Param>
       </Code>
-      <Decoder type="SC">
+      <Decoder type="SCFlip">
         <Param name="T">5</Param>
         <Param name="delta">1.0</Param>
       </Decoder>

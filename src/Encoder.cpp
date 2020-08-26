@@ -37,22 +37,21 @@ std::vector<int> Encoder::Encode(std::vector<int> word) {
 
 	size_t n = _codePtr->N();
 	std::vector<int> codeword(n, 0);
-	std::vector<int> mask;
-	if (_codePtr->IsCrcUsed()) {
-		mask = _codePtr->BitsMaskExtended();
-		word = _crcPtr->Add(word);
+	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
+
+	for (size_t i = 0; i < codewordBits.size(); i++)
+	{ 
+		codeword[codewordBits[i]] = word[i];
 	}
-	else
-		mask = _codePtr->BitsMask();
 
-	size_t j = 0;
-	for (size_t i = 0; i < n; i++)
-	{
-		if (mask[i] == 0)
-			continue;
+	if (_codePtr->IsCrcUsed()) {
+		std::vector<int> crc(_codePtr->CrcDeg(), 0);
+		std::vector<int> crcBits = _codePtr->CrcUnfrozenBits();
 
-		codeword[i] = word[j];
-		j++;
+		for (size_t i = 0; i < crcBits.size(); i++)
+		{
+			codeword[crcBits[i]] = crc[i];
+		}
 	}
 
 	PolarTransform(codeword.begin(), n);
