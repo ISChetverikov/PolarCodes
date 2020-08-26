@@ -3,6 +3,7 @@
 #include "../include/PolarCode.h"
 #include "../include/Exceptions.h"
 #include "../include/Encoder.h"
+#include "../include/CRC.h"
 
 Encoder::Encoder(PolarCode * codePtr) {
 	_codePtr = codePtr;

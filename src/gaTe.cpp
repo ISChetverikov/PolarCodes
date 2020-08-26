@@ -57,6 +57,7 @@ std::vector<int> SortProb1(std::vector<double> p) {
 	return indices;
 }
 
+// test correctness of GA
 int main2(int argc, char* argv[]) {
 
 	int n = 16;

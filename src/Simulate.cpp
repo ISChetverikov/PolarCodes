@@ -47,9 +47,15 @@ double ExtractDouble(std::unordered_map<std::string, std::string> map, std::stri
 	return result;
 }
 
-std::string ExtractString(std::unordered_map<std::string, std::string> map, std::string key, std::string section) {
-	if (map.count(key) <= 0)
-		throw MissedParamException("Missed parameters \"" + key + "\" in section " + section);
+std::string ExtractString(std::unordered_map<std::string, std::string> map, std::string key, std::string section, bool isRequired) {
+	if (map.count(key) <= 0) {
+		if (isRequired)
+			throw MissedParamException("Missed parameters \"" + key + "\" in section " + section);
+
+		else
+			return "";
+	}
+		
 
 	std::string result;
 	try {
@@ -78,16 +84,38 @@ std::vector<int> ReadSequenceFromFile(std::string path) {
 	return seq;
 }
 
+std::vector<int> StrToVector(std::string crcPolyStr) {
+	if (crcPolyStr.empty())
+		return std::vector<int>();
+
+	size_t deg = crcPolyStr.size();
+
+	std::vector<int> result(deg + 1, 0);
+	result[deg] = 1;
+
+	for (size_t i = 0; i < deg; i++)
+	{
+		if (crcPolyStr[i] == '1')
+			result[deg - i - 1] = 1;
+
+		else if (crcPolyStr[i] != '0')
+			throw CrcPolyException("Crc polynom has incorrect symbol: " + crcPolyStr);
+	}
+
+	return result;
+}
+
 PolarCode * BuildCode(std::unordered_map<std::string, std::string> codeParams) {
 	PolarCode * codePtr;
 
 	int m = ExtractInt(codeParams, "m", "PolarCode");
 	int k = ExtractInt(codeParams, "k", "PolarCode");
-	std::string sequenceFilePath = ExtractString(codeParams, "sequenceFile", "PolarCode");
-	
+	std::string crcPolyString = ExtractString(codeParams, "CRC", "PolarCode", false);
+	std::vector<int> crcPoly = StrToVector(crcPolyString);
+	std::string sequenceFilePath = ExtractString(codeParams, "sequenceFile", "PolarCode", true);
 	std::vector<int> reliabilitySequence = ReadSequenceFromFile(sequenceFilePath);
 
-	codePtr = new PolarCode(m, k, reliabilitySequence);
+	codePtr = new PolarCode(m, k, reliabilitySequence, crcPoly);
 	return codePtr;
 }
 

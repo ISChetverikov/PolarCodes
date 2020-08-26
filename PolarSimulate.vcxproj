@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="include\BaseSimulator.h" />
     <ClInclude Include="include\BaseDecoder.h" />
+    <ClInclude Include="include\CRC.h" />
     <ClInclude Include="include\Domain.h" />
     <ClInclude Include="include\Encoder.h" />
     <ClInclude Include="include\GaussianApproximation.h" />
@@ -40,6 +41,7 @@
     <ClCompile Include="src\BaseSimulator.cpp" />
     <ClCompile Include="src\BaseDecoder.cpp" />
     <ClCompile Include="src\ConfigReading.cpp" />
+    <ClCompile Include="src\CRC.cpp" />
     <ClCompile Include="src\DecoderType.cpp" />
     <ClCompile Include="src\Encoder.cpp" />
     <ClCompile Include="src\GaussianApproximation.cpp" />
