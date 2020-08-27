@@ -33,11 +33,15 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr)
 
 	_maskWithCrc = std::vector<int>(n, 0);
 	auto maskInf = _codePtr->BitsMask();
-	auto maskCrc = _codePtr->CrcMask();
-	for (size_t i = 0; i < n; i++)
-	{
-		_maskWithCrc[i] = maskInf[i] || maskCrc[i];
-	}
+	
+	if (_codePtr->IsCrcUsed()) {
+		auto maskCrc = _codePtr->CrcMask();
+		for (size_t i = 0; i < n; i++)
+			_maskWithCrc[i] = maskInf[i] || maskCrc[i];
+	}	
+	else
+		_maskWithCrc = maskInf;
+	
 
 	_x = std::vector<int>(n, -1);
 	_crcPtr = new CRC(_codePtr->CrcPoly());
@@ -280,7 +284,8 @@ std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int po
 
 			int left = j;
 			int right = j;
-			for (size_t k = i + 1; i <= m; i++)
+			tree[i][j] = 0;
+			for (size_t k = i + 1; k <= m; k++)
 			{
 				left = left << 1;
 				right = (right << 1) + 1;
@@ -331,7 +336,6 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 
 	for (size_t i = 0; i < n; i++)
 	{
-
 		PassDown(i);
 		if (_maskWithCrc[i]) {
 			_x[i] = L(_beliefTree[m][i]);
@@ -343,7 +347,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 		PassUp(i);
 	}
 
-	if (!IsCrcPassed(_x)) {
+	/*if (!IsCrcPassed(_x)) {
 		auto criticalSet = GetCriticalSet(_maskWithCrc, 0);
 		std::vector<int> suspectedBits = SortCriticalBits(criticalSet, _beliefTree[m]);
 		for (size_t i = 0; i < suspectedBits.size(); i++)
@@ -356,7 +360,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 			if (IsCrcPassed(_x))
 				break;
 		}
-	}
+	}*/
 
 	std::vector<int> result(_codePtr->k(), 0);
 	std::vector<int> codewordBits = _codePtr->UnfrozenBits();

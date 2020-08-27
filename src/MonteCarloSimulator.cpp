@@ -57,7 +57,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		tests++;
 
 		std::generate(word.begin(), word.end(), [&]() { return uniform_discrete_dist(randomDevice); });
-		word = { 1, 0, 0, 1};
+		//word = { 1, 0, 0, 1};
 		codeword = _encoderPtr->Encode(word);
 
 		for (size_t i = 0; i < n; i++) {
