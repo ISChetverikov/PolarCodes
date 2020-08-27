@@ -233,6 +233,64 @@ std::vector<int> ScFlipProgDecoder::GetSmallestLlrsIndices(std::vector<double> l
 	return indices;
 }
 
+// mask: 1 - black, 0 - white
+std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int position) {
+	std::vector<std::vector<int>> tree;
+	size_t m = _codePtr->m();
+	size_t n = _codePtr->N();
+	std::vector<int> result;
+
+	for (size_t i = 0; i < m + 1; i++)
+	{
+		std::vector<int> temp(1 << i, 0);
+		tree.push_back(temp);
+	}
+	for (size_t i = 0; i < n; i++)
+	{
+		tree[m][i] = mask[i];
+	}
+
+	for (int i = m - 1; i >= 0 ; i--)
+	{
+		size_t levelSize = tree[i].size();
+		for (int j = 0; j < levelSize; j++)
+		{
+			int left = j << 1;
+			int right = left + 1;
+
+			tree[i][j] = tree[i + 1][left] && tree[i + 1][right];
+		}
+	}
+
+	for (size_t i = 0; i < m + 1; i++)
+	{
+		size_t levelSize = tree[i].size();
+		for (size_t j = 0; j < levelSize; j++)
+		{
+			if (!tree[i][j])
+				continue;
+
+			int criticalBit = j << (m - i);
+			if (criticalBit > position)
+				result.push_back(criticalBit);
+
+			int left = j;
+			int right = j;
+			for (size_t k = i + 1; i <= m; i++)
+			{
+				left = left << 1;
+				right = right << 1 + 1;
+
+				for (size_t l = left; l <= right; l++)
+					tree[k][l] = 0;
+			}
+		}
+	}
+
+	return result;
+
+}
+
 std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	size_t n = inLlr.size();
 	size_t m = _codePtr->m();
@@ -244,6 +302,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 
 	for (size_t i = 0; i < n; i++)
 	{
+
 		PassDown(i);
 		if (_mask[i]) {
 			_x[i] = L(_beliefTree[m][i]);
@@ -256,7 +315,8 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	}
 
 	while (!IsCrcPassed(_x)) {
-		std::vector<int> suspectedBits = GetSmallestLlrsIndices(_beliefTree[m], _T);
+		auto criticalSet = GetCriticalSet(_mask, 0)
+		std::vector<int> suspectedBits = SortCriticalBits();
 		for (size_t i = 0; i < _T; i++)
 		{
 			int bitPosition = suspectedBits[i];

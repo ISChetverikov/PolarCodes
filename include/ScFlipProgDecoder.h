@@ -36,6 +36,7 @@ private:
 	void DecodeFrom(int position);
 	bool IsCrcPassed(std::vector<int> codeword);
 	std::vector<int> GetSmallestLlrsIndices(std::vector<double> llrs, int count);
+	std::vector<int> GetCriticalSet(std::vector<int> mask, int position);
 
 public:
 	ScFlipProgDecoder(PolarCode * code, int T);
