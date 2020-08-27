@@ -12,7 +12,6 @@ private:
 	size_t _treeHeight;
 	std::vector<int> _mask;
 	std::vector<int> _x;
-	int _T;
 	CRC * _crcPtr;
 	std::vector<double> _subchannelsMeansGa;
 
@@ -41,7 +40,7 @@ private:
 	std::vector<int> SortCriticalBits(std::vector<int> criticalSet, std::vector<double> llrs);
 
 public:
-	ScFlipProgDecoder(PolarCode * code, int T);
+	ScFlipProgDecoder(PolarCode * code);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
 	void SetSigma(double sigma) override;

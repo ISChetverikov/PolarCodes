@@ -15,6 +15,9 @@ PolarCode::PolarCode(int m, int k, std::vector<int> reliabilitySequence, std::ve
 	_crcPoly = crcPoly;
 	_crcDeg = _crcPoly.size() - 1;
 
+	if (_k + _crcDeg > _N)
+		throw CrcPolyException("Dimensions of a message with crc do not fit with dimension of a codeword ");
+
 	if (!_crcPoly.empty())
 		_k_extended = _k + _crcDeg;
 
@@ -29,7 +32,7 @@ PolarCode::PolarCode(int m, int k, std::vector<int> reliabilitySequence, std::ve
 	sort(_unfrozenBits.begin(), _unfrozenBits.end());
 
 	// the mask and the set with crc
-	_crcMask = std::vector<int>(_crcDeg, 0);
+	_crcMask = std::vector<int>(_N, 0);
 	_crcUnfrozenBits = std::vector<int>(_crcDeg, 0);
 	for (size_t i = sequenceLength - _k_extended, j = 0; i < sequenceLength - k; i++, j++)
 	{

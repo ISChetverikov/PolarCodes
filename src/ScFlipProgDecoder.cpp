@@ -17,7 +17,7 @@
 #define FROZEN_VALUE 0
 
 
-ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr, int T) : BaseDecoder(codePtr) {
+ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 	size_t m = _codePtr->m();
 	size_t n = _codePtr->N();
 	_treeHeight = m + 1;
@@ -33,7 +33,6 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr, int T) : BaseDecoder(c
 
 	_mask = _codePtr->BitsMask();
 	_x = std::vector<int>(n, -1);
-	_T = T;
 	_crcPtr = new CRC(_codePtr->CrcPoly());
 	_subchannelsMeansGa = std::vector<double>(n, 0);;
 }
@@ -240,7 +239,7 @@ std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int po
 
 	for (size_t i = 0; i < m + 1; i++)
 	{
-		std::vector<int> temp(1 << i, 0);
+		std::vector<int> temp((int)1 << i, 0);
 		tree.push_back(temp);
 	}
 	for (size_t i = 0; i < n; i++)
@@ -248,7 +247,7 @@ std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int po
 		tree[m][i] = mask[i];
 	}
 
-	for (int i = m - 1; i >= 0 ; i--)
+	for (int i = (int)m - 1; i >= 0 ; i--)
 	{
 		size_t levelSize = tree[i].size();
 		for (int j = 0; j < levelSize; j++)
@@ -262,8 +261,8 @@ std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int po
 
 	for (size_t i = 0; i < m + 1; i++)
 	{
-		size_t levelSize = tree[i].size();
-		for (size_t j = 0; j < levelSize; j++)
+		int levelSize = (int)tree[i].size();
+		for (int j = 0; j < levelSize; j++)
 		{
 			if (!tree[i][j])
 				continue;
@@ -277,7 +276,7 @@ std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int po
 			for (size_t k = i + 1; i <= m; i++)
 			{
 				left = left << 1;
-				right = right << 1 + 1;
+				right = (right << 1) + 1;
 
 				for (size_t l = left; l <= right; l++)
 					tree[k][l] = 0;
@@ -291,10 +290,9 @@ std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int po
 
 // with using means after gaussian approxiamtion procedure
 std::vector<int> ScFlipProgDecoder::SortCriticalBits(std::vector<int> criticalSet, std::vector<double> llrs) {
-	int length = criticalSet.size();
+	size_t length = criticalSet.size();
 	std::vector<int> result(length, 0);
-	std::vector<int> sortingMetric(length, 0);
-	
+	std::vector<double> sortingMetric(length, 0);
 	
 	for (size_t i = 0; i < length; i++)
 	{
@@ -305,7 +303,7 @@ std::vector<int> ScFlipProgDecoder::SortCriticalBits(std::vector<int> criticalSe
 	for (size_t i = 0; i < length; i++)
 	{
 		auto minIt = std::min_element(sortingMetric.begin(), sortingMetric.end());
-		int minInd = std::distance(sortingMetric.begin(), minIt);
+		int minInd = (int)std::distance(sortingMetric.begin(), minIt);
 		result[i] = criticalSet[minInd];
 
 		criticalSet.erase(criticalSet.begin() + minInd);
@@ -338,7 +336,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 		PassUp(i);
 	}
 
-	while (!IsCrcPassed(_x)) {
+	if (!IsCrcPassed(_x)) {
 		auto criticalSet = GetCriticalSet(_mask, 0);
 		std::vector<int> suspectedBits = SortCriticalBits(criticalSet, _beliefTree[m]);
 		for (size_t i = 0; i < suspectedBits.size(); i++)

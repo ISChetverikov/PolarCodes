@@ -9,13 +9,15 @@
       <SnrArray>
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">7</Param>
-        <Param name="k">64</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\128.txt</Param>
+        <Param name="m">3</Param>
+        <Param name="k">4</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt</Param>
         <Param name="CRC">00000111</Param>
       </Code>
-      <Decoder type="SCFlip">
+      <Decoder type="SCFlipProg">
         <Param name="T">5</Param>
+        <Param name="gammaLeft">3</Param>
+        <Param name="gammRight">4</Param>
         <Param name="delta">1.0</Param>
       </Decoder>
     </Simulation>
