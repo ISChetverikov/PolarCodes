@@ -14,6 +14,7 @@ private:
 	std::vector<int> _x;
 	int _T;
 	CRC * _crcPtr;
+	std::vector<double> _subchannelsMeansGa;
 
 	double f(double llr1, double llr2);
 	double g(double llr1, double llr2, int u1);
@@ -35,13 +36,15 @@ private:
 
 	void DecodeFrom(int position);
 	bool IsCrcPassed(std::vector<int> codeword);
-	std::vector<int> GetSmallestLlrsIndices(std::vector<double> llrs, int count);
+
 	std::vector<int> GetCriticalSet(std::vector<int> mask, int position);
+	std::vector<int> SortCriticalBits(std::vector<int> criticalSet, std::vector<double> llrs);
 
 public:
 	ScFlipProgDecoder(PolarCode * code, int T);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
+	void SetSigma(double sigma) override;
 	domain GetDomain() override;
 
 	~ScFlipProgDecoder() {};

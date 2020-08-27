@@ -8,6 +8,7 @@
 
 #include "../include/PolarCode.h"
 #include "../include/ScDecoder.h"
+#include "../include/GaussianApproximation.h"
 #include "../include/ScFlipProgDecoder.h"
 #include "../include/Exceptions.h"
 #include "../include/Domain.h"
@@ -34,10 +35,25 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr, int T) : BaseDecoder(c
 	_x = std::vector<int>(n, -1);
 	_T = T;
 	_crcPtr = new CRC(_codePtr->CrcPoly());
+	_subchannelsMeansGa = std::vector<double>(n, 0);;
 }
 
 domain ScFlipProgDecoder::GetDomain() {
 	return LLR;
+
+}
+
+void ScFlipProgDecoder::SetSigma(double sigma) {
+	BaseDecoder::SetSigma(sigma);
+
+	GaussianApproximation ga(sigma);
+	size_t n = _codePtr->N();
+	for (size_t i = 0; i < n; i++)
+	{
+		_subchannelsMeansGa[i] = ga.GetMu(i + 1, n);
+	}
+
+	return;
 }
 
 double ScFlipProgDecoder::f(double llr1, double llr2) {
@@ -215,24 +231,6 @@ bool ScFlipProgDecoder::IsCrcPassed(std::vector<int> codeword) {
 	return crc == crcReal;
 }
 
-std::vector<int> ScFlipProgDecoder::GetSmallestLlrsIndices(std::vector<double> llrs, int count) {
-	std::vector<int> indices(count, 0);
-	for (size_t i = 0; i < llrs.size(); i++)
-	{
-		llrs[i] = fabs(llrs[i]);
-	}
-
-	for (size_t i = 0; i < count; i++)
-	{
-		auto minIt = std::min_element(llrs.begin(), llrs.end());
-		auto minInd = (int)std::distance( llrs.begin(), minIt);
-		indices[i] = minInd;
-		llrs.erase(minIt);
-	}
-	
-	return indices;
-}
-
 // mask: 1 - black, 0 - white
 std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int position) {
 	std::vector<std::vector<int>> tree;
@@ -291,6 +289,32 @@ std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int po
 
 }
 
+// with using means after gaussian approxiamtion procedure
+std::vector<int> ScFlipProgDecoder::SortCriticalBits(std::vector<int> criticalSet, std::vector<double> llrs) {
+	int length = criticalSet.size();
+	std::vector<int> result(length, 0);
+	std::vector<int> sortingMetric(length, 0);
+	
+	
+	for (size_t i = 0; i < length; i++)
+	{
+		int criticalInd = criticalSet[i];
+		sortingMetric[i] = fabs(llrs[criticalInd]) / _subchannelsMeansGa[criticalInd];
+	}
+
+	for (size_t i = 0; i < length; i++)
+	{
+		auto minIt = std::min_element(sortingMetric.begin(), sortingMetric.end());
+		int minInd = std::distance(sortingMetric.begin(), minIt);
+		result[i] = criticalSet[minInd];
+
+		criticalSet.erase(criticalSet.begin() + minInd);
+		sortingMetric.erase(sortingMetric.begin() + minInd);
+	}
+
+	return result;
+}
+
 std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	size_t n = inLlr.size();
 	size_t m = _codePtr->m();
@@ -315,8 +339,8 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	}
 
 	while (!IsCrcPassed(_x)) {
-		auto criticalSet = GetCriticalSet(_mask, 0)
-		std::vector<int> suspectedBits = SortCriticalBits();
+		auto criticalSet = GetCriticalSet(_mask, 0);
+		std::vector<int> suspectedBits = SortCriticalBits(criticalSet, _beliefTree[m]);
 		for (size_t i = 0; i < _T; i++)
 		{
 			int bitPosition = suspectedBits[i];
