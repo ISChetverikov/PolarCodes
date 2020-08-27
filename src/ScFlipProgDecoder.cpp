@@ -341,7 +341,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	while (!IsCrcPassed(_x)) {
 		auto criticalSet = GetCriticalSet(_mask, 0);
 		std::vector<int> suspectedBits = SortCriticalBits(criticalSet, _beliefTree[m]);
-		for (size_t i = 0; i < _T; i++)
+		for (size_t i = 0; i < suspectedBits.size(); i++)
 		{
 			int bitPosition = suspectedBits[i];
 			_x[bitPosition] = !_x[bitPosition];
