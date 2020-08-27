@@ -45,7 +45,7 @@ std::vector<int> Encoder::Encode(std::vector<int> word) {
 	}
 
 	if (_codePtr->IsCrcUsed()) {
-		std::vector<int> crc(_codePtr->CrcDeg(), 0);
+		std::vector<int> crc = _crcPtr->Calculate(word);
 		std::vector<int> crcBits = _codePtr->CrcUnfrozenBits();
 
 		for (size_t i = 0; i < crcBits.size(); i++)

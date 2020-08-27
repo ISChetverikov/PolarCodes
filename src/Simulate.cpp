@@ -91,8 +91,7 @@ std::vector<int> StrToVector(std::string crcPolyStr) {
 
 	size_t deg = crcPolyStr.size();
 
-	std::vector<int> result(deg + 1, 0);
-	result[deg] = 1;
+	std::vector<int> result(deg, 0);
 
 	for (size_t i = 0; i < deg; i++)
 	{

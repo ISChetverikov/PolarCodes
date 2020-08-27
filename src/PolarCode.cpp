@@ -13,13 +13,12 @@ PolarCode::PolarCode(int m, int k, std::vector<int> reliabilitySequence, std::ve
 		throw IncorrectSequenceSizeException("Sequence length does not match with code length");
 
 	_crcPoly = crcPoly;
-	_crcDeg = _crcPoly.size() - 1;
+	_crcDeg = _crcPoly.size();
 
 	if (_k + _crcDeg > _N)
 		throw CrcPolyException("Dimensions of a message with crc do not fit with dimension of a codeword ");
 
-	if (!_crcPoly.empty())
-		_k_extended = _k + _crcDeg;
+	_k_extended = _k + _crcDeg;
 
 	// the mask and the set without crc
 	_bitsMask = std::vector<int>(_N, 0);
@@ -32,13 +31,16 @@ PolarCode::PolarCode(int m, int k, std::vector<int> reliabilitySequence, std::ve
 	sort(_unfrozenBits.begin(), _unfrozenBits.end());
 
 	// the mask and the set with crc
-	_crcMask = std::vector<int>(_N, 0);
-	_crcUnfrozenBits = std::vector<int>(_crcDeg, 0);
-	for (size_t i = sequenceLength - _k_extended, j = 0; i < sequenceLength - k; i++, j++)
-	{
-		_crcMask[reliabilitySequence[i]] = 1;
-		_crcUnfrozenBits[j] = reliabilitySequence[i];
+	if (IsCrcUsed()) {
+		_crcMask = std::vector<int>(_N, 0);
+		_crcUnfrozenBits = std::vector<int>(_crcDeg, 0);
+		for (size_t i = sequenceLength - _k_extended, j = 0; i < sequenceLength - k; i++, j++)
+		{
+			_crcMask[reliabilitySequence[i]] = 1;
+			_crcUnfrozenBits[j] = reliabilitySequence[i];
+		}
 	}
+	
 }
 
 size_t PolarCode::m() {

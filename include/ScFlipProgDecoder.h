@@ -10,7 +10,7 @@ private:
 	std::vector<std::vector<double>> _beliefTree;
 	std::vector<std::vector<int>> _uhatTree;
 	size_t _treeHeight;
-	std::vector<int> _mask;
+	std::vector<int> _maskWithCrc;
 	std::vector<int> _x;
 	CRC * _crcPtr;
 	std::vector<double> _subchannelsMeansGa;

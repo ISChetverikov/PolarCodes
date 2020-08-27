@@ -31,7 +31,14 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr)
 		_uhatTree.push_back(u);
 	}
 
-	_mask = _codePtr->BitsMask();
+	_maskWithCrc = std::vector<int>(n, 0);
+	auto maskInf = _codePtr->BitsMask();
+	auto maskCrc = _codePtr->CrcMask();
+	for (size_t i = 0; i < n; i++)
+	{
+		_maskWithCrc[i] = maskInf[i] || maskCrc[i];
+	}
+
 	_x = std::vector<int>(n, -1);
 	_crcPtr = new CRC(_codePtr->CrcPoly());
 	_subchannelsMeansGa = std::vector<double>(n, 0);;
@@ -196,7 +203,7 @@ void ScFlipProgDecoder::DecodeFrom(int position) {
 	for (size_t i = position + 1; i < n; i++)
 	{
 		PassDown(i);
-		if (_mask[i]) {
+		if (_maskWithCrc[i]) {
 			_x[i] = L(_beliefTree[m][i]);
 		}
 		else {
@@ -213,7 +220,7 @@ bool ScFlipProgDecoder::IsCrcPassed(std::vector<int> codeword) {
 	size_t deg = _codePtr->CrcDeg();
 
 	auto wordBits = _codePtr->UnfrozenBits();
-	std::vector<int> word(n, 0);
+	std::vector<int> word(k, 0);
 	for (size_t i = 0; i < k; i++)
 	{
 		word[i] = codeword[wordBits[i]];
@@ -316,7 +323,7 @@ std::vector<int> ScFlipProgDecoder::SortCriticalBits(std::vector<int> criticalSe
 std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	size_t n = inLlr.size();
 	size_t m = _codePtr->m();
-	size_t k = _codePtr->k();
+	
 	for (size_t i = 0; i < n; i++)
 	{
 		_beliefTree[0][i] = inLlr[i];
@@ -326,7 +333,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	{
 
 		PassDown(i);
-		if (_mask[i]) {
+		if (_maskWithCrc[i]) {
 			_x[i] = L(_beliefTree[m][i]);
 		}
 		else {
@@ -337,7 +344,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	}
 
 	if (!IsCrcPassed(_x)) {
-		auto criticalSet = GetCriticalSet(_mask, 0);
+		auto criticalSet = GetCriticalSet(_maskWithCrc, 0);
 		std::vector<int> suspectedBits = SortCriticalBits(criticalSet, _beliefTree[m]);
 		for (size_t i = 0; i < suspectedBits.size(); i++)
 		{
@@ -351,15 +358,11 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 		}
 	}
 
-	std::vector<int> result(k, 0);
-	size_t l = 0;
-	for (size_t i = 0; i < n; i++)
+	std::vector<int> result(_codePtr->k(), 0);
+	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
+	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
-		if (_mask[i] == 0)
-			continue;
-
-		result[l] = _x[i];
-		l++;
+		result[i] = _x[codewordBits[i]];
 	}
 
 	return result;

@@ -3,8 +3,8 @@
 
 CRC::CRC(std::vector<int> poly) {
 	_poly = poly;
-	_deg = poly.size() - 1;
-
+	_deg = poly.size();
+	_poly.push_back(1); // add main degree
 	_paddingSymbol = 0;
 	_init = std::vector<int>(_deg, 0);
 	// here exception if poly is empty
