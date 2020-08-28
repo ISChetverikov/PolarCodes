@@ -14,4 +14,5 @@ public:
 
 	CRC(std::vector<int> poly);
 	std::vector<int> Calculate(std::vector<int> bits);
+
 };

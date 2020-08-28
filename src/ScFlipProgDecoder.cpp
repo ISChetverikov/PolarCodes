@@ -203,6 +203,7 @@ void ScFlipProgDecoder::DecodeFrom(int position) {
 	size_t n = _codePtr->N();
 	size_t m = _codePtr->m();
 
+	_uhatTree[m][position] = _x[position];
 	PassUp(position);
 	for (size_t i = position + 1; i < n; i++)
 	{
@@ -347,7 +348,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 		PassUp(i);
 	}
 
-	/*if (!IsCrcPassed(_x)) {
+	if (!IsCrcPassed(_x)) {
 		auto criticalSet = GetCriticalSet(_maskWithCrc, 0);
 		std::vector<int> suspectedBits = SortCriticalBits(criticalSet, _beliefTree[m]);
 		for (size_t i = 0; i < suspectedBits.size(); i++)
@@ -359,8 +360,11 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 
 			if (IsCrcPassed(_x))
 				break;
+
+			_x[bitPosition] = !_x[bitPosition];
+			DecodeFrom(bitPosition);
 		}
-	}*/
+	}
 
 	std::vector<int> result(_codePtr->k(), 0);
 	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
