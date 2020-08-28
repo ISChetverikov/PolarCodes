@@ -4,8 +4,16 @@
 #include "Domain.h"
 #include "CRC.h"
 
+struct CriticalSetNode {
+public:
+	std::vector<CriticalSetNode *> Children;
+	std::vector<int> Path;
+	int Bit;
+};
+
 class ScFlipProgDecoder : public BaseDecoder {
 
+	
 private:
 	std::vector<std::vector<double>> _beliefTree;
 	std::vector<std::vector<int>> _uhatTree;
@@ -13,7 +21,13 @@ private:
 	std::vector<int> _maskWithCrc;
 	std::vector<int> _x;
 	CRC * _crcPtr;
+	CriticalSetNode * _criticalSetTree;
 	std::vector<double> _subchannelsMeansGa;
+
+	double _gammaLeft = 4;
+	double _gammaRight = 5;
+	std::vector<double> _omega = { 0, 0, 0.5, 0.25, 0 };
+	int _levelMax = 2;
 
 	double f(double llr1, double llr2);
 	double g(double llr1, double llr2, int u1);
@@ -38,7 +52,7 @@ private:
 
 	std::vector<int> GetCriticalSet(std::vector<int> mask, int position);
 	std::vector<int> SortCriticalBits(std::vector<int> criticalSet, std::vector<double> llrs);
-
+	CriticalSetNode * GetCriticalSetTree(std::vector<int> mask, int levelMax);
 public:
 	ScFlipProgDecoder(PolarCode * code);
 

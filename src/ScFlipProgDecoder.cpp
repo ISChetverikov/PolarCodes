@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <iostream>
+#include <queue>
 #include <algorithm>
 
 #include "../include/PolarCode.h"
@@ -16,6 +17,87 @@
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
 
+// mask: 1 - black, 0 - white
+std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int position) {
+	std::vector<std::vector<int>> tree;
+	size_t m = _codePtr->m();
+	size_t n = _codePtr->N();
+	std::vector<int> result;
+
+	for (size_t i = 0; i < m + 1; i++)
+	{
+		std::vector<int> temp((int)1 << i, 0);
+		tree.push_back(temp);
+	}
+	for (size_t i = position; i < n; i++)
+	{
+		tree[m][i] = mask[i];
+	}
+
+	for (int i = (int)m - 1; i >= 0; i--)
+	{
+		size_t levelSize = tree[i].size();
+		for (int j = 0; j < levelSize; j++)
+		{
+			int left = j << 1;
+			int right = left + 1;
+
+			tree[i][j] = tree[i + 1][left] && tree[i + 1][right];
+		}
+	}
+
+	for (size_t i = 0; i < m + 1; i++)
+	{
+		int levelSize = (int)tree[i].size();
+		for (int j = 0; j < levelSize; j++)
+		{
+			if (!tree[i][j])
+				continue;
+
+			int criticalBit = j << (m - i);
+			if (criticalBit > position)
+				result.push_back(criticalBit);
+
+			int left = j;
+			int right = j;
+			tree[i][j] = 0;
+			for (size_t k = i + 1; k <= m; k++)
+			{
+				left = left << 1;
+				right = (right << 1) + 1;
+
+				for (size_t l = left; l <= right; l++)
+					tree[k][l] = 0;
+			}
+		}
+	}
+
+	return result;
+}
+
+CriticalSetNode * ScFlipProgDecoder::GetCriticalSetTree(std::vector<int> mask, int levelMax) {
+	std::queue<CriticalSetNode *> q;
+
+	auto root = new CriticalSetNode();
+	root->Bit = -1;
+	q.push(root);
+	while (!q.empty()) {
+		CriticalSetNode * cur = q.front();
+		q.pop();
+
+		auto criticalSet = GetCriticalSet(_maskWithCrc, cur->Bit + 1);
+		for (size_t i = 0; i < criticalSet.size(); i++)
+		{
+			auto childNode = new CriticalSetNode();
+			childNode->Bit = criticalSet[i];
+			childNode->Path.push_back(cur->Bit);
+			cur->Children.push_back(childNode);
+			
+			if (childNode->Path.size() < levelMax)
+				q.push(childNode);
+		}
+	}
+}
 
 ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 	size_t m = _codePtr->m();
@@ -42,7 +124,7 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr)
 	else
 		_maskWithCrc = maskInf;
 	
-
+	_criticalSetTree = GetCriticalSetTree(_maskWithCrc);
 	_x = std::vector<int>(n, -1);
 	_crcPtr = new CRC(_codePtr->CrcPoly());
 	_subchannelsMeansGa = std::vector<double>(n, 0);;
@@ -242,64 +324,7 @@ bool ScFlipProgDecoder::IsCrcPassed(std::vector<int> codeword) {
 	return crc == crcReal;
 }
 
-// mask: 1 - black, 0 - white
-std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int position) {
-	std::vector<std::vector<int>> tree;
-	size_t m = _codePtr->m();
-	size_t n = _codePtr->N();
-	std::vector<int> result;
 
-	for (size_t i = 0; i < m + 1; i++)
-	{
-		std::vector<int> temp((int)1 << i, 0);
-		tree.push_back(temp);
-	}
-	for (size_t i = 0; i < n; i++)
-	{
-		tree[m][i] = mask[i];
-	}
-
-	for (int i = (int)m - 1; i >= 0 ; i--)
-	{
-		size_t levelSize = tree[i].size();
-		for (int j = 0; j < levelSize; j++)
-		{
-			int left = j << 1;
-			int right = left + 1;
-
-			tree[i][j] = tree[i + 1][left] && tree[i + 1][right];
-		}
-	}
-
-	for (size_t i = 0; i < m + 1; i++)
-	{
-		int levelSize = (int)tree[i].size();
-		for (int j = 0; j < levelSize; j++)
-		{
-			if (!tree[i][j])
-				continue;
-
-			int criticalBit = j << (m - i);
-			if (criticalBit > position)
-				result.push_back(criticalBit);
-
-			int left = j;
-			int right = j;
-			tree[i][j] = 0;
-			for (size_t k = i + 1; k <= m; k++)
-			{
-				left = left << 1;
-				right = (right << 1) + 1;
-
-				for (size_t l = left; l <= right; l++)
-					tree[k][l] = 0;
-			}
-		}
-	}
-
-	return result;
-
-}
 
 // with using means after gaussian approxiamtion procedure
 std::vector<int> ScFlipProgDecoder::SortCriticalBits(std::vector<int> criticalSet, std::vector<double> llrs) {
