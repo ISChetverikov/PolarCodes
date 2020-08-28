@@ -124,7 +124,7 @@ BaseDecoder * BuildDecoder(
                             std::unordered_map<std::string, std::string> decoderParams,
 							PolarCode * codePtr) {
     BaseDecoder * decoderPtr = NULL;
-    
+
     switch (decoderType)
     {
 	case decoderType::SC: {
@@ -163,10 +163,11 @@ BaseSimulator * BuildSimulator(
     switch (simulationType)
     {
     case simulatorType::MC: {
+		bool isSigmaDependOnR = (bool)ExtractInt(simulationTypeParams, "isSigmaDependOnR", "MC Simulator");
         int maxTestsCount = ExtractInt(simulationTypeParams, "maxTestsCount", "MC simulator");
         int maxRejectionsCount = ExtractInt(simulationTypeParams, "maxRejectionsCount", "MC simulator");
             
-        simulator = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, decoderPtr);
+        simulator = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, decoderPtr, isSigmaDependOnR);
     }
         break;
     default:
