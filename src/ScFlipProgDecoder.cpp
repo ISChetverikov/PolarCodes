@@ -16,6 +16,7 @@
 
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
+#define ROOT_POSITION -1
 
 // mask: 1 - black, 0 - white
 std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int position) {
@@ -89,11 +90,15 @@ CriticalSetNode * ScFlipProgDecoder::GetCriticalSetTree(std::vector<int> mask, i
 		{
 			auto childNode = new CriticalSetNode();
 			childNode->Bit = criticalSet[i];
-			childNode->Path = cur->Path;
-			childNode->Path.push_back(cur->Bit);
+			
+			if (cur->Bit != ROOT_POSITION) {
+				childNode->Path = cur->Path;
+				childNode->Path.push_back(cur->Bit);
+			}
+				
 			cur->Children.push_back(childNode);
 			
-			if (childNode->Path.size() < levelMax)
+			if (childNode->Path.size() < levelMax - 1) // indices of level from 1
 				q.push(childNode);
 		}
 	}
@@ -329,14 +334,14 @@ bool ScFlipProgDecoder::IsCrcPassed(std::vector<int> codeword) {
 
 
 // with using means after gaussian approxiamtion procedure
-std::vector<int> ScFlipProgDecoder::SortCriticalBits(std::vector<int> criticalSet, std::vector<double> llrs) {
-	size_t length = criticalSet.size();
-	std::vector<int> result(length, 0);
+std::vector<CriticalSetNode *> ScFlipProgDecoder::SortCriticalNodes(std::vector<CriticalSetNode *> criticalNodes, std::vector<double> llrs) {
+	size_t length = criticalNodes.size();
+	std::vector<CriticalSetNode *> result(length, 0);
 	std::vector<double> sortingMetric(length, 0);
 	
 	for (size_t i = 0; i < length; i++)
 	{
-		int criticalInd = criticalSet[i];
+		int criticalInd = criticalNodes[i]->Bit;
 		sortingMetric[i] = fabs(llrs[criticalInd]) / _subchannelsMeansGa[criticalInd];
 	}
 
@@ -344,9 +349,9 @@ std::vector<int> ScFlipProgDecoder::SortCriticalBits(std::vector<int> criticalSe
 	{
 		auto minIt = std::min_element(sortingMetric.begin(), sortingMetric.end());
 		int minInd = (int)std::distance(sortingMetric.begin(), minIt);
-		result[i] = criticalSet[minInd];
+		result[i] = criticalNodes[minInd];
 
-		criticalSet.erase(criticalSet.begin() + minInd);
+		criticalNodes.erase(criticalNodes.begin() + minInd);
 		sortingMetric.erase(sortingMetric.begin() + minInd);
 	}
 
@@ -379,12 +384,42 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 		std::queue<CriticalSetNode *> q;
 		q.push(_criticalSetTree);
 
-		while (!q.empty()) {
+		bool exitFlag = false;
+		while (!q.empty() && !exitFlag) {
+			auto currentNode = q.front();
+			q.pop();
 
+			auto criticalNodes = currentNode->Children;
+			std::vector<CriticalSetNode *> suspectedNodes = SortCriticalNodes(criticalNodes, _beliefTree[m]);
+
+			for (size_t i = 0; i < suspectedNodes.size(); i++)
+			{
+				
+				for (size_t j = 0; j < suspectedNodes[i]->Path.size(); j++)
+				{
+					int prevBitPosition = suspectedNodes[i]->Path[j];
+					_x[prevBitPosition] = !_x[prevBitPosition];
+					DecodeFrom(prevBitPosition);
+				}
+				int bitPosition = suspectedNodes[i]->Bit;
+				_x[bitPosition] = !_x[bitPosition];
+				DecodeFrom(bitPosition);
+				
+				if (IsCrcPassed(_x)) {
+					exitFlag = true;
+					break;
+				}
+				
+				int minPosition = suspectedNodes[i]->Path.empty() ? bitPosition : suspectedNodes[i]->Path[0];
+				_x[minPosition] = !_x[minPosition];
+				DecodeFrom(minPosition);
+
+				q.push(suspectedNodes[i]);
+			}
 		}
 
-		auto criticalSet = GetCriticalSet(_maskWithCrc, 0);
-		std::vector<int> suspectedBits = SortCriticalBits(criticalSet, _beliefTree[m]);
+		/*auto criticalSet = GetCriticalSet(_maskWithCrc, 0);
+		
 		for (size_t i = 0; i < suspectedBits.size(); i++)
 		{
 			int bitPosition = suspectedBits[i];
@@ -397,7 +432,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 
 			_x[bitPosition] = !_x[bitPosition];
 			DecodeFrom(bitPosition);
-		}
+		}*/
 	}
 
 	std::vector<int> result(_codePtr->k(), 0);

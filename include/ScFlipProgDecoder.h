@@ -27,7 +27,7 @@ private:
 	double _gammaLeft = 4;
 	double _gammaRight = 5;
 	std::vector<double> _omega = { 0, 0, 0.5, 0.25, 0 };
-	int _levelMax = 2;
+	int _levelMax = 1;
 
 	double f(double llr1, double llr2);
 	double g(double llr1, double llr2, int u1);
@@ -51,7 +51,7 @@ private:
 	bool IsCrcPassed(std::vector<int> codeword);
 
 	std::vector<int> GetCriticalSet(std::vector<int> mask, int position);
-	std::vector<int> SortCriticalBits(std::vector<int> criticalSet, std::vector<double> llrs);
+	std::vector<CriticalSetNode *> SortCriticalNodes(std::vector<CriticalSetNode *> criticalSet, std::vector<double> llrs);
 	CriticalSetNode * GetCriticalSetTree(std::vector<int> mask, int levelMax);
 public:
 	ScFlipProgDecoder(PolarCode * code);
