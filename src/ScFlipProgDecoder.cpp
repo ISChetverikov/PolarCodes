@@ -55,8 +55,7 @@ std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int po
 				continue;
 
 			int criticalBit = j << (m - i);
-			if (criticalBit > position)
-				result.push_back(criticalBit);
+			result.push_back(criticalBit);
 
 			int left = j;
 			int right = j;
@@ -90,6 +89,7 @@ CriticalSetNode * ScFlipProgDecoder::GetCriticalSetTree(std::vector<int> mask, i
 		{
 			auto childNode = new CriticalSetNode();
 			childNode->Bit = criticalSet[i];
+			childNode->Path = cur->Path;
 			childNode->Path.push_back(cur->Bit);
 			cur->Children.push_back(childNode);
 			
@@ -97,6 +97,8 @@ CriticalSetNode * ScFlipProgDecoder::GetCriticalSetTree(std::vector<int> mask, i
 				q.push(childNode);
 		}
 	}
+
+	return root;
 }
 
 ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
@@ -124,7 +126,7 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr)
 	else
 		_maskWithCrc = maskInf;
 	
-	_criticalSetTree = GetCriticalSetTree(_maskWithCrc);
+	_criticalSetTree = GetCriticalSetTree(_maskWithCrc, _levelMax);
 	_x = std::vector<int>(n, -1);
 	_crcPtr = new CRC(_codePtr->CrcPoly());
 	_subchannelsMeansGa = std::vector<double>(n, 0);;
@@ -374,6 +376,13 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	}
 
 	if (!IsCrcPassed(_x)) {
+		std::queue<CriticalSetNode *> q;
+		q.push(_criticalSetTree);
+
+		while (!q.empty()) {
+
+		}
+
 		auto criticalSet = GetCriticalSet(_maskWithCrc, 0);
 		std::vector<int> suspectedBits = SortCriticalBits(criticalSet, _beliefTree[m]);
 		for (size_t i = 0; i < suspectedBits.size(); i++)
