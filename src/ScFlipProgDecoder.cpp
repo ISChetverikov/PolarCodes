@@ -79,7 +79,7 @@ CriticalSetNode * ScFlipProgDecoder::GetCriticalSetTree(std::vector<int> mask, i
 	std::queue<CriticalSetNode *> q;
 
 	auto root = new CriticalSetNode();
-	root->Bit = -1;
+	root->Bit = ROOT_POSITION;
 	q.push(root);
 	while (!q.empty()) {
 		CriticalSetNode * cur = q.front();

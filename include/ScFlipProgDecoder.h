@@ -27,7 +27,7 @@ private:
 	double _gammaLeft = 4;
 	double _gammaRight = 5;
 	std::vector<double> _omega = { 0, 0, 0.5, 0.25, 0 };
-	int _levelMax = 1;
+	int _levelMax = 4;
 
 	double f(double llr1, double llr2);
 	double g(double llr1, double llr2, int u1);
