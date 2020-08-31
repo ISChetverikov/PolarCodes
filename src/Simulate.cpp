@@ -160,7 +160,7 @@ BaseDecoder * BuildDecoder(
 		int gammaLeft = ExtractInt(decoderParams, "gammaLeft", "SCFlipProg decoder");
 		int gammaRight = ExtractInt(decoderParams, "gammaRight", "SCFlipProg decoder");
 		std::string omegaArrString = ExtractString(decoderParams, "omegaArr", "SCFlipProg decoder", true);
-		std::vector<double> omegaArr = OmegaArrStrToVector(omegaArr);
+		std::vector<double> omegaArr = OmegaArrStrToVector(omegaArrString);
 
 		decoderPtr = new ScFlipProgDecoder(codePtr, level, gammaLeft, gammaRight, omegaArr);
 	}

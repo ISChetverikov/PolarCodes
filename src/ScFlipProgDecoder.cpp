@@ -131,15 +131,15 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr, int level, double gamm
 	else
 		_maskWithCrc = maskInf;
 	
-	_criticalSetTree = GetCriticalSetTree(_maskWithCrc, _levelMax);
-	_x = std::vector<int>(n, -1);
-	_crcPtr = new CRC(_codePtr->CrcPoly());
-	_subchannelsMeansGa = std::vector<double>(n, 0);
-
 	_gammaLeft = gammaLeft;
 	_gammaRight = gammaRight;
 	_levelMax = level;
 	_omegaArr = omegaArr;
+
+	_criticalSetTree = GetCriticalSetTree(_maskWithCrc, _levelMax);
+	_x = std::vector<int>(n, -1);
+	_crcPtr = new CRC(_codePtr->CrcPoly());
+	_subchannelsMeansGa = std::vector<double>(n, 0);
 }
 
 domain ScFlipProgDecoder::GetDomain() {
@@ -382,15 +382,15 @@ bool ScFlipProgDecoder::NoChild(CriticalSetNode * node, std::vector<double> inLl
 	size_t criticalSetSize = node->Children.size();
 	
 	if (position >= n)
-		return false;
+		return true;
 
 	if (criticalSetSize <= 0)
-		return false;
+		return true;
 
 	size_t level = node->Path.size() + 1;
 
-	if (_omegaArr[level] == 0.0)
-		return true;
+	if (_omegaArr[level] == 1.0)
+		return false;
 
 	std::vector<int> maskWithoutCriticalSet = _maskWithCrc;
 	for (size_t i = 0; i < criticalSetSize; i++)
@@ -414,9 +414,11 @@ bool ScFlipProgDecoder::NoChild(CriticalSetNode * node, std::vector<double> inLl
 
 	return ((double)n2 ) / n1 > _omegaArr[level];
 }
-bool ScFlipProgDecoder::NotSelect(int position) {
-
-	return true;
+bool ScFlipProgDecoder::NotSelect(int position, std::vector<double> inLlr) {
+	double mu = _subchannelsMeansGa[position];
+	double sigma = sqrt(2 * mu);
+	
+	return inLlr[position] > mu + _gammaRight * sigma;
 }
 
 std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
@@ -456,7 +458,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 			for (size_t i = 0; i < suspectedNodes.size(); i++)
 			{
 				int bitPosition = suspectedNodes[i]->Bit;
-				if (NotSelect(bitPosition))
+				if (NotSelect(bitPosition, inLlr))
 					continue;
 
 				size_t pathSize = suspectedNodes[i]->Path.size();

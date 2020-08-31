@@ -54,7 +54,7 @@ private:
 	std::vector<CriticalSetNode *> SortCriticalNodes(std::vector<CriticalSetNode *> criticalSet, std::vector<double> llrs);
 	CriticalSetNode * GetCriticalSetTree(std::vector<int> mask, int levelMax);
 	bool NoChild(CriticalSetNode * node, std::vector<double> inLlr);
-	bool NotSelect(int position);
+	bool NotSelect(int position, std::vector<double> inLlr);
 
 public:
 	ScFlipProgDecoder(PolarCode * code, int level, double gammaLeft, double gammaRight, std::vector<double> omegaArr);
