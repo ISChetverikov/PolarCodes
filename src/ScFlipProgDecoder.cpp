@@ -324,6 +324,17 @@ void ScFlipProgDecoder::DecodeFromTo(int startPosition, int endPosition) {
 		_uhatTree[m][i] = _x[i];
 		PassUp(i);
 	}
+
+	if (endPosition != n) {
+		PassDown(endPosition);
+		if (_maskWithCrc[endPosition]) {
+			_x[endPosition] = L(_beliefTree[m][endPosition]);
+		}
+		else {
+			_x[endPosition] = FROZEN_VALUE;
+		}
+	}
+		
 }
 
 bool ScFlipProgDecoder::IsCrcPassed(std::vector<int> codeword) {
@@ -458,8 +469,8 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 			for (size_t i = 0; i < suspectedNodes.size(); i++)
 			{
 				int bitPosition = suspectedNodes[i]->Bit;
-				if (NotSelect(bitPosition, inLlr))
-					continue;
+			//if (NotSelect(bitPosition, inLlr))
+					//continue;
 
 				size_t pathSize = suspectedNodes[i]->Path.size();
 				for (size_t j = 0; j < pathSize; j++)
@@ -471,7 +482,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 				}
 				
 				_x[bitPosition] = !_x[bitPosition];
-				DecodeFromTo(bitPosition, n);
+				DecodeFromTo(bitPosition, (int)n);
 				
 				if (IsCrcPassed(_x)) {
 					exitFlag = true;
@@ -480,9 +491,9 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 				
 				int minPosition = suspectedNodes[i]->Path.empty() ? bitPosition : suspectedNodes[i]->Path[0];
 				_x[minPosition] = !_x[minPosition];
-				DecodeFromTo(minPosition, n);
+				DecodeFromTo(minPosition, (int)n);
 				
-				if (!NoChild(suspectedNodes[i], inLlr))
+				//if (!NoChild(suspectedNodes[i], inLlr))
 					q.push(suspectedNodes[i]);
 			}
 		}
