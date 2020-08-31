@@ -47,7 +47,7 @@ private:
 	void PassDown(size_t iter);
 	void PassUp(size_t iter);
 
-	void DecodeFrom(int position);
+	void DecodeFromTo(int position, int endPosition);
 	bool IsCrcPassed(std::vector<int> codeword);
 
 	std::vector<int> GetCriticalSet(std::vector<int> mask, int position);
