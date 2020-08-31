@@ -85,7 +85,7 @@ std::vector<int> ReadSequenceFromFile(std::string path) {
 	return seq;
 }
 
-std::vector<int> StrToVector(std::string crcPolyStr) {
+std::vector<int> PolyStrToVector(std::string crcPolyStr) {
 	if (crcPolyStr.empty())
 		return std::vector<int>();
 
@@ -105,13 +105,28 @@ std::vector<int> StrToVector(std::string crcPolyStr) {
 	return result;
 }
 
+std::vector<double> OmegaArrStrToVector(std::string str)
+{
+	if (str.empty())
+		return std::vector<double>();
+
+	std::vector<double> result;
+	std::string token;
+	std::istringstream tokenStream(str);
+	while (std::getline(tokenStream, token, ','))
+	{
+		result.push_back(std::stod(token));
+	}
+	return result;
+}
+
 PolarCode * BuildCode(std::unordered_map<std::string, std::string> codeParams) {
 	PolarCode * codePtr;
 
 	int m = ExtractInt(codeParams, "m", "PolarCode");
 	int k = ExtractInt(codeParams, "k", "PolarCode");
 	std::string crcPolyString = ExtractString(codeParams, "CRC", "PolarCode", false);
-	std::vector<int> crcPoly = StrToVector(crcPolyString);
+	std::vector<int> crcPoly = PolyStrToVector(crcPolyString);
 	std::string sequenceFilePath = ExtractString(codeParams, "sequenceFile", "PolarCode", true);
 	std::vector<int> reliabilitySequence = ReadSequenceFromFile(sequenceFilePath);
 
@@ -141,7 +156,13 @@ BaseDecoder * BuildDecoder(
 		decoderPtr = new ScFlipDecoder(codePtr, T);
 	}
 	case decoderType::SCFlipProg: {
-		decoderPtr = new ScFlipProgDecoder(codePtr);
+		int level = ExtractInt(decoderParams, "level", "SCFlipProg decoder");
+		int gammaLeft = ExtractInt(decoderParams, "gammaLeft", "SCFlipProg decoder");
+		int gammaRight = ExtractInt(decoderParams, "gammaRight", "SCFlipProg decoder");
+		std::string omegaArrString = ExtractString(decoderParams, "omegaArr", "SCFlipProg decoder", true);
+		std::vector<double> omegaArr = OmegaArrStrToVector(omegaArr);
+
+		decoderPtr = new ScFlipProgDecoder(codePtr, level, gammaLeft, gammaRight, omegaArr);
 	}
 		break;
     default:

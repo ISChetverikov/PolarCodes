@@ -24,10 +24,10 @@ private:
 	CriticalSetNode * _criticalSetTree;
 	std::vector<double> _subchannelsMeansGa;
 
-	double _gammaLeft = 4;
-	double _gammaRight = 5;
-	std::vector<double> _omega = { 0, 0, 0.5, 0.25, 0 };
-	int _levelMax = 4;
+	double _gammaLeft;
+	double _gammaRight;
+	std::vector<double> _omegaArr;
+	int _levelMax;
 
 	double f(double llr1, double llr2);
 	double g(double llr1, double llr2, int u1);
@@ -53,8 +53,11 @@ private:
 	std::vector<int> GetCriticalSet(std::vector<int> mask, int position);
 	std::vector<CriticalSetNode *> SortCriticalNodes(std::vector<CriticalSetNode *> criticalSet, std::vector<double> llrs);
 	CriticalSetNode * GetCriticalSetTree(std::vector<int> mask, int levelMax);
+	bool NoChild(CriticalSetNode * node, std::vector<double> inLlr);
+	bool NotSelect(int position);
+
 public:
-	ScFlipProgDecoder(PolarCode * code);
+	ScFlipProgDecoder(PolarCode * code, int level, double gammaLeft, double gammaRight, std::vector<double> omegaArr);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
 	void SetSigma(double sigma) override;

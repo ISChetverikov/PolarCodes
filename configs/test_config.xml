@@ -23,8 +23,8 @@
         <Param name="gammaLeft">3</Param>
         <Param name="gammRight">4</Param>
         <Param name="delta">1.0</Param>
-        <Param name="pruning">1</Param>
         <Param name="level">4</Param>
+        <Param name="omegaArr">0,0,0.5,0.25,0</Param>
       </Decoder>
     </Simulation>
 </Config>

@@ -106,7 +106,7 @@ CriticalSetNode * ScFlipProgDecoder::GetCriticalSetTree(std::vector<int> mask, i
 	return root;
 }
 
-ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
+ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr, int level, double gammaLeft, double gammaRight, std::vector<double> omegaArr) : BaseDecoder(codePtr) {
 	size_t m = _codePtr->m();
 	size_t n = _codePtr->N();
 	_treeHeight = m + 1;
@@ -134,7 +134,12 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr) : BaseDecoder(codePtr)
 	_criticalSetTree = GetCriticalSetTree(_maskWithCrc, _levelMax);
 	_x = std::vector<int>(n, -1);
 	_crcPtr = new CRC(_codePtr->CrcPoly());
-	_subchannelsMeansGa = std::vector<double>(n, 0);;
+	_subchannelsMeansGa = std::vector<double>(n, 0);
+
+	_gammaLeft = gammaLeft;
+	_gammaRight = gammaRight;
+	_levelMax = level;
+	_omegaArr = omegaArr;
 }
 
 domain ScFlipProgDecoder::GetDomain() {
@@ -371,6 +376,49 @@ std::vector<CriticalSetNode *> ScFlipProgDecoder::SortCriticalNodes(std::vector<
 	return result;
 }
 
+bool ScFlipProgDecoder::NoChild(CriticalSetNode * node, std::vector<double> inLlr) {
+	int position = node->Bit;
+	size_t n = _codePtr->N();
+	size_t criticalSetSize = node->Children.size();
+	
+	if (position >= n)
+		return false;
+
+	if (criticalSetSize <= 0)
+		return false;
+
+	size_t level = node->Path.size() + 1;
+
+	if (_omegaArr[level] == 0.0)
+		return true;
+
+	std::vector<int> maskWithoutCriticalSet = _maskWithCrc;
+	for (size_t i = 0; i < criticalSetSize; i++)
+	{
+		maskWithoutCriticalSet[node->Children[i]->Bit] = 0;
+	}
+
+	int n1 = 0;
+	int n2 = 0;
+	for (size_t i = position; i < n; i++)
+	{
+		if (maskWithoutCriticalSet[i]) {
+			n1++;
+
+			double mu = _subchannelsMeansGa[i];
+			double sigma = sqrt(2 * mu);
+			if (inLlr[i] < mu - _gammaLeft * sigma)
+				n2++;
+		}
+	}
+
+	return ((double)n2 ) / n1 > _omegaArr[level];
+}
+bool ScFlipProgDecoder::NotSelect(int position) {
+
+	return true;
+}
+
 std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	size_t n = inLlr.size();
 	size_t m = _codePtr->m();
@@ -408,6 +456,8 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 			for (size_t i = 0; i < suspectedNodes.size(); i++)
 			{
 				int bitPosition = suspectedNodes[i]->Bit;
+				if (NotSelect(bitPosition))
+					continue;
 
 				size_t pathSize = suspectedNodes[i]->Path.size();
 				for (size_t j = 0; j < pathSize; j++)
@@ -429,8 +479,9 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 				int minPosition = suspectedNodes[i]->Path.empty() ? bitPosition : suspectedNodes[i]->Path[0];
 				_x[minPosition] = !_x[minPosition];
 				DecodeFromTo(minPosition, n);
-
-				q.push(suspectedNodes[i]);
+				
+				if (!NoChild(suspectedNodes[i], inLlr))
+					q.push(suspectedNodes[i]);
 			}
 		}
 
