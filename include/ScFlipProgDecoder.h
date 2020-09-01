@@ -29,6 +29,9 @@ private:
 	std::vector<double> _omegaArr;
 	int _levelMax;
 
+	// optimization allocation
+	std::vector<int> _binaryIter;
+
 	double f(double llr1, double llr2);
 	double g(double llr1, double llr2, int u1);
 	int L(double llr1);

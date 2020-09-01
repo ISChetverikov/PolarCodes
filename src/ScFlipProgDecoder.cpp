@@ -140,6 +140,9 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr, int level, double gamm
 	_x = std::vector<int>(n, -1);
 	_crcPtr = new CRC(_codePtr->CrcPoly());
 	_subchannelsMeansGa = std::vector<double>(n, 0);
+
+	// optimization allocation
+	_binaryIter = std::vector<int>(m, 0);
 }
 
 domain ScFlipProgDecoder::GetDomain() {
@@ -160,33 +163,33 @@ void ScFlipProgDecoder::SetSigma(double sigma) {
 	return;
 }
 
-double ScFlipProgDecoder::f(double llr1, double llr2) {
-	double prod = tanh(llr1 / 2) * tanh(llr2 / 2);
-	double limit = 0.9999999999999999;
-
-	if (prod > limit)
-		prod = limit;
-	if (prod < -limit)
-		prod = -limit;
-
-	return 2 * atanh(prod);
-}
-
-
 //double ScFlipProgDecoder::f(double llr1, double llr2) {
-//	double sign = 1.0;
+//	double prod = tanh(llr1 / 2) * tanh(llr2 / 2);
+//	double limit = 0.9999999999999999;
 //
-//	if (llr1 < 0) {
-//		sign *= -1;
-//		llr1 *= -1;
-//	}
-//	if (llr2 < 0) {
-//		sign *= -1;
-//		llr2 *= -1;
-//	}
+//	if (prod > limit)
+//		prod = limit;
+//	if (prod < -limit)
+//		prod = -limit;
 //
-//	return ((llr1 < llr2) ? llr1 : llr2) * sign;
+//	return 2 * atanh(prod);
 //}
+
+
+double ScFlipProgDecoder::f(double llr1, double llr2) {
+	double sign = 1.0;
+
+	if (llr1 < 0) {
+		sign *= -1;
+		llr1 *= -1;
+	}
+	if (llr2 < 0) {
+		sign *= -1;
+		llr2 *= -1;
+	}
+
+	return ((llr1 < llr2) ? llr1 : llr2) * sign;
+}
 
 double ScFlipProgDecoder::g(double llr1, double llr2, int u1) {
 	return llr2 + (1 - 2 * u1) * llr1;
@@ -245,11 +248,12 @@ void ScFlipProgDecoder::PassDown(size_t iter) {
 		level = 0;
 	}
 
-	std::vector<int> binaryIter(m - level, 0);
+	//std::vector<int> binaryIter(m - level, 0);
+	int size = m - level;
 	size_t iterCopy = iter;
-	for (int i = (int)binaryIter.size() - 1; i >= 0; i--)
+	for (int i = size - 1; i >= 0; i--)
 	{
-		binaryIter[i] = iterCopy % 2;
+		_binaryIter[i] = iterCopy % 2;
 		iterCopy = iterCopy >> 1;
 	}
 
@@ -259,7 +263,7 @@ void ScFlipProgDecoder::PassDown(size_t iter) {
 		size_t ones = ~0u;
 		size_t offset = iter & (ones << (m - i));
 
-		if (!binaryIter[i - level]) {
+		if (!_binaryIter[i - level]) {
 			FillLeftMessageInTree(_beliefTree[i].begin() + offset,
 				_beliefTree[i].begin() + offset + length,
 				_beliefTree[i + 1].begin() + offset,
@@ -454,7 +458,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 		PassUp(i);
 	}
 
-	if (!IsCrcPassed(_x)) {
+	if (!IsCrcPassed(_x) && false) {
 		std::queue<CriticalSetNode *> q;
 		q.push(_criticalSetTree);
 

@@ -119,7 +119,6 @@ void ScFlipDecoder::PassDown(size_t iter) {
 		binaryIter[i] = iterCopy % 2;
 		iterCopy = iterCopy >> 1;
 	}
-
 	size_t length = (size_t)1 << (m - level - 1);
 	for (size_t i = level; i < m; i++)
 	{
