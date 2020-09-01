@@ -365,7 +365,6 @@ bool ScFlipProgDecoder::IsCrcPassed(std::vector<int> codeword) {
 }
 
 
-
 // with using means after gaussian approxiamtion procedure
 std::vector<CriticalSetNode *> ScFlipProgDecoder::SortCriticalNodes(std::vector<CriticalSetNode *> criticalNodes, std::vector<double> llrs) {
 	size_t length = criticalNodes.size();
@@ -404,7 +403,7 @@ bool ScFlipProgDecoder::NoChild(CriticalSetNode * node, std::vector<double> inLl
 
 	size_t level = node->Path.size() + 1;
 
-	if (_omegaArr[level] == 1.0)
+	if (_omegaArr[level] >= 1.0)
 		return false;
 
 	std::vector<int> maskWithoutCriticalSet = _maskWithCrc;
@@ -412,6 +411,7 @@ bool ScFlipProgDecoder::NoChild(CriticalSetNode * node, std::vector<double> inLl
 	{
 		maskWithoutCriticalSet[node->Children[i]->Bit] = 0;
 	}
+	maskWithoutCriticalSet[node->Bit] = 0;
 
 	int n1 = 0;
 	int n2 = 0;
@@ -429,7 +429,13 @@ bool ScFlipProgDecoder::NoChild(CriticalSetNode * node, std::vector<double> inLl
 
 	return ((double)n2 ) / n1 > _omegaArr[level];
 }
-bool ScFlipProgDecoder::NotSelect(int position, std::vector<double> inLlr) {
+bool ScFlipProgDecoder::NotSelect(CriticalSetNode * node, std::vector<double> inLlr) {
+	int position = node->Bit;
+	size_t level = node->Path.size() + 1;
+
+	if (_omegaArr[level] >= 1.0)
+		return false;
+
 	double mu = _subchannelsMeansGa[position];
 	double sigma = sqrt(2 * mu);
 	
@@ -458,7 +464,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 		PassUp(i);
 	}
 
-	if (!IsCrcPassed(_x) && false) {
+	if (!IsCrcPassed(_x)) {
 		std::queue<CriticalSetNode *> q;
 		q.push(_criticalSetTree);
 
@@ -473,8 +479,8 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 			for (size_t i = 0; i < suspectedNodes.size(); i++)
 			{
 				int bitPosition = suspectedNodes[i]->Bit;
-			//if (NotSelect(bitPosition, inLlr))
-					//continue;
+				if (NotSelect(suspectedNodes[i], inLlr))
+					continue;
 
 				size_t pathSize = suspectedNodes[i]->Path.size();
 				for (size_t j = 0; j < pathSize; j++)
@@ -497,7 +503,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 				_x[minPosition] = !_x[minPosition];
 				DecodeFromTo(minPosition, (int)n);
 				
-				//if (!NoChild(suspectedNodes[i], inLlr))
+				if (!NoChild(suspectedNodes[i], inLlr))
 					q.push(suspectedNodes[i]);
 			}
 		}
