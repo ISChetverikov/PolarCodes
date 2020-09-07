@@ -431,10 +431,12 @@ bool ScFlipProgDecoder::NoChild(CriticalSetNode * node, std::vector<double> inLl
 }
 bool ScFlipProgDecoder::NotSelect(CriticalSetNode * node, std::vector<double> inLlr) {
 	int position = node->Bit;
-	size_t level = node->Path.size() + 1;
+	size_t level_dec = node->Path.size();
 
-	if (_omegaArr[level] >= 1.0)
+	if (_omegaArr[level_dec] >= 1.0)
 		return false;
+
+	//std::cout << level_dec << std::endl;
 
 	double mu = _subchannelsMeansGa[position];
 	double sigma = sqrt(2 * mu);
