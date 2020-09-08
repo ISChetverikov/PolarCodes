@@ -188,6 +188,8 @@ std::vector<int> ScDecoder::TakeResult() {
 	{
 		result[i] = _x[codewordBits[i]];
 	}
+
+	return result;
 }
 
 std::vector<int> ScDecoder::Decode(std::vector<double> inLlr) {

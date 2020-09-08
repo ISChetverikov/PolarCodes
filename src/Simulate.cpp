@@ -125,6 +125,8 @@ domain ToStrDomain(std::string domainStr) {
 		return P1;
 	if (domainStr == "LLR")
 		return LLR;
+	else
+		throw UnknownDomainException("Unknown domain in decoder settings");
 }
 
 PolarCode * BuildCode(std::unordered_map<std::string, std::string> codeParams) {

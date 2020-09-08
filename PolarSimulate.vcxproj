@@ -39,7 +39,7 @@
     <ClInclude Include="include\Simulate.h" />
     <ClInclude Include="include\SimulationParameters.h" />
     <ClInclude Include="include\SimulationType.h" />
-    <ClInclude Include="src\ScCrcAidedDecoder.cpp" />
+    <ClCompile Include="src\ScCrcAidedDecoder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseSimulator.cpp" />
