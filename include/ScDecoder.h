@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BaseDecoder.h"
-#include "Domain.h"
 
 class ScDecoder : public BaseDecoder {
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ScDecoder.h"
 #include "CRC.h"
+#include "ScDecoder.h"
 
 // logically it is abstract class
 class ScCrcAidedDecoder : public ScDecoder {
@@ -16,5 +16,6 @@ protected:
 
 public:
 	ScCrcAidedDecoder(PolarCode * code, domain domain, bool isMinSum);
+	
 	~ScCrcAidedDecoder() {};
 };

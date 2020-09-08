@@ -6,15 +6,14 @@
 #include <iostream>
 #include <algorithm>
 
-#include "../include/PolarCode.h"
-#include "../include/ScFlipDecoder.h"
 #include "../include/ScCrcAidedDecoder.h"
+#include "../include/ScFlipDecoder.h"
+#include "../include/PolarCode.h"
 #include "../include/Exceptions.h"
 #include "../include/Domain.h"
 
-#define DBL_MAX 1.7976931348623158e+308 
-#define FROZEN_VALUE 0
 
+#define FROZEN_VALUE 0
 
 ScFlipDecoder::ScFlipDecoder(PolarCode * codePtr, domain domain, bool isMinSum, int T) : ScCrcAidedDecoder(codePtr, domain, isMinSum) {
 	_T = T;

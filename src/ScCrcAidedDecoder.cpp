@@ -8,7 +8,6 @@
 #include <algorithm>
 
 #include "../include/PolarCode.h"
-#include "../include/ScDecoder.h"
 #include "../include/ScCrcAidedDecoder.h"
 #include "../include/Exceptions.h"
 #include "../include/Domain.h"

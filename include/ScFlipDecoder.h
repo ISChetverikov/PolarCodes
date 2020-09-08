@@ -5,9 +5,6 @@
 class ScFlipDecoder : public ScCrcAidedDecoder {
 private:
 	int _T;
-
-protected:
-	
 	std::vector<int> GetSmallestLlrsIndices(std::vector<double> llrs, int count);
 
 public:

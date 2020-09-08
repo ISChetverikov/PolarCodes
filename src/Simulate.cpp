@@ -172,7 +172,7 @@ BaseDecoder * BuildDecoder(
 		std::string omegaArrString = ExtractString(decoderParams, "omegaArr", "SCFlipProg decoder", true);
 		std::vector<double> omegaArr = OmegaArrStrToVector(omegaArrString);
 
-		decoderPtr = new ScFlipProgDecoder(codePtr, domain, isMinSum, level, gammaLeft, gammaRight, omegaArr);
+		//decoderPtr = new ScFlipProgDecoder(codePtr, domain, isMinSum, level, gammaLeft, gammaRight, omegaArr);
 	}
 		break;
     default:

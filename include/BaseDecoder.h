@@ -1,8 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <algorithm>
-#include <stdexcept>
 #include <functional>
 
 #include "PolarCode.h"
@@ -37,5 +35,5 @@ public:
 	virtual void SetSigma(double sigma);
 	double GetSigma();
 	virtual std::vector<int> Decode(std::vector<double> llr) = 0;
-	virtual ~BaseDecoder() {};
+	~BaseDecoder() {};
 };
