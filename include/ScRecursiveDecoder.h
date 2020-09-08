@@ -22,7 +22,6 @@ public:
 	ScRecursiveDecoder(PolarCode * codePtr, domain domain, bool isMinSum);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
-	domain GetDomain() override;
 
 	~ScRecursiveDecoder() {};
 };

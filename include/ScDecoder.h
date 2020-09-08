@@ -36,8 +36,6 @@ public:
 	ScDecoder(PolarCode * code, domain domain, bool isMinSum);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
-	void SetSigma(double sigma) override;
-	domain GetDomain() override;
 
 	~ScDecoder() {};
 };

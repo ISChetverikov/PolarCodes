@@ -33,7 +33,7 @@ protected:
 public:
 	BaseDecoder(PolarCode * codePtr, domain domain, bool isMinSum);
 	
-	virtual domain GetDomain() = 0;
+	virtual domain GetDomain();
 	virtual void SetSigma(double sigma);
 	double GetSigma();
 	virtual std::vector<int> Decode(std::vector<double> llr) = 0;

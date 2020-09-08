@@ -37,6 +37,19 @@ ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr,
 	_subchannelsMeansGa = std::vector<double>(n, 0);
 }
 
+void ScFlipProgDecoder::SetSigma(double sigma) {
+	BaseDecoder::SetSigma(sigma);
+
+	GaussianApproximation ga(sigma);
+	size_t n = _codePtr->N();
+	for (size_t i = 0; i < n; i++)
+	{
+		_subchannelsMeansGa[i] = ga.GetMu(i + 1, n);
+	}
+
+	return;
+}
+
 // mask: 1 - black, 0 - white
 std::vector<int> ScFlipProgDecoder::GetCriticalSet(std::vector<int> mask, int position) {
 	std::vector<std::vector<int>> tree;

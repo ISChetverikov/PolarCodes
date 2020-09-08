@@ -96,7 +96,7 @@ void ScDecoder::PassDown(size_t iter) {
 	}
 
 	//std::vector<int> binaryIter(m - level, 0);
-	int size = m - level;
+	int size = (int)(m - level);
 	size_t iterCopy = iter;
 	for (int i = size - 1; i >= 0; i--)
 	{

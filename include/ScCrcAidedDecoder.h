@@ -1,9 +1,6 @@
 #pragma once
 
-#pragma once
-
 #include "ScDecoder.h"
-#include "Domain.h"
 #include "CRC.h"
 
 // logically it is abstract class

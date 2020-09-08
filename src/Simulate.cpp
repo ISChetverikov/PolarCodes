@@ -120,6 +120,13 @@ std::vector<double> OmegaArrStrToVector(std::string str)
 	return result;
 }
 
+domain ToStrDomain(std::string domainStr) {
+	if (domainStr == "P1")
+		return P1;
+	if (domainStr == "LLR")
+		return LLR;
+}
+
 PolarCode * BuildCode(std::unordered_map<std::string, std::string> codeParams) {
 	PolarCode * codePtr;
 
@@ -139,11 +146,14 @@ BaseDecoder * BuildDecoder(
                             std::unordered_map<std::string, std::string> decoderParams,
 							PolarCode * codePtr) {
     BaseDecoder * decoderPtr = NULL;
-
+	
+	std::string domainStr = ExtractString(decoderParams, "Domain", "Decoder Section", true);
+	bool isMinSum = (bool)ExtractInt(decoderParams, "isMinSum", "Decoder Section");
+	domain domain = ToStrDomain(domainStr);
     switch (decoderType)
     {
 	case decoderType::SCRecursive: {
-		decoderPtr = new ScRecursiveDecoder(codePtr);
+		decoderPtr = new ScRecursiveDecoder(codePtr, domain, isMinSum);
 	}
 		break;
 	case decoderType::SCFano: {
@@ -153,7 +163,7 @@ BaseDecoder * BuildDecoder(
 	}
 	case decoderType::SCFlip: {
 		int T = ExtractInt(decoderParams, "T", "SCFlip decoder");
-		decoderPtr = new ScFlipDecoder(codePtr, T);
+		decoderPtr = new ScFlipDecoder(codePtr, domain, isMinSum, T);
 	}
 	case decoderType::SCFlipProg: {
 		int level = ExtractInt(decoderParams, "level", "SCFlipProg decoder");
@@ -162,7 +172,7 @@ BaseDecoder * BuildDecoder(
 		std::string omegaArrString = ExtractString(decoderParams, "omegaArr", "SCFlipProg decoder", true);
 		std::vector<double> omegaArr = OmegaArrStrToVector(omegaArrString);
 
-		decoderPtr = new ScFlipProgDecoder(codePtr, level, gammaLeft, gammaRight, omegaArr);
+		decoderPtr = new ScFlipProgDecoder(codePtr, domain, isMinSum, level, gammaLeft, gammaRight, omegaArr);
 	}
 		break;
     default:
