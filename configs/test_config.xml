@@ -13,7 +13,7 @@
         <Param name="m">10</Param>
         <Param name="k">488</Param>
         <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\1024.txt</Param>
-        <Param name="CRC">100000000000000001100011</Param>
+        <Param name="CR1C">100000000000000001100011</Param>
         <Param name="CRC1">111</Param>
       </Code>
       <Decoder type="SCRecursive">

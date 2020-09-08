@@ -150,7 +150,7 @@ BaseDecoder * BuildDecoder(
     BaseDecoder * decoderPtr = NULL;
 	
 	std::string domainStr = ExtractString(decoderParams, "Domain", "Decoder Section", true);
-	bool isMinSum = (bool)ExtractInt(decoderParams, "isMinSum", "Decoder Section");
+	bool isMinSum = (bool)ExtractInt(decoderParams, "IsMinSum", "Decoder Section");
 	domain domain = ToStrDomain(domainStr);
     switch (decoderType)
     {
@@ -174,7 +174,7 @@ BaseDecoder * BuildDecoder(
 		std::string omegaArrString = ExtractString(decoderParams, "omegaArr", "SCFlipProg decoder", true);
 		std::vector<double> omegaArr = OmegaArrStrToVector(omegaArrString);
 
-		//decoderPtr = new ScFlipProgDecoder(codePtr, domain, isMinSum, level, gammaLeft, gammaRight, omegaArr);
+		decoderPtr = new ScFlipProgDecoder(codePtr, domain, isMinSum, level, gammaLeft, gammaRight, omegaArr);
 	}
 		break;
     default:
