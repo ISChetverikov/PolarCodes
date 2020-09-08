@@ -30,13 +30,16 @@
     <ClInclude Include="include\DecoderType.h" />
     <ClInclude Include="include\Exceptions.h" />
     <ClInclude Include="include\MonteCarloSimulator.h" />
+    <ClInclude Include="include\ScCrcAidedDecoder.h" />
     <ClInclude Include="include\ScDecoder.h" />
+    <ClInclude Include="include\ScRecursiveDecoder.h" />
     <ClInclude Include="include\ScFanoDecoder.h" />
     <ClInclude Include="include\ScFlipDecoder.h" />
     <ClInclude Include="include\ScFlipProgDecoder.h" />
     <ClInclude Include="include\Simulate.h" />
     <ClInclude Include="include\SimulationParameters.h" />
     <ClInclude Include="include\SimulationType.h" />
+    <ClInclude Include="src\ScCrcAidedDecoder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseSimulator.cpp" />
@@ -51,6 +54,7 @@
     <ClCompile Include="src\MonteCarloSimulator.cpp" />
     <ClCompile Include="src\PolarCode.cpp" />
     <ClCompile Include="src\ScDecoder.cpp" />
+    <ClCompile Include="src\ScRecursiveDecoder.cpp" />
     <ClCompile Include="src\ScFanoDecoder.cpp" />
     <ClCompile Include="src\ScFlipDecoder.cpp" />
     <ClCompile Include="src\ScFlipProgDecoder.cpp" />

@@ -2,7 +2,7 @@
 
 decoderType decoderTypeFromString(std::string str) {
 	std::unordered_map<std::string, decoderType> decoderTypeResolver = {
-		{"SC", decoderType::SC},
+		{"SCRecursive", decoderType::SCRecursive},
 		{"SCFano", decoderType::SCFano},
 		{"SCFlip", decoderType::SCFlip},
 		{"SCFlipProg", decoderType::SCFlipProg}
@@ -17,7 +17,7 @@ decoderType decoderTypeFromString(std::string str) {
 std::string decoderTypeToString(decoderType type) {
 
 	std::unordered_map<decoderType, std::string> decoderTypeStringResolver = {
-		{decoderType::SC, "SC"},
+		{decoderType::SCRecursive, "SCRecursive"},
 		{decoderType::SCFano, "SCFano"},
 		{decoderType::SCFlip, "SCFlip"},
 		{decoderType::SCFlipProg, "SCFlipProg"}

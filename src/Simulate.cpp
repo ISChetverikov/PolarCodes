@@ -10,7 +10,7 @@
 #include "../include/MonteCarloSimulator.h"
 #include "../include/PolarCode.h"
 #include "../include/Encoder.h"
-#include "../include/ScDecoder.h"
+#include "../include/ScRecursiveDecoder.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
 #include "../include/ScFlipProgDecoder.h"
@@ -142,8 +142,8 @@ BaseDecoder * BuildDecoder(
 
     switch (decoderType)
     {
-	case decoderType::SC: {
-		decoderPtr = new ScDecoder(codePtr);
+	case decoderType::SCRecursive: {
+		decoderPtr = new ScRecursiveDecoder(codePtr);
 	}
 		break;
 	case decoderType::SCFano: {
