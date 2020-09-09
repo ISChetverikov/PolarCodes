@@ -103,5 +103,5 @@ double BaseDecoder::g_est(double p1, double p2) {
 }
 
 int BaseDecoder::L_P1(double p1) {
-	return p1 >= 1 / 2;
+	return p1 >= (0.5);
 }

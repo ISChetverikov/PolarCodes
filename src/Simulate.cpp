@@ -11,6 +11,7 @@
 #include "../include/PolarCode.h"
 #include "../include/Encoder.h"
 #include "../include/ScRecursiveDecoder.h"
+#include "../include/ScDecoder.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
 #include "../include/ScFlipProgDecoder.h"
@@ -149,6 +150,13 @@ BaseDecoder * BuildDecoder(
 							PolarCode * codePtr) {
     BaseDecoder * decoderPtr = NULL;
 	
+	if (decoderType == decoderType::SCFano) {
+		double T = ExtractDouble(decoderParams, "T", "SCFano decoder");
+		double delta = ExtractDouble(decoderParams, "delta", "SCFano decoder");
+		decoderPtr = new ScFanoDecoder(codePtr, T, delta);
+		return decoderPtr;
+	}
+
 	std::string domainStr = ExtractString(decoderParams, "Domain", "Decoder Section", true);
 	bool isMinSum = (bool)ExtractInt(decoderParams, "IsMinSum", "Decoder Section");
 	domain domain = ToStrDomain(domainStr);
@@ -156,16 +164,16 @@ BaseDecoder * BuildDecoder(
     {
 	case decoderType::SCRecursive: {
 		decoderPtr = new ScRecursiveDecoder(codePtr, domain, isMinSum);
+		break;
+	}
+	case decoderType::SC: {
+		decoderPtr = new ScDecoder(codePtr, domain, isMinSum);
 	}
 		break;
-	case decoderType::SCFano: {
-		double T = ExtractDouble(decoderParams, "T", "SCFano decoder");
-		double delta = ExtractDouble(decoderParams, "delta", "SCFano decoder");
-		decoderPtr = new ScFanoDecoder(codePtr, T, delta);
-	}
 	case decoderType::SCFlip: {
 		int T = ExtractInt(decoderParams, "T", "SCFlip decoder");
 		decoderPtr = new ScFlipDecoder(codePtr, domain, isMinSum, T);
+		break;
 	}
 	case decoderType::SCFlipProg: {
 		int level = ExtractInt(decoderParams, "level", "SCFlipProg decoder");
