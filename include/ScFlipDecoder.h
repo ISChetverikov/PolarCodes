@@ -8,7 +8,7 @@ private:
 	std::vector<int> GetSmallestLlrsIndices(std::vector<double> llrs, int count);
 
 public:
-	ScFlipDecoder(PolarCode * code, domain domain, bool isMinSum, int T);
+	ScFlipDecoder(PolarCode * code, int T);
 	std::vector<int> Decode(std::vector<double> llr) override;
 	~ScFlipDecoder() {};
 };

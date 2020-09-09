@@ -16,7 +16,7 @@
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
 
-ScFanoDecoder::ScFanoDecoder(PolarCode * codePtr, double T, double delta) : ScDecoder(codePtr, P1, false) {
+ScFanoDecoder::ScFanoDecoder(PolarCode * codePtr, double T, double delta) : ScDecoder(codePtr) {
 	size_t n = _codePtr->N();
 
 	_T = T;

@@ -14,7 +14,7 @@
 
 #define FROZEN_VALUE 0
 
-ScCrcAidedDecoder::ScCrcAidedDecoder(PolarCode * codePtr, domain domain, bool isMinSum) : ScDecoder(codePtr, domain, isMinSum) {
+ScCrcAidedDecoder::ScCrcAidedDecoder(PolarCode * codePtr) : ScDecoder(codePtr) {
 	
 	_crcPtr = new CRC(_codePtr->CrcPoly());
 }
@@ -29,7 +29,7 @@ void ScCrcAidedDecoder::DecodeFrom(int position) {
 	{
 		PassDown(i);
 		if (_maskWithCrc[i]) {
-			_x[i] = _L(_beliefTree[m][i]);
+			_x[i] = L(_beliefTree[m][i]);
 		}
 		else {
 			_x[i] = FROZEN_VALUE;
@@ -49,7 +49,7 @@ void ScCrcAidedDecoder::DecodeFromTo(int startPosition, int endPosition) {
 	{
 		PassDown(i);
 		if (_maskWithCrc[i]) {
-			_x[i] = _L(_beliefTree[m][i]);
+			_x[i] = L(_beliefTree[m][i]);
 		}
 		else {
 			_x[i] = FROZEN_VALUE;
@@ -61,7 +61,7 @@ void ScCrcAidedDecoder::DecodeFromTo(int startPosition, int endPosition) {
 	if (endPosition != n) {
 		PassDown(endPosition);
 		if (_maskWithCrc[endPosition]) {
-			_x[endPosition] = _L(_beliefTree[m][endPosition]);
+			_x[endPosition] = L(_beliefTree[m][endPosition]);
 		}
 		else {
 			_x[endPosition] = FROZEN_VALUE;

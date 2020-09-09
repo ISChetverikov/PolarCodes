@@ -30,8 +30,6 @@ private:
 
 public:
 	ScFlipProgDecoder(PolarCode * codePtr,
-		domain domain,
-		bool isMinSum,
 		int level,
 		double gammaLeft,
 		double gammaRight,

@@ -19,12 +19,10 @@
 #define ROOT_POSITION -1
 
 ScFlipProgDecoder::ScFlipProgDecoder(PolarCode * codePtr,
-	domain domain,
-	bool isMinSum,
 	int level,
 	double gammaLeft,
 	double gammaRight,
-	std::vector<double> omegaArr) : ScCrcAidedDecoder(codePtr, domain, isMinSum) {
+	std::vector<double> omegaArr) : ScCrcAidedDecoder(codePtr) {
 
 	size_t n = _codePtr->N();
 

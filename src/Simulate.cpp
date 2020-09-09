@@ -121,15 +121,6 @@ std::vector<double> OmegaArrStrToVector(std::string str)
 	return result;
 }
 
-domain ToStrDomain(std::string domainStr) {
-	if (domainStr == "P1")
-		return P1;
-	if (domainStr == "LLR")
-		return LLR;
-	else
-		throw UnknownDomainException("Unknown domain in decoder settings");
-}
-
 PolarCode * BuildCode(std::unordered_map<std::string, std::string> codeParams) {
 	PolarCode * codePtr;
 
@@ -150,29 +141,26 @@ BaseDecoder * BuildDecoder(
 							PolarCode * codePtr) {
     BaseDecoder * decoderPtr = NULL;
 	
-	if (decoderType == decoderType::SCFano) {
+    switch (decoderType)
+    {
+	case decoderType::SCRecursive: {
+		decoderPtr = new ScRecursiveDecoder(codePtr);
+		break;
+	}
+	case decoderType::SC: {
+		decoderPtr = new ScDecoder(codePtr);
+	}
+		break;
+	case decoderType::SCFano: {
 		double T = ExtractDouble(decoderParams, "T", "SCFano decoder");
 		double delta = ExtractDouble(decoderParams, "delta", "SCFano decoder");
 		decoderPtr = new ScFanoDecoder(codePtr, T, delta);
 		return decoderPtr;
 	}
-
-	std::string domainStr = ExtractString(decoderParams, "Domain", "Decoder Section", true);
-	bool isMinSum = (bool)ExtractInt(decoderParams, "IsMinSum", "Decoder Section");
-	domain domain = ToStrDomain(domainStr);
-    switch (decoderType)
-    {
-	case decoderType::SCRecursive: {
-		decoderPtr = new ScRecursiveDecoder(codePtr, domain, isMinSum);
-		break;
-	}
-	case decoderType::SC: {
-		decoderPtr = new ScDecoder(codePtr, domain, isMinSum);
-	}
 		break;
 	case decoderType::SCFlip: {
 		int T = ExtractInt(decoderParams, "T", "SCFlip decoder");
-		decoderPtr = new ScFlipDecoder(codePtr, domain, isMinSum, T);
+		decoderPtr = new ScFlipDecoder(codePtr, T);
 		break;
 	}
 	case decoderType::SCFlipProg: {
@@ -182,7 +170,7 @@ BaseDecoder * BuildDecoder(
 		std::string omegaArrString = ExtractString(decoderParams, "omegaArr", "SCFlipProg decoder", true);
 		std::vector<double> omegaArr = OmegaArrStrToVector(omegaArrString);
 
-		decoderPtr = new ScFlipProgDecoder(codePtr, domain, isMinSum, level, gammaLeft, gammaRight, omegaArr);
+		decoderPtr = new ScFlipProgDecoder(codePtr, level, gammaLeft, gammaRight, omegaArr);
 	}
 		break;
     default:

@@ -15,7 +15,30 @@
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
 
-ScDecoder::ScDecoder(PolarCode * codePtr, domain domain, bool isMinSum) : BaseDecoder(codePtr, domain, isMinSum) {
+double f(double x, double y) {
+	double sign = 1.0;
+
+	if (x < 0) {
+		sign *= -1;
+		x *= -1;
+	}
+	if (y < 0) {
+		sign *= -1;
+		y *= -1;
+	}
+
+	return ((x < y) ? x : y) * sign;
+}
+
+double g(double x, double y, int b) {
+	return y + (1 - 2 * b) * x;
+}
+
+int L(double llr) {
+	return llr < 0;
+}
+
+ScDecoder::ScDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 	size_t m = _codePtr->m();
 	size_t n = _codePtr->N();
 	_treeHeight = m + 1;
@@ -53,7 +76,7 @@ void ScDecoder::FillLeftMessageInTree(std::vector<double>::iterator leftIt,
 {
 	for (size_t i = 0; i < n; i++, leftIt++, rightIt++, outIt++)
 	{
-		*outIt = _f(*leftIt, *rightIt);
+		*outIt = f(*leftIt, *rightIt);
 	}
 }
 
@@ -65,7 +88,7 @@ void ScDecoder::FillRightMessageInTree(std::vector<double>::iterator leftIt,
 {
 	for (size_t i = 0; i < n; i++, leftIt++, rightIt++, outIt++, uhatIt++)
 	{
-		*outIt = _g(*leftIt, *rightIt, *uhatIt);
+		*outIt = g(*leftIt, *rightIt, *uhatIt);
 	}
 }
 
@@ -169,7 +192,7 @@ void ScDecoder::DecodeEnternal(std::vector<double> inLlr) {
 	{
 		PassDown(i);
 		if (_maskWithCrc[i]) {
-			_x[i] = _L(_beliefTree[m][i]);
+			_x[i] = L(_beliefTree[m][i]);
 		}
 		else {
 			_x[i] = FROZEN_VALUE;

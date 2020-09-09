@@ -15,7 +15,7 @@ protected:
 	bool IsCrcPassed(std::vector<int> codeword);
 
 public:
-	ScCrcAidedDecoder(PolarCode * code, domain domain, bool isMinSum);
+	ScCrcAidedDecoder(PolarCode * code);
 	
 	~ScCrcAidedDecoder() {};
 };

@@ -19,7 +19,7 @@ protected:
 	);
 
 public:
-	ScRecursiveDecoder(PolarCode * codePtr, domain domain, bool isMinSum);
+	ScRecursiveDecoder(PolarCode * codePtr);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
 

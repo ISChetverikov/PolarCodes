@@ -15,7 +15,7 @@
 
 #define FROZEN_VALUE 0
 
-ScFlipDecoder::ScFlipDecoder(PolarCode * codePtr, domain domain, bool isMinSum, int T) : ScCrcAidedDecoder(codePtr, domain, isMinSum) {
+ScFlipDecoder::ScFlipDecoder(PolarCode * codePtr, int T) : ScCrcAidedDecoder(codePtr) {
 	_T = T;
 }
 

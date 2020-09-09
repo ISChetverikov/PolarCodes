@@ -32,7 +32,7 @@ protected:
 	std::vector<int> TakeResult();
 
 public:
-	ScDecoder(PolarCode * code, domain domain, bool isMinSum);
+	ScDecoder(PolarCode * code);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
 

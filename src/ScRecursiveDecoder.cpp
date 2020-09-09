@@ -15,7 +15,7 @@
 #define FROZEN_VALUE 0
  
 
-ScRecursiveDecoder::ScRecursiveDecoder(PolarCode * codePtr, domain domain, bool isMinSum) :  BaseDecoder(codePtr, domain, isMinSum) {
+ScRecursiveDecoder::ScRecursiveDecoder(PolarCode * codePtr) :  BaseDecoder(codePtr) {
 }
 
 std::vector<double> ScRecursiveDecoder::GetLeftMessage(std::vector<double>::iterator leftIt, std::vector<double>::iterator rightIt, size_t n) {
@@ -23,7 +23,7 @@ std::vector<double> ScRecursiveDecoder::GetLeftMessage(std::vector<double>::iter
 	std::vector<double> out(n, 0);
 	for (size_t i = 0; i < n; i++, leftIt++, rightIt++)
 	{
-		out[i] = _f(*leftIt, *rightIt);
+		out[i] = f(*leftIt, *rightIt);
 	}
 
 	return out;
@@ -34,7 +34,7 @@ std::vector<double> ScRecursiveDecoder::GetRightMessage(std::vector<double>::ite
 
 	for (size_t i = 0; i < n; i++, leftIt++, rightIt++)
 	{
-		out[i] = _g(*leftIt, *rightIt, uHat[i]);
+		out[i] = g(*leftIt, *rightIt, uHat[i]);
 	}
 
 	return out;
@@ -53,7 +53,7 @@ std::vector<int> ScRecursiveDecoder::DecodeRecursive(
 	if (n == 1) {
 		*outLlrIt = *inLlrIt;
 		if (*maskIt)
-			*xIt = _L(*inLlrIt);
+			*xIt = L(*inLlrIt);
 		else
 			*xIt = FROZEN_VALUE;
 		
