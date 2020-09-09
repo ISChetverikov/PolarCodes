@@ -12,38 +12,42 @@
 #include "../include/Exceptions.h"
 #include "../include/Domain.h"
 
-
 #define FROZEN_VALUE 0
 
 ScFlipDecoder::ScFlipDecoder(PolarCode * codePtr, int T) : ScCrcAidedDecoder(codePtr) {
 	_T = T;
 }
 
-std::vector<int> ScFlipDecoder::GetSmallestLlrsIndices(std::vector<double> llrs, int count) {
+std::vector<int> ScFlipDecoder::GetSmallestBeliefsIndices(std::vector<double> beliefs, int count) {
 	std::vector<int> indices(count, 0);
-	for (size_t i = 0; i < llrs.size(); i++)
+	for (size_t i = 0; i < beliefs.size(); i++)
 	{
-		llrs[i] = fabs(llrs[i]);
+#ifdef DOMAIN_LLR
+		beliefs[i] = fabs(beliefs[i]);
+#elif DOMAIN_P1
+		beliefs[i] = fabs(beliefs[i] - 0.5);
+#endif // DOMAIN_LLR
+
 	}
 
 	for (size_t i = 0; i < count; i++)
 	{
-		auto minIt = std::min_element(llrs.begin(), llrs.end());
-		auto minInd = (int)std::distance( llrs.begin(), minIt);
+		auto minIt = std::min_element(beliefs.begin(), beliefs.end());
+		auto minInd = (int)std::distance( beliefs.begin(), minIt);
 		indices[i] = minInd;
-		llrs.erase(minIt);
+		beliefs.erase(minIt);
 	}
 	
 	return indices;
 }
 
-std::vector<int> ScFlipDecoder::Decode(std::vector<double> inLlr) {
+std::vector<int> ScFlipDecoder::Decode(std::vector<double> inBeliefs) {
 
-	DecodeEnternal(inLlr);
+	DecodeEnternal(inBeliefs);
 
 	size_t m = _codePtr->m();
 	if (_T > 0 && !IsCrcPassed(_x)) {
-		std::vector<int> suspectedBits = GetSmallestLlrsIndices(_beliefTree[m], _T);
+		std::vector<int> suspectedBits = GetSmallestBeliefsIndices(_beliefTree[m], _T);
 		for (size_t i = 0; i < _T; i++)
 		{
 			int bitPosition = suspectedBits[i];
@@ -53,6 +57,9 @@ std::vector<int> ScFlipDecoder::Decode(std::vector<double> inLlr) {
 
 			if (IsCrcPassed(_x))
 				break;
+
+			_x[bitPosition] = !_x[bitPosition];
+			DecodeFrom(bitPosition);
 		}
 	}
 

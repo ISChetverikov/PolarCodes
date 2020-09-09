@@ -11,17 +11,17 @@
       </SnrArray>
       <Code type="Polar">
         <Param name="m">10</Param>
-        <Param name="k">512</Param>
+        <Param name="k">488</Param>
         <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\1024.txt</Param>
-        <Param name="CRC2">100000000000000001100011</Param>
+        <Param name="CRC">100000000000000001100011</Param>
         <Param name="CRC1">111</Param>
       </Code>
-      <Decoder type="SC">
+      <Decoder type="SCFlipProg">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>
         <Param name="gammaRight">3</Param>
-        <Param name="level">2</Param>
+        <Param name="level">1</Param>
         <Param name="omegaArr">1.1,1.1,0.5,0.25,1.1</Param>
 
         <!--SC Fano decoder params-->
@@ -29,7 +29,7 @@
         <Param name="delta">1.0</Param>
 
         <!--SC Flip decoder params-->
-        <Param name="T">5</Param>
+        <Param name="T">200</Param>
       </Decoder>
     </Simulation>
 </Config>

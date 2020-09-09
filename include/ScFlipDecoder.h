@@ -5,7 +5,7 @@
 class ScFlipDecoder : public ScCrcAidedDecoder {
 private:
 	int _T;
-	std::vector<int> GetSmallestLlrsIndices(std::vector<double> llrs, int count);
+	std::vector<int> GetSmallestBeliefsIndices(std::vector<double> llrs, int count);
 
 public:
 	ScFlipDecoder(PolarCode * code, int T);
