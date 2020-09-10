@@ -186,7 +186,7 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 		if (_maskWithCrc[i_all]) {
 			FillListMask(i_all);
 			
-			for (size_t j = 0; j < _L;) {
+			for (size_t j = 0, i = 0; i < _L; i++) {
 				// add new path
 				if (_areTakenOne[j] && _areTakenZero[j]) {
 					_candidates[j][i_all] = 1;
@@ -196,6 +196,8 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 					_candidates.push_back(_candidates[j]);
 
 					_candidates[j][i_all] = 0;
+					_areTakenOne.push_back(false);
+					_areTakenZero.push_back(false);
 
 					j++;
 					continue;
@@ -216,8 +218,9 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 				_metrics.erase(_metrics.begin() + j);
 				_uhatTrees.erase(_uhatTrees.begin() + j);
 				_candidates.erase(_candidates.begin() + j);
+				_areTakenZero.erase(_areTakenZero.begin() + j);
+				_areTakenOne.erase(_areTakenOne.begin() + j);
 			}
-				
 		}
 		else {
 			for (size_t j = 0; j < _L; j++)
