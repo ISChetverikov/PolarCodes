@@ -55,6 +55,7 @@
     <ClCompile Include="src\MonteCarloSimulator.cpp" />
     <ClCompile Include="src\PolarCode.cpp" />
     <ClCompile Include="src\ScDecoder.cpp" />
+    <ClCompile Include="src\ScListDecoder.cpp" />
     <ClCompile Include="src\ScRecursiveDecoder.cpp" />
     <ClCompile Include="src\ScFanoDecoder.cpp" />
     <ClCompile Include="src\ScFlipDecoder.cpp" />

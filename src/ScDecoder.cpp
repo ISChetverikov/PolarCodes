@@ -15,29 +15,6 @@
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
 
-double f(double x, double y) {
-	double sign = 1.0;
-
-	if (x < 0) {
-		sign *= -1;
-		x *= -1;
-	}
-	if (y < 0) {
-		sign *= -1;
-		y *= -1;
-	}
-
-	return ((x < y) ? x : y) * sign;
-}
-
-double g(double x, double y, int b) {
-	return y + (1 - 2 * b) * x;
-}
-
-int L(double llr) {
-	return llr < 0;
-}
-
 ScDecoder::ScDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 	size_t m = _codePtr->m();
 	size_t n = _codePtr->N();
@@ -180,7 +157,7 @@ void ScDecoder::PassUp(size_t iter) {
 	}
 }
 
-void ScDecoder::DecodeEnternal(std::vector<double> inLlr) {
+void ScDecoder::DecodeInternal(std::vector<double> inLlr) {
 	size_t n = inLlr.size();
 	size_t m = _codePtr->m();
 
@@ -217,7 +194,7 @@ std::vector<int> ScDecoder::TakeResult() {
 
 std::vector<int> ScDecoder::Decode(std::vector<double> inLlr) {
 	
-	DecodeEnternal(inLlr);
+	DecodeInternal(inLlr);
 
 	return TakeResult();
 }

@@ -28,7 +28,7 @@ protected:
 
 	void PassDown(size_t iter);
 	void PassUp(size_t iter);
-	void DecodeEnternal(std::vector<double> inLlr);
+	void DecodeInternal(std::vector<double> inLlr);
 	std::vector<int> TakeResult();
 
 public:

@@ -219,7 +219,7 @@ std::vector<int> ScFlipProgDecoder::Decode(std::vector<double> inLlr) {
 	size_t n = inLlr.size();
 	size_t m = _codePtr->m();
 	
-	DecodeEnternal(inLlr);
+	DecodeInternal(inLlr);
 
 	if (!IsCrcPassed(_x)) {
 		std::queue<CriticalSetNode *> q;

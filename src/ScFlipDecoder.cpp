@@ -43,7 +43,7 @@ std::vector<int> ScFlipDecoder::GetSmallestBeliefsIndices(std::vector<double> be
 
 std::vector<int> ScFlipDecoder::Decode(std::vector<double> inBeliefs) {
 
-	DecodeEnternal(inBeliefs);
+	DecodeInternal(inBeliefs);
 
 	size_t m = _codePtr->m();
 	if (_T > 0 && !IsCrcPassed(_x)) {
