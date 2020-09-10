@@ -19,33 +19,34 @@ ScListDecoder::ScListDecoder(PolarCode * codePtr, int L) : ScCrcAidedDecoder(cod
 	size_t n = _codePtr->N();
 	_treeHeight = m + 1;
 
+	std::vector<double> b(n, -10000.0);
+	std::vector<int> u(n, -1);
+
+	std::vector<std::vector<double>> beliefTree;
+	std::vector<std::vector<int>> uhatTree;
+
+	for (size_t i = 0; i < _treeHeight; i++)
+	{
+		beliefTree.push_back(b);
+		uhatTree.push_back(u);
+	}
+
 	for (size_t i = 0; i < _L; i++)
 	{
-		std::vector<std::vector<double>> beliefTree;
-		std::vector<std::vector<int>> uhatTree;
-
-		std::vector<double> b(n, -10000.0);
-		std::vector<int> u(n, -1);
-
-		for (size_t i = 0; i < _treeHeight; i++)
-		{
-			beliefTree.push_back(b);
-			uhatTree.push_back(u);
-		}
-
 		_beliefTrees.push_back(beliefTree);
 		_uhatTrees.push_back(uhatTree);
 	}
 
-	std::vector<int> x(n, -1);
 	for (size_t i = 0; i < _L; i++)
 	{
-		_candidates.push_back(x);
+		_candidates.push_back(u);
 	}
+
 	_metrics = std::vector<double>(_L, 0);
 	
 	// optimization allocation
-	_binaryIter = std::vector<int>(m, 0);
+	_areTakenOne = std::vector<bool>(_L, 0);
+	_areTakenZero = std::vector<bool>(_L, 0);
 }
 
 double ScListDecoder::StepMetric(double belief, int decision) {
@@ -85,7 +86,7 @@ void ScListDecoder::PassDownList(size_t iter) {
 		size_t ones = ~0u;
 		size_t offset = iter & (ones << (m - i));
 
-		for (size_t j = 0; j < 2 * _L; j++)
+		for (size_t j = 0; j < _L; j++)
 		{
 			if (!_binaryIter[i - level]) {
 				FillLeftMessageInTree(_beliefTrees[j][i].begin() + offset,
@@ -119,7 +120,7 @@ void ScListDecoder::PassUpList(size_t iter) {
 	while (bit != 0)
 	{
 		offset -= length;
-		for (size_t j = 0; j < 2 * _L; j++)
+		for (size_t j = 0; j < _L; j++)
 		{
 			for (size_t i = 0; i < length; i++)
 			{
@@ -147,65 +148,158 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 		for (size_t i = 0; i < n; i++)
 			_beliefTrees[j][0][i] = inLlr[i];
 	
-	int logL = log2(_L) - 1;
+	int logL = (int)log2(_L) - 1;
 	// first log(_L) bits
-	size_t i = 0; // number of bit (j - number of condidate in list)
-	while (i < logL)
+	size_t i_all = 0; // number of bit (j - number of condidate in list)
+	size_t i_unfrozen = 0;
+	while (i_unfrozen < logL)
 	{
-		PassDownList(i);
+		PassDownList(i_all);
 
-		if (_maskWithCrc[i]) {
+		if (_maskWithCrc[i_all]) {
 			int value = 0;
 			for (size_t j = 0; j < _L; j++) {
-				_candidates[j][i] = value;
-				if (value % (i + 1) == 0)
+				_candidates[j][i_all] = value;
+				if ((j + 1) % (i_unfrozen + 1) == 0) // all paths at the logL first steps 
 					value = !value;
 			}
+			i_unfrozen++;
 		}
 		else {
 			for (size_t j = 0; j < _L; j++)
-				_candidates[j][i] = FROZEN_VALUE;
+				_candidates[j][i_all] = FROZEN_VALUE;
 		}
 
 		for (size_t j = 0; j < _L; j++) {
-			_uhatTrees[j][m][i] = _candidates[j][i];
-			_metrics[j] += StepMetric(_beliefTrees[j][m][i], _candidates[j][i]);
+			_uhatTrees[j][m][i_all] = _candidates[j][i_all];
+			_metrics[j] += StepMetric(_beliefTrees[j][m][i_all], _candidates[j][i_all]);
 		}
 			
-		PassUpList(i);
+		PassUpList(i_all);
 
-		if (_maskWithCrc[i])
-			i++;
+		i_all++;
 	}
-	while (i < n)
+	while (i_all < n)
 	{
-		PassDownList(i);
+		PassDownList(i_all);
 
-		if (_maskWithCrc[i]) {
-			// 2 x 2 array
-			auto sortedIndices = GetIndices();
+		if (_maskWithCrc[i_all]) {
+			FillListMask(i_all);
 			
-			//for (size_t j = 0; j < _L; j++)
-				//_candidates[j][i] = L(_beliefTrees[j][m][i]);
+			for (size_t j = 0; j < _L;) {
+				// add new path
+				if (_areTakenOne[j] && _areTakenZero[j]) {
+					_candidates[j][i_all] = 1;
+					_beliefTrees.push_back(_beliefTrees[j]);
+					_metrics.push_back(_metrics[j]);
+					_uhatTrees.push_back(_uhatTrees[j]);
+					_candidates.push_back(_candidates[j]);
+
+					_candidates[j][i_all] = 0;
+
+					j++;
+					continue;
+				}
+				if (_areTakenZero[j]) {
+					_candidates[j][i_all] = 0;
+					j++;
+					continue;
+				}
+				if (_areTakenOne[j]) {
+					_candidates[j][i_all] = 1;
+					j++;
+					continue;
+				}
+
+				// delete path
+				_beliefTrees.erase(_beliefTrees.begin() + j);
+				_metrics.erase(_metrics.begin() + j);
+				_uhatTrees.erase(_uhatTrees.begin() + j);
+				_candidates.erase(_candidates.begin() + j);
+			}
+				
 		}
 		else {
 			for (size_t j = 0; j < _L; j++)
-				_candidates[j][i] = FROZEN_VALUE;
+				_candidates[j][i_all] = FROZEN_VALUE;
 		}
 
-		for (size_t j = 0; j < _L; j++)
-			_uhatTrees[j][m][i] = _candidates[j][i];
-		PassUpList(i);
+		for (size_t j = 0; j < _L; j++) {
+			_uhatTrees[j][m][i_all] = _candidates[j][i_all];
+			_metrics[j] += StepMetric(_beliefTrees[j][m][i_all], _candidates[j][i_all]);
+		}
+			
+		PassUpList(i_all);
 
-		i++;
+		i_all++;
 	}
 
 	return;
 }
 
+void ScListDecoder::FillListMask(size_t iter) {
+	std::vector<int> indices(2 * _L, 0);
+	std::vector<double> metricsNew(2 * _L, 0);
+
+	size_t m = _codePtr->m();
+
+	for (int j = 0; j < _L; j++)
+	{
+		_areTakenOne[j] = false;
+		_areTakenZero[j] = false;
+
+		indices[j] = j;
+		indices[j + _L] = j + _L;
+
+		metricsNew[j] = _metrics[j] + StepMetric(_beliefTrees[j][m][iter], 0);
+		metricsNew[j + _L] = _metrics[j] + StepMetric(_beliefTrees[j][m][iter], 1);
+	}
+
+	for (size_t i = 0; i < _L; i++)
+	{
+		auto maxIt = std::max_element(metricsNew.begin(), metricsNew.end());
+		int maxInd = (int)std::distance(metricsNew.begin(), maxIt);
+
+		if (indices[maxInd] >= _L)
+			_areTakenOne[indices[maxInd] - _L] = true;
+		else
+			_areTakenZero[indices[maxInd]] = true;
+
+		indices.erase(indices.begin() + maxInd);
+		metricsNew.erase(metricsNew.begin() + maxInd);
+	}
+}
+
+std::vector<int> ScListDecoder::TakeListResult() {
+	std::vector<int> result(_codePtr->k(), 0);
+	std::vector<int> candidate(_codePtr->N(), 0);
+	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
+
+	size_t j = 0;
+	for (; j < _L; j++)
+	{
+		auto maxIt = std::max_element(_metrics.begin(), _metrics.end());
+		int maxInd = (int)std::distance(_metrics.begin(), maxIt);
+
+		if (IsCrcPassed(_candidates[j]))
+			break;
+	}
+
+	if (j < _L)
+		candidate = _candidates[j];
+
+	for (size_t i = 0; i < codewordBits.size(); i++)
+	{
+		result[i] = _x[codewordBits[i]];
+	}
+
+	return result;
+}
+
+
 std::vector<int> ScListDecoder::Decode(std::vector<double> inLlr) {
 
-	DecodeInternal(inLlr);
+	DecodeListInternal(inLlr);
 
-	return TakeResult();
+	return TakeListResult();
 }

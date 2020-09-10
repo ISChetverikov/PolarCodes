@@ -14,6 +14,7 @@
 #include "../include/ScDecoder.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
+#include "../include/ScListDecoder.h"
 #include "../include/ScFlipProgDecoder.h"
 #include "../include/BaseSimulator.h"
 #include "../include/ConfigReading.h"
@@ -163,6 +164,11 @@ BaseDecoder * BuildDecoder(
 		decoderPtr = new ScFlipDecoder(codePtr, T);
 		break;
 	}
+	case decoderType::SCList: {
+		int L = ExtractInt(decoderParams, "L", "SCList decoder");
+		decoderPtr = new ScListDecoder(codePtr, L);
+	}
+	break;
 	case decoderType::SCFlipProg: {
 		int level = ExtractInt(decoderParams, "level", "SCFlipProg decoder");
 		int gammaLeft = ExtractInt(decoderParams, "gammaLeft", "SCFlipProg decoder");

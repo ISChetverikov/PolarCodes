@@ -6,7 +6,8 @@ decoderType decoderTypeFromString(std::string str) {
 		{"SCFano", decoderType::SCFano},
 		{"SCFlip", decoderType::SCFlip},
 		{"SCFlipProg", decoderType::SCFlipProg},
-		{"SC", decoderType::SC}
+		{"SC", decoderType::SC},
+		{"SCL", decoderType::SCList}
 	};
 
 	if (decoderTypeResolver.count(str) > 0)
@@ -22,7 +23,8 @@ std::string decoderTypeToString(decoderType type) {
 		{decoderType::SCFano, "SCFano"},
 		{decoderType::SCFlip, "SCFlip"},
 		{decoderType::SCFlipProg, "SCFlipProg"},
-		{decoderType::SC, "SC"}
+		{decoderType::SC, "SC"},
+		{decoderType::SCList, "SCL"}
 	};
 
 	return decoderTypeStringResolver[type];
