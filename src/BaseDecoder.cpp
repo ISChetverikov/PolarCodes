@@ -18,6 +18,10 @@ void BaseDecoder::SetSigma(double sigma) {
 	_sigma = sigma;
 }
 
+void BaseDecoder::SetCodeword(std::vector<int> codeword) {
+	_codeword = codeword;
+}
+
 domain BaseDecoder::GetDomain() {
 #ifdef DOMAIN_LLR
 	return LLR;

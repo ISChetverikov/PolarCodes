@@ -11,7 +11,8 @@ class BaseDecoder {
 protected:
 	PolarCode * _codePtr;
 	double _sigma;
-	
+	std::vector<int> _codeword;
+
 	double f(double p1, double p2);
 	double g(double p1, double p2, int b);
 	int L(double p1);
@@ -19,6 +20,7 @@ protected:
 public:
 	BaseDecoder(PolarCode * codePtr);
 	
+	void SetCodeword(std::vector<int> codeword);
 	virtual domain GetDomain();
 	virtual void SetSigma(double sigma);
 	double GetSigma();

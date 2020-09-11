@@ -13,7 +13,7 @@
         <Param name="m">3</Param>
         <Param name="k">4</Param>
         <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt</Param>
-        <Param name="CRC">100000000000000001100011</Param>
+        <Param name="CR1C">100000000000000001100011</Param>
         <Param name="CRC">111</Param>
       </Code>
       <Decoder type="SCL">
@@ -32,7 +32,7 @@
         <Param name="T">200</Param>
         
         <!--SC Flip decoder params-->
-        <Param name="L">4</Param>
+        <Param name="L">8</Param>
 
       </Decoder>
     </Simulation>

@@ -53,7 +53,7 @@ double ScListDecoder::StepMetric(double belief, int decision) {
 #ifdef DOMAIN_LLR
 	return (decision) ? -belief : belief;
 #elif DOMAIN_P1
-	return log((decision ^ (belief > 0.5))  ? 1 - belief : belief);
+	return log((decision) ? belief : 1 - belief);
 #endif // DOMAIN
 }
 
@@ -179,6 +179,7 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 
 		i_all++;
 	}
+	auto c = _codeword;
 	while (i_all < n)
 	{
 		PassDownList(i_all);
@@ -254,8 +255,11 @@ void ScListDecoder::FillListMask(size_t iter) {
 		indices[j] = j;
 		indices[j + _L] = j + _L;
 
-		metricsNew[j] = _metrics[j] + StepMetric(_beliefTrees[j][m][iter], 0);
-		metricsNew[j + _L] = _metrics[j] + StepMetric(_beliefTrees[j][m][iter], 1);
+		double step0 = StepMetric(_beliefTrees[j][m][iter], 0);
+		double step1 = StepMetric(_beliefTrees[j][m][iter], 1);
+
+		metricsNew[j] = _metrics[j] + step0;
+		metricsNew[j + _L] = _metrics[j] + step1;
 	}
 
 	for (size_t i = 0; i < _L; i++)
@@ -278,6 +282,8 @@ std::vector<int> ScListDecoder::TakeListResult() {
 	std::vector<int> candidate(_codePtr->N(), 0);
 	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
 
+	auto c = _codeword;
+
 	size_t j = 0;
 	for (; j < _L; j++)
 	{
@@ -293,7 +299,7 @@ std::vector<int> ScListDecoder::TakeListResult() {
 
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
-		result[i] = _x[codewordBits[i]];
+		result[i] = candidate[codewordBits[i]];
 	}
 
 	return result;

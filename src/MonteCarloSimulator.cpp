@@ -59,7 +59,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		std::generate(word.begin(), word.end(), [&]() { return uniform_discrete_dist(randomDevice); });
 		// word = { 0 , 0, 0,  1 };
 		codeword = _encoderPtr->Encode(word);
-
+		_decoderPtr->SetCodeword(codeword);
 		for (size_t i = 0; i < n; i++) {
 			beliefs[i] = ModulateBpsk(codeword[i]) + normal_dist(randomDevice);
 			beliefs[i] = InputToLlr(beliefs[i], sigma);
