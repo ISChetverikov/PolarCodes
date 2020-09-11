@@ -144,9 +144,13 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 	size_t m = _codePtr->m();
 
 	// Fill each tree in the forrest with input llrs
-	for (size_t j = 0; j < _L; j++)
+	for (size_t j = 0; j < _L; j++) {
 		for (size_t i = 0; i < n; i++)
 			_beliefTrees[j][0][i] = inLlr[i];
+
+		_metrics[j] = 0;
+	}
+		
 	
 	int logL = (int)log2(_L) - 1;
 	// first log(_L) bits
@@ -284,18 +288,21 @@ std::vector<int> ScListDecoder::TakeListResult() {
 
 	auto c = _codeword;
 
+	int maxInd = -1;
 	size_t j = 0;
 	for (; j < _L; j++)
 	{
 		auto maxIt = std::max_element(_metrics.begin(), _metrics.end());
-		int maxInd = (int)std::distance(_metrics.begin(), maxIt);
+		maxInd = (int)std::distance(_metrics.begin(), maxIt);
 
-		if (IsCrcPassed(_candidates[j]))
+		if (IsCrcPassed(_candidates[maxInd]))
 			break;
+		
+		_metrics[maxInd] = -100000.0;
 	}
 
 	if (j < _L)
-		candidate = _candidates[j];
+		candidate = _candidates[maxInd];
 
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{

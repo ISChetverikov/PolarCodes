@@ -3,18 +3,18 @@
       <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\test.results</ResultFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">50000</Param>
-        <Param name="maxRejectionsCount">100</Param>
+        <Param name="maxRejectionsCount">50000</Param>
         <Param name="isSigmaDependOnR">0</Param>
       </Simulator>
       <SnrRange start="-2" stop="0.5" step="0.5"></SnrRange>
       <SnrArray>
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">3</Param>
-        <Param name="k">4</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt</Param>
-        <Param name="CR1C">100000000000000001100011</Param>
-        <Param name="CRC">111</Param>
+        <Param name="m">10</Param>
+        <Param name="k">488</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\1024.txt</Param>
+        <Param name="CRC">100000000000000001100011</Param>
+        <Param name="CRC1">111</Param>
       </Code>
       <Decoder type="SCL">
     
@@ -31,8 +31,8 @@
         <!--SC Flip decoder params-->
         <Param name="T">200</Param>
         
-        <!--SC Flip decoder params-->
-        <Param name="L">8</Param>
+        <!--SC List decoder params-->
+        <Param name="L">4</Param>
 
       </Decoder>
     </Simulation>
