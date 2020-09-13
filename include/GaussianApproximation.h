@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 #define PI_HALF_SQRT 1.253314137315500251207882642405522626503493370304969158314
 
 #define PHI_MAX exp(0.0218)
@@ -17,8 +19,8 @@ public:
 	double NumericalSolve(double y);
 	double phiInv(double y);
 
-	double GetMu(size_t i, size_t n);
+	double GetMu(std::size_t i, std::size_t n);
 public:
 	GaussianApproximation(double sigma);
-	double GetChannelErrorProbability(size_t j, size_t n);
+	double GetChannelErrorProbability(std::size_t j, std::size_t n);
 };

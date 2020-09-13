@@ -1,4 +1,4 @@
-#include <functional>
+// #include <functional>
 
 #include "../include/Exceptions.h"
 #include "../include/BaseDecoder.h"

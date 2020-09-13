@@ -1,0 +1,3 @@
+/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build/CMakeFiles/rebuild_cache.dir
+/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build/CMakeFiles/edit_cache.dir
+/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build/CMakeFiles/PolarSimulate.dir

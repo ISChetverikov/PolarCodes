@@ -1,5 +1,6 @@
 #include <random>
 #include <chrono>
+#include <algorithm>
 #include "../include/SimulationParameters.h"
 #include "../include/MonteCarloSimulator.h"
 

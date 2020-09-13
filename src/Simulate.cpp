@@ -245,10 +245,10 @@ bool TryLogIntoFile(std::string filename, std::string message, std::string strin
 }
 
 bool IsFileExists(std::string filename) {
-	FILE *file;
-	fopen_s(&file, filename.c_str(), "r");
-	if (file) {
-		fclose(file);
+	FILE *fp;
+	fp = std::fopen(filename.c_str(), "r");
+	if (fp!=NULL) {
+		fclose(fp);
 		return true;
 	}
 	else {
