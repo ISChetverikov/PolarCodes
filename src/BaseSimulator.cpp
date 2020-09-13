@@ -5,6 +5,7 @@ BaseSimulator::BaseSimulator(PolarCode * codePtr, Encoder * encoderPtr, BaseDeco
 	_encoderPtr = encoderPtr;
 	_codePtr = codePtr;
 	_isSigmaDependOnR = isSigmaDependOnR;
+	_additionalInfoFilename = additionalInfoFilename;
 }
 
 double BaseSimulator::GetSigma(double snr, double R) {

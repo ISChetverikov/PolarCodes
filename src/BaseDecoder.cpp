@@ -89,3 +89,10 @@ int BaseDecoder::L(double p1) {
 #endif
 
 
+std::string BaseDecoder::GetStatistic() {
+	return "";
+}
+void BaseDecoder::ClearStatistic() {
+	
+}
+

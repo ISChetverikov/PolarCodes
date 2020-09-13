@@ -201,8 +201,9 @@ BaseSimulator * BuildSimulator(
 		bool isSigmaDependOnR = (bool)ExtractInt(simulationTypeParams, "isSigmaDependOnR", "MC Simulator");
         int maxTestsCount = ExtractInt(simulationTypeParams, "maxTestsCount", "MC simulator");
         int maxRejectionsCount = ExtractInt(simulationTypeParams, "maxRejectionsCount", "MC simulator");
+		std::string additionalInfoFilename = ExtractString(simulationTypeParams, "additionalInfoFilename", "MC simulator", false);
             
-        simulator = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, decoderPtr, isSigmaDependOnR);
+        simulator = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, decoderPtr, isSigmaDependOnR, additionalInfoFilename);
     }
         break;
     default:
@@ -303,6 +304,11 @@ void Simulate(std::string configFilename) {
 
 				auto result = simulatorPtr->Run(simulationParams.snrArray[i]);
 				auto message = result.ToString() + "\n";
+
+#ifdef DECODER_STAT
+				auto decoderStat = decoderPtr->GetStatistic();
+				LogIntoFile(simulationParams.resultsFilename, decoderStat);
+#endif // DECODER_STAT
 
 				LogIntoFile(simulationParams.resultsFilename, message);
 				LogIntoConsole("Iteration has been ended with result:\n\t" + message);
