@@ -14,6 +14,7 @@ void PrintUsage() {
 
 int main(int argc, char* argv[]) {
 
+    
 	if (argc != 2) {
 		PrintUsage();
 		return 1;

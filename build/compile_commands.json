@@ -1,133 +1,133 @@
 [
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/BaseDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/BaseDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/BaseDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/BaseDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/BaseDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/BaseSimulator.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/BaseSimulator.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/BaseSimulator.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/BaseSimulator.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/BaseSimulator.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ConfigReading.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ConfigReading.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ConfigReading.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ConfigReading.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ConfigReading.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/CRC.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/CRC.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/CRC.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/CRC.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/CRC.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/crcTest.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/crcTest.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/crcTest.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/crcTest.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/crcTest.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/DecoderType.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/DecoderType.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/DecoderType.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/DecoderType.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/DecoderType.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/Encoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/Encoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/Encoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/Encoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/Encoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/gaTe.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/gaTe.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/gaTe.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/gaTe.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/gaTe.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/GaussianApproximation.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/GaussianApproximation.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/GaussianApproximation.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/GaussianApproximation.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/GaussianApproximation.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/main.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/main.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/main.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/main.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/main.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/MonteCarloSimulator.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/MonteCarloSimulator.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/MonteCarloSimulator.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/MonteCarloSimulator.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/MonteCarloSimulator.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/PolarCode.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/PolarCode.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/PolarCode.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/PolarCode.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/PolarCode.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScCrcAidedDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScCrcAidedDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScCrcAidedDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScCrcAidedDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScCrcAidedDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScFanoDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFanoDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScFanoDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFanoDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFanoDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScFlipDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScFlipDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScFlipProgDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipProgDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScFlipProgDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipProgDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipProgDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScFlipStatDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipStatDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScFlipStatDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipStatDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScFlipStatDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScListDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScListDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScListDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScListDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScListDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScRecursiveDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScRecursiveDecoder.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/ScRecursiveDecoder.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScRecursiveDecoder.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/ScRecursiveDecoder.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/Simulate.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/Simulate.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/Simulate.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/Simulate.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/Simulate.cpp"
 },
 
 {
   "directory": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/build",
-  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/SimulationType.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/SimulationType.cpp",
+  "command": "/usr/local/bin/g++-10  -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS  -O3 -DNDEBUG -flto -fno-fat-lto-objects -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -o CMakeFiles/PolarSimulate.dir/src/SimulationType.cpp.o -c /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/SimulationType.cpp",
   "file": "/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/src/SimulationType.cpp"
 }
 ]

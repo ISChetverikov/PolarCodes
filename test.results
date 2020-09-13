@@ -1,0 +1,61 @@
+SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)
+# ############################################################
+# Prameters of simulation run
+# 
+# ResultsFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/test.results
+# 
+# AdditionalFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/CMake/test.stat
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	isSigmaDependOnR: 0
+# 	maxRejectionsCount: 1000000
+# 	maxTestsCount: 50000
+# Decoder type: SCL
+# Decoder params:
+# 	L: 4
+# 	T: 200
+# 	omegaArr: 1.1,1.1,0.5,0.25,1.1
+# 	level: 1
+# 	gammaRight: 3
+# 	delta: 1.0
+# 	gammaLeft: 4
+# Code type: Polar
+# Code params:
+# 	CRC1: 00000111
+# 	sequenceFile: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/polar_sequences/256.txt
+# 	k: 120
+# 	m: 8
+# 
+# SNR: -1, 
+# ############################################################
+# ############################################################
+# Prameters of simulation run
+# 
+# ResultsFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/test.results
+# 
+# AdditionalFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/CMake/test.stat
+# 
+# Simulation type: MC
+# Simulation parameters:
+# 	isSigmaDependOnR: 0
+# 	maxRejectionsCount: 1000000
+# 	maxTestsCount: 50000
+# Decoder type: SCL
+# Decoder params:
+# 	L: 4
+# 	T: 200
+# 	omegaArr: 1.1,1.1,0.5,0.25,1.1
+# 	level: 1
+# 	gammaRight: 3
+# 	delta: 1.0
+# 	gammaLeft: 4
+# Code type: Polar
+# Code params:
+# 	CRC1: 00000111
+# 	sequenceFile: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/polar_sequences/256.txt
+# 	k: 120
+# 	m: 8
+# 
+# SNR: -1, 
+# ############################################################

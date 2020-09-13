@@ -1,7 +1,7 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\test.results</ResultFile>
-      <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\test.stat</AdditionalFile>
+      <ResultFile>/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/test.results</ResultFile>
+      <AdditionalFile>/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/test.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">50000</Param>
         <Param name="maxRejectionsCount">1000000</Param>
@@ -13,11 +13,11 @@
       <Code type="Polar">
         <Param name="m">8</Param>
         <Param name="k">120</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\256.txt</Param>
+        <Param name="sequenceFile">/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/polar_sequences/256.txt</Param>
         <Param name="CRC1">100000000000000001100011</Param>
         <Param name="CRC">00000111</Param>
       </Code>
-      <Decoder type="SCFlipStat">
+      <Decoder type="SCL">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>
