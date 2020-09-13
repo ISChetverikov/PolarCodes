@@ -4,10 +4,16 @@
 
 class ScFlipStatDecoder : public ScCrcAidedDecoder {
 private:
-	int _T;
+	std::vector<int> _unfrozenBits;
+	std::vector<int> _singleFlipStatistic;
+	std::vector<std::vector<int>> _doubleFlipStatistic;
 
 public:
-	ScFlipDecoder(PolarCode * code, int T);
+	ScFlipStatDecoder(PolarCode * code);
+
+	std::string GetStatistic() override;
+	void ClearStatistic() override;
+
 	std::vector<int> Decode(std::vector<double> llr) override;
-	~ScFlipDecoder() {};
+	~ScFlipStatDecoder() {};
 };

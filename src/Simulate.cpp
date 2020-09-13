@@ -203,7 +203,7 @@ BaseSimulator * BuildSimulator(
         int maxRejectionsCount = ExtractInt(simulationTypeParams, "maxRejectionsCount", "MC simulator");
 		std::string additionalInfoFilename = ExtractString(simulationTypeParams, "additionalInfoFilename", "MC simulator", false);
             
-        simulator = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, decoderPtr, isSigmaDependOnR, additionalInfoFilename);
+        simulator = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, decoderPtr, isSigmaDependOnR);
     }
         break;
     default:
