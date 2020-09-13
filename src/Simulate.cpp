@@ -14,6 +14,7 @@
 #include "../include/ScDecoder.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
+#include "../include/ScFlipStatDecoder.h"
 #include "../include/ScListDecoder.h"
 #include "../include/ScFlipProgDecoder.h"
 #include "../include/BaseSimulator.h"
@@ -179,6 +180,10 @@ BaseDecoder * BuildDecoder(
 		decoderPtr = new ScFlipProgDecoder(codePtr, level, gammaLeft, gammaRight, omegaArr);
 	}
 		break;
+	case decoderType::SCFlipStat: {
+		decoderPtr = new ScFlipStatDecoder(codePtr);
+	}
+	break;
     default:
         break;
     }
@@ -297,7 +302,6 @@ void Simulate(std::string configFilename) {
 			LogIntoFile(simulationParams.resultsFilename, simulationParams.ToString(), "# ");
 			LogIntoConsole(simulationParams.ToString());
 
-
 			for (size_t i = 0; i < simulationParams.snrArray.size(); i++)
 			{
 				LogIntoConsole("Iteration has been started. SNR: " + std::to_string(simulationParams.snrArray[i]) + "\n");
@@ -307,7 +311,8 @@ void Simulate(std::string configFilename) {
 
 #ifdef DECODER_STAT
 				auto decoderStat = decoderPtr->GetStatistic();
-				LogIntoFile(simulationParams.resultsFilename, decoderStat);
+				LogIntoFile(simulationParams.additionalFilename, decoderStat);
+				decoderPtr->ClearStatistic();
 #endif // DECODER_STAT
 
 				LogIntoFile(simulationParams.resultsFilename, message);
