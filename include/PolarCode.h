@@ -13,6 +13,8 @@ protected:
 	std::vector<int> _bitsMask;
 	std::vector<int> _crcMask;
 
+	std::vector<int> _unfrozenPolarSequence;
+
 	std::vector<int> _unfrozenBits;
 	std::vector<int> _crcUnfrozenBits;
 
@@ -29,6 +31,8 @@ public:
 	
 	std::vector<int> BitsMask();
 	std::vector<int> CrcMask();
+
+	std::vector<int> UnfrozenPolarSequence();
 
 	std::vector<int> UnfrozenBits();
 	std::vector<int> CrcUnfrozenBits();

@@ -70,7 +70,7 @@ void ScDecoder::FillRightMessageInTree(std::vector<double>::iterator leftIt,
 }
 
 
-size_t ScDecoder::log2(size_t n) {
+size_t ScDecoder::FirstBitPos(size_t n) {
 	size_t m = 0;
 	while (n > 0)
 	{
@@ -89,7 +89,7 @@ void ScDecoder::PassDown(size_t iter) {
 	size_t level;
 	if (iter) {
 		iterXor = iter ^ (iter - 1);
-		level = m - log2(iterXor);
+		level = m - FirstBitPos(iterXor);
 	}
 	else {
 		level = 0;

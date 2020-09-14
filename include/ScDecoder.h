@@ -14,7 +14,7 @@ protected:
 	// optimization allocation
 	std::vector<int> _binaryIter;
 
-	size_t log2(size_t n);
+	size_t FirstBitPos(size_t n);
 
 	void FillLeftMessageInTree(std::vector<double>::iterator leftIt,
 		std::vector<double>::iterator rightIt,

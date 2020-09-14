@@ -65,7 +65,7 @@ void ScListDecoder::PassDownList(size_t iter) {
 	size_t level;
 	if (iter) {
 		iterXor = iter ^ (iter - 1);
-		level = m - log2(iterXor);
+		level = m - FirstBitPos(iterXor);
 	}
 	else {
 		level = 0;
@@ -152,7 +152,7 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 	}
 		
 	
-	int logL = (int)log2(_L) - 1;
+	int logL = (int)FirstBitPos(_L) - 1;
 	// first log(_L) bits
 	size_t i_all = 0; // number of bit (j - number of condidate in list)
 	size_t i_unfrozen = 0;
@@ -285,8 +285,6 @@ std::vector<int> ScListDecoder::TakeListResult() {
 	std::vector<int> result(_codePtr->k(), 0);
 	std::vector<int> candidate(_codePtr->N(), 0);
 	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
-
-	auto c = _codeword;
 
 	int maxInd = -1;
 	size_t j = 0;

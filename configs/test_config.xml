@@ -4,7 +4,7 @@
       <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\test.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">50000</Param>
-        <Param name="maxRejectionsCount">1000000</Param>
+        <Param name="maxRejectionsCount">100</Param>
         <Param name="isSigmaDependOnR">0</Param>
       </Simulator>
       <SnrRange start="-1" stop="-0.5" step="0.5"></SnrRange>
@@ -17,7 +17,7 @@
         <Param name="CRC1">100000000000000001100011</Param>
         <Param name="CRC">00000111</Param>
       </Code>
-      <Decoder type="SCFlipStat">
+      <Decoder type="SCL">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>
@@ -32,11 +32,9 @@
         <!--SC Flip decoder params-->
         <Param name="T">200</Param>
         
-        <!--SC List decoder params-->
-        <Param name="L">4</Param>
+        <!--SC List & List Stat decoder params-->
+        <Param name="L">8</Param>
 
-        <!--SC Flip Stat decoder-->
-        
       </Decoder>
     </Simulation>
 </Config>
