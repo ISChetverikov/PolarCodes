@@ -4,7 +4,7 @@
 
 class ScListFlipStatDecoder : public ScListDecoder {
 private:
-	std::vector<int> _unfrozenPolarSeq;
+	std::vector<int> _unfrozenPolarSeqWithCrc;
 	std::vector<int> _singleFlipStatistic;
 	std::vector<std::vector<int>> _doubleFlipStatistic;
 

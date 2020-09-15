@@ -7,7 +7,7 @@
 #define FROZEN_VALUE 0
 
 ScListFlipStatDecoder::ScListFlipStatDecoder(PolarCode * codePtr, int L) : ScListDecoder(codePtr, L) {
-	_unfrozenPolarSeq = _codePtr->UnfrozenPolarSequenceWithCrc();
+	_unfrozenPolarSeqWithCrc = _codePtr->UnfrozenPolarSequenceWithCrc();
 	ClearStatistic();
 }
 
@@ -19,23 +19,23 @@ void ScListFlipStatDecoder::ClearStatistic() {
 
 std::string ScListFlipStatDecoder::GetStatistic() {
 	std::stringstream ss;
-	//std::sort(_singleFlipStatistic.rbegin(), _singleFlipStatistic.rend());
+	// std::sort(_singleFlipStatistic.rbegin(), _singleFlipStatistic.rend());
 	ss << "Single Flip:\n";
-	for (size_t i = 0; i < _codePtr->k(); i++)
+	for (size_t i = 0; i < _codePtr->kExt(); i++)
 	{
-		//if (_singleFlipStatistic[i])
-			ss << "(" << _unfrozenPolarSeq[i] << "): " << _singleFlipStatistic[i] << "\n";
+		// if (_singleFlipStatistic[i])
+			ss << "(" << _unfrozenPolarSeqWithCrc[i] << "): " << _singleFlipStatistic[i] << "\n";
 	}
 
 	ss << "Double Flip:\n";
-	for (size_t i = 0; i < _codePtr->k(); i++)
+	for (size_t i = 0; i < _codePtr->kExt(); i++)
 	{
-		for (size_t j = 0; j < _codePtr->k(); j++)
+		for (size_t j = 0; j < _codePtr->kExt(); j++)
 		{
 			std::sort(_doubleFlipStatistic[i].rbegin(), _doubleFlipStatistic[i].rend());
-			if (_doubleFlipStatistic[i][j]) {
-				ss << "(" << _unfrozenPolarSeq[i] << ", " << _unfrozenPolarSeq[j] << "): " << _doubleFlipStatistic[i][j] << "\n";
-			}
+			// if (_doubleFlipStatistic[i][j])
+				ss << "(" << _unfrozenPolarSeqWithCrc[i] << ", " << _unfrozenPolarSeqWithCrc[j] << "): " << _doubleFlipStatistic[i][j] << "\n";
+			
 		}
 	}
 
@@ -197,7 +197,7 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 	size_t kExt = _codePtr->kExt();
 	for (size_t i = 0; i < kExt; i++)
 	{
-		int bitPosition = _unfrozenPolarSeq[i];
+		int bitPosition = _unfrozenPolarSeqWithCrc[i];
 
 		std::vector<int> flipPositions;
 		flipPositions.push_back(bitPosition);
@@ -211,6 +211,27 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 		}
 	}
 	
+	for (size_t i = 0; i < kExt; i++)
+	{
+		for (size_t j = i + 1; j < kExt; j++)
+		{
+			int bitPosition1 = _unfrozenPolarSeqWithCrc[i];
+			int bitPosition2 = _unfrozenPolarSeqWithCrc[j];
+
+			std::vector<int> flipPositions;
+			flipPositions.push_back(bitPosition1);
+			flipPositions.push_back(bitPosition2);
+
+			DecodeFlipListInternal(beliefs, flipPositions);
+			result = TakeListStatResult(isError);
+
+			if (!isError) {
+				_doubleFlipStatistic[i][j]++;
+				return result;
+			}
+		}
+	}
+
 	return result;
 
 	/*size_t k = _codePtr->k();
