@@ -11,13 +11,14 @@
       <SnrArray>
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">8</Param>
-        <Param name="k">120</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\256.txt</Param>
-        <Param name="CRC1">100000000000000001100011</Param>
+        <Param name="m">5</Param>
+        <Param name="k">8</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\32.txt</Param>
+        <Param name="CRC24">100000000000000001100011</Param>
+        <Param name="CRC12">100000001111</Param>
         <Param name="CRC">00000111</Param>
       </Code>
-      <Decoder type="SCL">
+      <Decoder type="SCLFlipStat">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>
@@ -32,9 +33,11 @@
         <!--SC Flip decoder params-->
         <Param name="T">200</Param>
         
-        <!--SC List & List Stat decoder params-->
+        <!--SC List decoder params-->
         <Param name="L">8</Param>
 
+        <!--SC Flip Stat decoder-->
+        
       </Decoder>
     </Simulation>
 </Config>

@@ -66,7 +66,7 @@ void ScListFlipStatDecoder::DecodeFlipListInternal(std::vector<double> inLlr, st
 			int value = 0;
 			for (size_t j = 0; j < _L; j++) {
 				_candidates[j][i_all] = value;
-				if ((j + 1) % (i_unfrozen + 1) == 0) // all paths at the logL first steps 
+				if ((j + 1) % (1 << i_unfrozen) == 0) // all paths at the logL first steps 
 					value = !value;
 			}
 			i_unfrozen++;
@@ -154,7 +154,7 @@ void ScListFlipStatDecoder::DecodeFlipListInternal(std::vector<double> inLlr, st
 	return;
 }
 
-std::vector<int> ScListFlipStatDecoder::TakeListStatResult(bool & isOriginalCodeword) {
+std::vector<int> ScListFlipStatDecoder::TakeListStatResult(bool & isError) {
 	std::vector<int> result(_codePtr->k(), 0);
 	std::vector<int> candidate(_codePtr->N(), 0);
 	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
@@ -169,13 +169,13 @@ std::vector<int> ScListFlipStatDecoder::TakeListStatResult(bool & isOriginalCode
 		if (IsCrcPassed(_candidates[maxInd]))
 			break;
 
-		_metrics[maxInd] = -100000.0;
+		_metrics[maxInd] = -10000000.0;
 	}
 
 	if (j < _L) {
 		candidate = _candidates[maxInd];	
 	}
-	isOriginalCodeword = (candidate == _codeword);
+	isError = (candidate != _codeword);
 
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
@@ -194,7 +194,7 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 	if (!isError)
 		return result;
 
-	size_t k = _codePtr->k();
+	/*size_t k = _codePtr->k();
 	for (size_t i = 0; i < k; i++)
 	{
 		int bitPosition = _unfrozenPolarSeq[i];
@@ -210,7 +210,7 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 			return result;
 		}
 	}
-
+	*/
 	return result;
 
 	/*size_t k = _codePtr->k();

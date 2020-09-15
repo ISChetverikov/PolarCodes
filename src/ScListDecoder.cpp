@@ -164,7 +164,7 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 			int value = 0;
 			for (size_t j = 0; j < _L; j++) {
 				_candidates[j][i_all] = value;
-				if ((j + 1) % (i_unfrozen + 1) == 0) // all paths at the logL first steps 
+				if ((j + 1) % (1 << i_unfrozen) == 0) // all paths at the logL first steps 
 					value = !value;
 			}
 			i_unfrozen++;
