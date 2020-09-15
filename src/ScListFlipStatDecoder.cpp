@@ -7,23 +7,23 @@
 #define FROZEN_VALUE 0
 
 ScListFlipStatDecoder::ScListFlipStatDecoder(PolarCode * codePtr, int L) : ScListDecoder(codePtr, L) {
-	_unfrozenPolarSeq = _codePtr->UnfrozenPolarSequence();
+	_unfrozenPolarSeq = _codePtr->UnfrozenPolarSequenceWithCrc();
 	ClearStatistic();
 }
 
 void ScListFlipStatDecoder::ClearStatistic() {
-	size_t k = _codePtr->k();
-	_singleFlipStatistic = std::vector<int>(k, 0);
-	_doubleFlipStatistic = std::vector<std::vector<int>>(k, _singleFlipStatistic);
+	size_t kExt = _codePtr->kExt();
+	_singleFlipStatistic = std::vector<int>(kExt, 0);
+	_doubleFlipStatistic = std::vector<std::vector<int>>(kExt, _singleFlipStatistic);
 }
 
 std::string ScListFlipStatDecoder::GetStatistic() {
 	std::stringstream ss;
-	std::sort(_singleFlipStatistic.rbegin(), _singleFlipStatistic.rend());
+	//std::sort(_singleFlipStatistic.rbegin(), _singleFlipStatistic.rend());
 	ss << "Single Flip:\n";
 	for (size_t i = 0; i < _codePtr->k(); i++)
 	{
-		if (_singleFlipStatistic[i])
+		//if (_singleFlipStatistic[i])
 			ss << "(" << _unfrozenPolarSeq[i] << "): " << _singleFlipStatistic[i] << "\n";
 	}
 
@@ -194,8 +194,8 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 	if (!isError)
 		return result;
 
-	/*size_t k = _codePtr->k();
-	for (size_t i = 0; i < k; i++)
+	size_t kExt = _codePtr->kExt();
+	for (size_t i = 0; i < kExt; i++)
 	{
 		int bitPosition = _unfrozenPolarSeq[i];
 
@@ -210,7 +210,7 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 			return result;
 		}
 	}
-	*/
+	
 	return result;
 
 	/*size_t k = _codePtr->k();
