@@ -33,6 +33,7 @@
     <ClInclude Include="include\ScCrcAidedDecoder.h" />
     <ClInclude Include="include\ScDecoder.h" />
     <ClInclude Include="include\ScListDecoder.h" />
+    <ClInclude Include="include\IvanDecoder.h" />
     <ClInclude Include="include\ScRecursiveDecoder.h" />
     <ClInclude Include="include\ScFanoDecoder.h" />
     <ClInclude Include="include\ScFlipDecoder.h" />
@@ -58,6 +59,7 @@
     <ClCompile Include="src\ScDecoder.cpp" />
     <ClCompile Include="src\ScFlipStatDecoder.cpp" />
     <ClCompile Include="src\ScListDecoder.cpp" />
+    <ClCompile Include="src\IvanDecoder.cpp" />
     <ClCompile Include="src\ScRecursiveDecoder.cpp" />
     <ClCompile Include="src\ScFanoDecoder.cpp" />
     <ClCompile Include="src\ScFlipDecoder.cpp" />
@@ -124,7 +126,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,7 +138,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,7 +152,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,7 +168,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

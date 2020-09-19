@@ -130,6 +130,7 @@ set(Headers
     "include/ScDecoder.h"
     "include/ScFanoDecoder.h"
     "include/ScFlipDecoder.h"
+    "include/IvanDecoder.h"
     "include/ScFlipProgDecoder.h"
     "include/ScFlipStatDecoder.h"
     "include/ScListDecoder.h"
@@ -160,6 +161,7 @@ set(Sources
     "src/ScFlipProgDecoder.cpp"
     "src/ScFlipStatDecoder.cpp"
     "src/ScListDecoder.cpp"
+    "src/IvanDecoder.cpp"
     "src/ScRecursiveDecoder.cpp"
     "src/Simulate.cpp"
     "src/SimulationType.cpp"
@@ -194,14 +196,14 @@ endif()
 if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
     target_compile_definitions(${PROJECT_NAME} PRIVATE
         "DECODER_STAT;"
-        "DOMAIN_P1;"
+        "DOMAIN_LLR;"
         "MINSUM;"
         "_MBCS"
     )
 elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
     target_compile_definitions(${PROJECT_NAME} PRIVATE
         "DECODER_STAT;"
-        "DOMAIN_P1;"
+        "DOMAIN_LLR;"
         "MINSUM;"
         "_MBCS"
     )

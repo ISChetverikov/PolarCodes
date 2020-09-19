@@ -67,156 +67,163 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 build cmake_object_order_depends_target_PolarSimulate_RELEASE: phony || CMakeFiles/PolarSimulate.dir
 
 build CMakeFiles/PolarSimulate.dir/src/BaseDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/BaseDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/BaseDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/BaseSimulator.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/BaseSimulator.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/BaseSimulator.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ConfigReading.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ConfigReading.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ConfigReading.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/CRC.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/CRC.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/CRC.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/crcTest.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/crcTest.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/crcTest.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/DecoderType.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/DecoderType.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/DecoderType.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/Encoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/Encoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/Encoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/gaTe.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/gaTe.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/gaTe.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/GaussianApproximation.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/GaussianApproximation.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/GaussianApproximation.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/main.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/main.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/main.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/MonteCarloSimulator.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/MonteCarloSimulator.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/MonteCarloSimulator.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/PolarCode.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/PolarCode.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/PolarCode.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ScCrcAidedDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ScCrcAidedDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ScCrcAidedDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ScDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ScDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ScDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ScFanoDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ScFanoDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ScFanoDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ScFlipDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ScFlipDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ScFlipDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ScFlipProgDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ScFlipProgDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ScFlipProgDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ScFlipStatDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ScFlipStatDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ScFlipStatDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ScListDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ScListDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ScListDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  OBJECT_DIR = CMakeFiles/PolarSimulate.dir
+  OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
+
+build CMakeFiles/PolarSimulate.dir/src/IvanDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/IvanDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
+  DEP_FILE = CMakeFiles/PolarSimulate.dir/src/IvanDecoder.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/ScRecursiveDecoder.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/ScRecursiveDecoder.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/ScRecursiveDecoder.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/Simulate.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/Simulate.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/Simulate.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
 build CMakeFiles/PolarSimulate.dir/src/SimulationType.cpp.o: CXX_COMPILER__PolarSimulate_Release ../src/SimulationType.cpp || cmake_object_order_depends_target_PolarSimulate_RELEASE
-  DEFINES = -DDECODER_STAT -DDOMAIN_P1 -DMINSUM -D_MBCS
+  DEFINES = -DDECODER_STAT -DDOMAIN_LLR -DMINSUM -D_MBCS
   DEP_FILE = CMakeFiles/PolarSimulate.dir/src/SimulationType.cpp.o.d
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   OBJECT_FILE_DIR = CMakeFiles/PolarSimulate.dir/src
 
@@ -228,8 +235,8 @@ build CMakeFiles/PolarSimulate.dir/src/SimulationType.cpp.o: CXX_COMPILER__Polar
 #############################################
 # Link the executable ../x64/Release/1PolarSimulate
 
-build ../x64/Release/1PolarSimulate: CXX_EXECUTABLE_LINKER__PolarSimulate_Release CMakeFiles/PolarSimulate.dir/src/BaseDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/BaseSimulator.cpp.o CMakeFiles/PolarSimulate.dir/src/ConfigReading.cpp.o CMakeFiles/PolarSimulate.dir/src/CRC.cpp.o CMakeFiles/PolarSimulate.dir/src/crcTest.cpp.o CMakeFiles/PolarSimulate.dir/src/DecoderType.cpp.o CMakeFiles/PolarSimulate.dir/src/Encoder.cpp.o CMakeFiles/PolarSimulate.dir/src/gaTe.cpp.o CMakeFiles/PolarSimulate.dir/src/GaussianApproximation.cpp.o CMakeFiles/PolarSimulate.dir/src/main.cpp.o CMakeFiles/PolarSimulate.dir/src/MonteCarloSimulator.cpp.o CMakeFiles/PolarSimulate.dir/src/PolarCode.cpp.o CMakeFiles/PolarSimulate.dir/src/ScCrcAidedDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScFanoDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScFlipDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScFlipProgDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScFlipStatDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScListDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScRecursiveDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/Simulate.cpp.o CMakeFiles/PolarSimulate.dir/src/SimulationType.cpp.o
-  FLAGS = -O3 -DNDEBUG  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+build ../x64/Release/1PolarSimulate: CXX_EXECUTABLE_LINKER__PolarSimulate_Release CMakeFiles/PolarSimulate.dir/src/BaseDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/BaseSimulator.cpp.o CMakeFiles/PolarSimulate.dir/src/ConfigReading.cpp.o CMakeFiles/PolarSimulate.dir/src/CRC.cpp.o CMakeFiles/PolarSimulate.dir/src/crcTest.cpp.o CMakeFiles/PolarSimulate.dir/src/DecoderType.cpp.o CMakeFiles/PolarSimulate.dir/src/Encoder.cpp.o CMakeFiles/PolarSimulate.dir/src/gaTe.cpp.o CMakeFiles/PolarSimulate.dir/src/GaussianApproximation.cpp.o CMakeFiles/PolarSimulate.dir/src/main.cpp.o CMakeFiles/PolarSimulate.dir/src/MonteCarloSimulator.cpp.o CMakeFiles/PolarSimulate.dir/src/PolarCode.cpp.o CMakeFiles/PolarSimulate.dir/src/ScCrcAidedDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScFanoDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScFlipDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScFlipProgDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScFlipStatDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScListDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/IvanDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/ScRecursiveDecoder.cpp.o CMakeFiles/PolarSimulate.dir/src/Simulate.cpp.o CMakeFiles/PolarSimulate.dir/src/SimulationType.cpp.o
+  FLAGS = -O3 -DNDEBUG -flto  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   OBJECT_DIR = CMakeFiles/PolarSimulate.dir
   POST_BUILD = :
   PRE_LINK = :

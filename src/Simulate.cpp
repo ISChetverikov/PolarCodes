@@ -20,6 +20,7 @@
 #include "../include/BaseSimulator.h"
 #include "../include/ConfigReading.h"
 #include "../include/Exceptions.h"
+#include "../include/IvanDecoder.h"
 
 int ExtractInt(std::unordered_map<std::string, std::string> map, std::string key, std::string section) {
 	if (map.count(key) <= 0)
@@ -170,6 +171,15 @@ BaseDecoder * BuildDecoder(
 		decoderPtr = new ScListDecoder(codePtr, L);
 	}
 	break;
+
+	case decoderType::SCIvan: {
+		int L = ExtractInt(decoderParams, "L", "SCIvan decoder");
+		int K = ExtractInt(decoderParams, "K", "SCIvan decoder");
+
+		decoderPtr = new SCIvanDecoder(codePtr, L, K);
+	}
+	break;
+
 	case decoderType::SCFlipProg: {
 		int level = ExtractInt(decoderParams, "level", "SCFlipProg decoder");
 		int gammaLeft = ExtractInt(decoderParams, "gammaLeft", "SCFlipProg decoder");
