@@ -8,7 +8,7 @@ decoderType decoderTypeFromString(std::string str) {
 		{"SCFlipProg", decoderType::SCFlipProg},
 		{"SC", decoderType::SC},
 		{"SCL", decoderType::SCList},
-		{"SCLFlipStat", decoderType::SCListFlipStat}
+		{"SCListFlipStat", decoderType::SCListFlipStat}
 	};
 
 	if (decoderTypeResolver.count(str) > 0)

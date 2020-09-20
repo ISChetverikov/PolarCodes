@@ -195,7 +195,40 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 	if (!isError)
 		return result;
 
-	size_t kExt = _codePtr->kExt();
+	std::vector<int> flipPositions;
+
+	auto single = FlipStatistic::GetSingles();
+	for (size_t i = 0; i < single.size(); i++)
+	{
+		flipPositions.clear();
+		flipPositions.push_back(single[i]);
+
+		DecodeFlipListInternal(beliefs, flipPositions);
+		result = TakeListStatResult(isError);
+
+		if (!isError) {
+			//_singleFlipStatistic[i]++;
+			return result;
+		}
+	}
+
+	auto pairs = FlipStatistic::GetPairs();
+	for (size_t i = 0; i < pairs.size(); i++)
+	{
+		flipPositions.clear();
+		flipPositions.push_back(std::get<0>(pairs[i]));
+		flipPositions.push_back(std::get<1>(pairs[i]));
+
+		DecodeFlipListInternal(beliefs, flipPositions);
+		result = TakeListStatResult(isError);
+
+		if (!isError) {
+			//_singleFlipStatistic[i]++;
+			return result;
+		}
+	}
+
+	/*size_t kExt = _codePtr->kExt();
 	for (size_t i = 0; i < kExt; i++)
 	{
 		int bitPosition = _unfrozenPolarSeqWithCrc[i];
@@ -207,7 +240,7 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 		result = TakeListStatResult(isError);
 
 		if (!isError) {
-			_singleFlipStatistic[i]++;
+			_doubleFlipStatistic[i]++;
 			return result;
 		}
 	}
@@ -232,45 +265,7 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 			}
 		}
 	}
-
+	*/
 	return result;
 
-	/*size_t k = _codePtr->k();
-	for (size_t i = 0; i < k; i++)
-	{
-		int bitPosition = _unfrozenBits[i];
-
-		if (_x[bitPosition] == originalCodeword[bitPosition])
-			continue;
-
-		_x[bitPosition] = !_x[bitPosition];
-
-		DecodeFrom(bitPosition);
-
-		if (_x == _codeword) {
-			_singleFlipStatistic[i]++;
-			return TakeResult();
-		}
-
-		for (size_t j = i + 1; j < k; j++)
-		{
-			int bitPosition2 = _unfrozenBits[j];
-			if (_x[bitPosition2] == originalCodeword[bitPosition2])
-				continue;
-
-			_x[bitPosition2] =! _x[bitPosition2];
-			DecodeFrom(bitPosition2);
-
-			if (_x == _codeword) {
-				_doubleFlipStatistic[i][j]++;
-				return TakeResult();
-			}
-
-			_x[bitPosition2] = !_x[bitPosition2];
-			DecodeFrom(bitPosition2);
-		}
-
-		_x[bitPosition] = !_x[bitPosition];
-		DecodeFrom(bitPosition);
-	}*/
 }
