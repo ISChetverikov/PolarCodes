@@ -24,6 +24,7 @@
     <ClInclude Include="include\CRC.h" />
     <ClInclude Include="include\Domain.h" />
     <ClInclude Include="include\Encoder.h" />
+    <ClInclude Include="include\FlipStatistic.h" />
     <ClInclude Include="include\GaussianApproximation.h" />
     <ClInclude Include="include\PolarCode.h" />
     <ClInclude Include="include\ConfigReading.h" />

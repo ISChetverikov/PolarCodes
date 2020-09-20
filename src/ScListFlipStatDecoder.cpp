@@ -3,6 +3,7 @@
 
 #include "../include/ScCrcAidedDecoder.h"
 #include "../include/ScListFlipStatDecoder.h"
+#include "../include/FlipStatistic.h"
 
 #define FROZEN_VALUE 0
 
