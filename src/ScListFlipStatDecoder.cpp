@@ -23,7 +23,7 @@ std::string ScListFlipStatDecoder::GetStatistic() {
 	ss << "Single Flip:\n";
 	for (size_t i = 0; i < _codePtr->kExt(); i++)
 	{
-		// if (_singleFlipStatistic[i])
+		//if (_singleFlipStatistic[i])
 			ss << "(" << _unfrozenPolarSeqWithCrc[i] << "): " << _singleFlipStatistic[i] << "\n";
 	}
 
@@ -32,8 +32,8 @@ std::string ScListFlipStatDecoder::GetStatistic() {
 	{
 		for (size_t j = 0; j < _codePtr->kExt(); j++)
 		{
-			std::sort(_doubleFlipStatistic[i].rbegin(), _doubleFlipStatistic[i].rend());
-			// if (_doubleFlipStatistic[i][j])
+			//std::sort(_doubleFlipStatistic[i].rbegin(), _doubleFlipStatistic[i].rend());
+			if (_doubleFlipStatistic[i][j])
 				ss << "(" << _unfrozenPolarSeqWithCrc[i] << ", " << _unfrozenPolarSeqWithCrc[j] << "): " << _doubleFlipStatistic[i][j] << "\n";
 			
 		}
