@@ -44,6 +44,7 @@ SCIvanDecoder::SCIvanDecoder(PolarCode * codePtr, int L, int k) : ScCrcAidedDeco
 	}
 
 	_metrics = std::vector<double>(_L, 0);
+	// _meta_metrics = std::vector<double>(0, 0);
 	
 	// optimization allocation
 	_areTakenOne = std::vector<bool>(_L, 0);
@@ -290,6 +291,7 @@ std::vector<int> SCIvanDecoder::TakeListResult() {
 	auto c = _codeword;
 
 	int maxInd = -1;
+	double max_metric;
 	size_t j = 0;
 	for (; j < _L; j++)
 	{
@@ -300,12 +302,40 @@ std::vector<int> SCIvanDecoder::TakeListResult() {
 			_find = 1;
 			break;
 		}
-		
+		max_metric = _metrics[maxInd];
 		_metrics[maxInd] = -100000.0;
 	}
 
-	if (j < _L)
+	if (j < _L){
+		_find = 1;
 		candidate = _candidates[maxInd];
+		max_metric = _metrics[maxInd];
+	}
+
+	for (size_t i = 0; i < codewordBits.size(); i++)
+	{
+		result[i] = candidate[codewordBits[i]];
+	}
+	_meta_metrics.push_back(max_metric);
+	return result;
+}
+
+
+std::vector<int> SCIvanDecoder::TakeListResultFinal() {
+	std::vector<int> result(_codePtr->k(), 0);
+	std::vector<int> candidate(_codePtr->N(), 0);
+	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
+
+	auto c = _codeword;
+
+	int maxInd = -1;
+	size_t j = 0;
+	
+	auto maxIt = std::max_element(_meta_metrics.begin(), _meta_metrics.end());
+	maxInd = (int)std::distance(_meta_metrics.begin(), maxIt);
+
+	
+	candidate = _candidates[maxInd];
 
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
@@ -314,6 +344,7 @@ std::vector<int> SCIvanDecoder::TakeListResult() {
 
 	return result;
 }
+
 
 std::vector<int> binary(unsigned x, int _k)
 {
@@ -335,10 +366,17 @@ std::vector<int> SCIvanDecoder::Decode(std::vector<double> inLlr) {
 	std::vector<int> min_ind(_k, -1);
 	std::vector<double> min_val(_k, -1);
 	std::vector<int> result(_codePtr->k(), 0);
-
+	std::vector<std::vector<int>> cand;
+	_find = 0;
+	std::cout<<"First";
+	DecodeListInternal(inLlr);
+	result = TakeListResult();
+	if(_find == 1)
+		return result;
+	cand.push_back(result);
 
     for(int i = 0; i< _k; i++){
-        double min = 10000000;
+        double min = * (std::max_element(inLlr.begin(), inLlr.end()));
         for(int j=0; j < inLlr.size(); j++){
             if(min > abs(inLlr[j]) && _codePtr->BitsMask()[j]){
                 int wasFlg = 0;
@@ -364,11 +402,13 @@ for(int i = 0; i < _k; i++)
 		result = TakeListResult();
 		if(_find == 1)
 			return result;
+		else
+			cand.push_back(result);
 
 
     }	
 
 
-
-	return result;
+	_candidates = cand;
+	return TakeListResult();
 }

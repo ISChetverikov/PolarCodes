@@ -284,7 +284,6 @@ void Simulate(std::string configFilename) {
 	
 	try {
 		LogIntoConsole("Simulation initializing is starting....\n");
-
 		simulationParamsArray = ReadConfig(configFilename);
 	}
 	catch (const std::exception& err) {

@@ -70,12 +70,12 @@ SimulationParams ReadSimulationSection(pugi::xml_node simulation_node) {
 
 	std::string simulatorStr = GetAttribute(simulator_node, TYPE_ATTRIBUTE).value();
 	simulatorType simulator = simulatorFromString(simulatorStr);
+	
 	if (simulator == simulatorType::UnknownSimulation)
 		throw ConfigParseException("Parse config error: unsupported value of simulation type: " + simulatorStr);
 
 	params.simulator = simulator;
 	params.simulatorParams = ReadParams(simulator_node);
-
 	pugi::xml_node code_node = GetChildNode(simulation_node, CODE_SECTION);
 
 	std::string codeStr = GetAttribute(code_node, TYPE_ATTRIBUTE).value();
@@ -88,7 +88,6 @@ SimulationParams ReadSimulationSection(pugi::xml_node simulation_node) {
 	decoderType decoder = decoderTypeFromString(decoderStr);
 	if (decoder == decoderType::UnknownDecoder)
 		throw ConfigParseException("Parse config error: unsupported value of decoder type: " + decoderStr);
-
 	params.decoder = decoderTypeFromString(decoderStr);
 	params.decoderParams = ReadParams(decoder_node);
 
@@ -122,18 +121,19 @@ std::vector<SimulationParams> ReadConfig(std::string configFilename) {
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(configFilename.c_str());
-
 	if (!result)
 	{
 		throw ConfigParseException("Error during open config xml file:" + std::string(result.description()));
 	}
-
+	
 	pugi::xml_node config_node = GetChildNode(doc, ROOT_SECTION);
+	
 	for (pugi::xml_node simulation_node : config_node.children(SIMULATION_SECTION))
 	{
+		
 		paramsArray.push_back(ReadSimulationSection(simulation_node));
+		
 	}
-
 	if (paramsArray.empty())
 		throw ConfigParseException("Parse config error: any \"Simulation\" section is absent.");
 

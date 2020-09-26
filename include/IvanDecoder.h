@@ -1,6 +1,7 @@
-#pragma once
+
 
 #include "ScCrcAidedDecoder.h"
+#pragma once
 
 class SCIvanDecoder : public ScCrcAidedDecoder {
 protected:
@@ -11,6 +12,7 @@ protected:
 	std::vector<std::vector<std::vector<int>>> _uhatTrees;
 	std::vector<std::vector<int>> _candidates;
 	std::vector<double> _metrics;
+	std::vector <double> _meta_metrics;
 
 	// optimization allocation
 	std::vector<bool> _areTakenZero;
@@ -22,6 +24,7 @@ protected:
 	void FillListMask(size_t iter);
 	double StepMetric(double belief, int decision);
 	std::vector<int> TakeListResult();
+	std::vector<int> TakeListResultFinal();
 
 public:
 	SCIvanDecoder(PolarCode * code, int L, int k);
