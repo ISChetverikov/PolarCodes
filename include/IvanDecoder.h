@@ -11,6 +11,7 @@ protected:
 	std::vector<std::vector<std::vector<double>>> _beliefTrees;
 	std::vector<std::vector<std::vector<int>>> _uhatTrees;
 	std::vector<std::vector<int>> _candidates;
+	std::vector<std::vector<int>> _meta_candidates;
 	std::vector<double> _metrics;
 	std::vector <double> _meta_metrics;
 

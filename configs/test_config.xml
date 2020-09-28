@@ -1,13 +1,13 @@
 <Config>
     <Simulation>
-      <ResultFile>/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/scl2.results</ResultFile>
+      <ResultFile>/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/scivan_-2_1.results</ResultFile>
       <AdditionalFile>/Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/test.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">100000</Param>
         <Param name="maxRejectionsCount">10000000</Param>
         <Param name="isSigmaDependOnR">0</Param>
       </Simulator>
-      <SnrRange start="-2" stop="0.5" step="0.5"></SnrRange>
+      <SnrRange start="-2" stop="1.1" step="0.5"></SnrRange>
       <SnrArray>
       </SnrArray>
       <Code type="Polar">
@@ -17,7 +17,7 @@
         <Param name="CRC">100000000000000001100011</Param>
         <Param name="CRC2">00000111</Param>
       </Code>
-      <Decoder type="SCL">
+      <Decoder type="SCIvan">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>

@@ -293,10 +293,10 @@ void SCIvanDecoder::FillListMask(size_t iter) {
 
 
 std::vector<int> SCIvanDecoder::TakeListResult() {
-	std::vector<int> result(_codePtr->k(), 0);
+	std::vector<int> result(_codePtr->k() + 1, 0);
 	std::vector<int> candidate(_codePtr->N(), 0);
 	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
-
+	*(result.end() - 1) = 0;
 	auto c = _codeword;
 
 	int maxInd = -1;
@@ -308,7 +308,7 @@ std::vector<int> SCIvanDecoder::TakeListResult() {
 		maxInd = (int)std::distance(_metrics.begin(), maxIt);
 
 		if (IsCrcPassed(_candidates[maxInd])){
-			_find = 1;
+			*(result.end() - 1) = 1;
 			break;
 		}
 		max_metric = _metrics[maxInd];
@@ -316,7 +316,7 @@ std::vector<int> SCIvanDecoder::TakeListResult() {
 	}
 
 	if (j < _L){
-		_find = 1;
+		*(result.end() - 1) = 1;
 		candidate = _candidates[maxInd];
 		max_metric = _metrics[maxInd];
 	}
@@ -336,21 +336,12 @@ std::vector<int> SCIvanDecoder::TakeListResultFinal() {
 	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
 
 	auto c = _codeword;
-
 	int maxInd = -1;
-	size_t j = 0;
-	
+	size_t j = 0;	
 	auto maxIt = std::max_element(_meta_metrics.begin(), _meta_metrics.end());
-	maxInd = (int)std::distance(_meta_metrics.begin(), maxIt);
-
+	maxInd = (int)std::distance(_meta_metrics.begin(), maxIt);	
+	result = _meta_candidates[maxInd];	
 	
-	candidate = _candidates[maxInd];
-
-	for (size_t i = 0; i < codewordBits.size(); i++)
-	{
-		result[i] = candidate[codewordBits[i]];
-	}
-
 	return result;
 }
 
@@ -376,13 +367,18 @@ std::vector<int> SCIvanDecoder::Decode(std::vector<double> inLlr) {
 	std::vector<double> min_val(_k, -1);
 	std::vector<int> result(_codePtr->k(), 0);
 	std::vector<std::vector<int>> cand;
+	_meta_candidates.clear();
+	_meta_metrics.clear();
 	// _find = 0;
 	// ChangeFind(0);
 
 	DecodeListInternal(inLlr);
 	result = TakeListResult();
-	if(_find == 1)
+	int find = result.back();
+	result.pop_back();
+	if(find == 1)
 		return result;
+	
 	cand.push_back(result);
 
     for(int i = 0; i< _k; i++){
@@ -399,26 +395,28 @@ std::vector<int> SCIvanDecoder::Decode(std::vector<double> inLlr) {
                 }
         }
     }
-	
+
 for(int i = 0; i < _k; i++)
          min_val[i] = inLlr[min_ind[i]];
     std::vector<int> s;
 for(int i=0; i < pow(2, _k); i++){
     s = Binary(i, _k);
 	for(int i = 0; i < _k; i++)
-        inLlr[min_ind[i]] = s[i];
-
+        inLlr[min_ind[i]] = s[i];	
 	DecodeListInternal(inLlr);
-	result = TakeListResult();
-	if(_find == 1)
+	result = TakeListResult();	
+	find = result.back();
+	result.pop_back();
+	if(find == 1)
 		return result;
+	
 	else
 		cand.push_back(result);
 
 
     }	
 
-
-	_candidates = cand;
-	return TakeListResult();
+	_meta_candidates = cand;
+	result = TakeListResultFinal();	
+	return result;
 }
