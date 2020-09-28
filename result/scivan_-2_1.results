@@ -9,8 +9,8 @@ SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)
 # Simulation type: MC
 # Simulation parameters:
 # 	isSigmaDependOnR: 0
-# 	maxRejectionsCount: 10000000
-# 	maxTestsCount: 100000
+# 	maxRejectionsCount: 100000
+# 	maxTestsCount: 50000
 # Decoder type: SCIvan
 # Decoder params:
 # 	K: 4
@@ -31,3 +31,9 @@ SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)
 # 
 # SNR: -2, -1.5, -1, -0.5, 0, 0.5, 1, 
 # ############################################################
+-2, 1.29059, 0.890195, 0.68578, 34289, 50000, 927108
+-1.5, 1.79059, 0.840398, 0.44118, 22059, 50000, 546688
+-1, 2.29059, 0.793387, 0.21532, 10766, 50000, 299462
+-0.5, 2.79059, 0.749005, 0.07696, 3848, 50000, 202598
+0, 3.29059, 0.707107, 0.02194, 1097, 50000, 162112
+0.5, 3.79059, 0.667552, 0.00504, 252, 50000, 228573
