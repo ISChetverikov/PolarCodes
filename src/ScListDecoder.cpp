@@ -314,6 +314,7 @@ std::vector<int> ScListDecoder::TakeListResult() {
 
 
 std::vector<int> ScListDecoder::Decode(std::vector<double> inLlr) {
+	
 
 	DecodeListInternal(inLlr);
 

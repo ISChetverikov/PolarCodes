@@ -12,9 +12,12 @@
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
 
+
+
 SCIvanDecoder::SCIvanDecoder(PolarCode * codePtr, int L, int k) : ScCrcAidedDecoder(codePtr) {
 	_L = L;
 	_k = k;
+	
 	_find = 0;
 	size_t m = _codePtr->m();
 	size_t n = _codePtr->N();
@@ -50,6 +53,10 @@ SCIvanDecoder::SCIvanDecoder(PolarCode * codePtr, int L, int k) : ScCrcAidedDeco
 	_areTakenOne = std::vector<bool>(_L, 0);
 	_areTakenZero = std::vector<bool>(_L, 0);
 }
+
+// void SCIvanDecoder::ChangeFind(int val){
+// 	_find = val;
+// }
 
 double SCIvanDecoder::StepMetric(double belief, int decision) {
 #ifdef DOMAIN_LLR
@@ -283,6 +290,8 @@ void SCIvanDecoder::FillListMask(size_t iter) {
 	}
 }
 
+
+
 std::vector<int> SCIvanDecoder::TakeListResult() {
 	std::vector<int> result(_codePtr->k(), 0);
 	std::vector<int> candidate(_codePtr->N(), 0);
@@ -346,13 +355,13 @@ std::vector<int> SCIvanDecoder::TakeListResultFinal() {
 }
 
 
-std::vector<int> binary(unsigned x, int _k)
+std::vector<int> Binary(unsigned x, int _k)
 {
     int size = 0;
     std::vector<int> s;
     do
     {
-        s.push_back(20 * (0 + (x & 1) - 0.5));
+        s.push_back(40 * (0 + (x & 1) - 0.5));
         size++;
     } while (x >>= 1);
     for(; size < _k; size++)
@@ -367,8 +376,9 @@ std::vector<int> SCIvanDecoder::Decode(std::vector<double> inLlr) {
 	std::vector<double> min_val(_k, -1);
 	std::vector<int> result(_codePtr->k(), 0);
 	std::vector<std::vector<int>> cand;
-	_find = 0;
-	std::cout<<"First";
+	// _find = 0;
+	// ChangeFind(0);
+
 	DecodeListInternal(inLlr);
 	result = TakeListResult();
 	if(_find == 1)
@@ -393,17 +403,17 @@ std::vector<int> SCIvanDecoder::Decode(std::vector<double> inLlr) {
 for(int i = 0; i < _k; i++)
          min_val[i] = inLlr[min_ind[i]];
     std::vector<int> s;
-    for(int i=0; i < pow(2, _k); i++){
-        s = binary(i, _k);
-		for(int i = 0; i < _k; i++)
-        	inLlr[min_ind[i]] = s[i];
+for(int i=0; i < pow(2, _k); i++){
+    s = Binary(i, _k);
+	for(int i = 0; i < _k; i++)
+        inLlr[min_ind[i]] = s[i];
 
-		DecodeListInternal(inLlr);
-		result = TakeListResult();
-		if(_find == 1)
-			return result;
-		else
-			cand.push_back(result);
+	DecodeListInternal(inLlr);
+	result = TakeListResult();
+	if(_find == 1)
+		return result;
+	else
+		cand.push_back(result);
 
 
     }	

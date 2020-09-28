@@ -23,6 +23,7 @@ protected:
 	void DecodeListInternal(std::vector<double> inLlr);
 	void FillListMask(size_t iter);
 	double StepMetric(double belief, int decision);
+	// void ChangeFind(int val);
 	std::vector<int> TakeListResult();
 	std::vector<int> TakeListResultFinal();
 

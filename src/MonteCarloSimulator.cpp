@@ -76,10 +76,12 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 				beliefs[i] = LlrToP1(beliefs[i]);
 			}
 		}
+		
 		decoded = _decoderPtr->Decode(beliefs);
 		if (decoded != word)
 			wrong_dec += 1;
 	}
+	
 
 	auto t2 = std::chrono::steady_clock::now();
 

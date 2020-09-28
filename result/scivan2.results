@@ -1,8 +1,9 @@
-SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)
+Error was ocurred:
+Sequence length does not match with code length
 # ############################################################
 # Prameters of simulation run
 # 
-# ResultsFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/scivan.results
+# ResultsFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/scivan2.results
 # 
 # AdditionalFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/test.stat
 # 
@@ -31,8 +32,8 @@ SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)
 # 
 # SNR: -2, -1.5, -1, -0.5, 0, 
 # ############################################################
--2, 1.29059, 0.890195, 0.73156, 36578, 50000, 115008
--1.5, 1.79059, 0.840398, 0.48942, 24471, 50000, 137060
--1, 2.29059, 0.793387, 0.25274, 12637, 50000, 143261
--0.5, 2.79059, 0.749005, 0.0992, 4960, 50000, 251179
-0, 3.29059, 0.707107, 0.0282, 1410, 50000, 144162
+-2, 1.29059, 0.890195, 0.73296, 36648, 50000, 116297
+-1.5, 1.79059, 0.840398, 0.49372, 24686, 50000, 116666
+-1, 2.29059, 0.793387, 0.2539, 12695, 50000, 123467
+-0.5, 2.79059, 0.749005, 0.09856, 4928, 50000, 159530
+0, 3.29059, 0.707107, 0.02802, 1401, 50000, 150224

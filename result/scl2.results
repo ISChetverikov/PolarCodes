@@ -2,16 +2,16 @@ SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)
 # ############################################################
 # Prameters of simulation run
 # 
-# ResultsFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/scivan.results
+# ResultsFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/scl2.results
 # 
 # AdditionalFilename: /Users/valyagorbunova/Desktop/Работа/huawei/PolarCodes/result/test.stat
 # 
 # Simulation type: MC
 # Simulation parameters:
 # 	isSigmaDependOnR: 0
-# 	maxRejectionsCount: 1000000
-# 	maxTestsCount: 50000
-# Decoder type: SCIvan
+# 	maxRejectionsCount: 10000000
+# 	maxTestsCount: 100000
+# Decoder type: SCL
 # Decoder params:
 # 	K: 4
 # 	L: 4
@@ -31,8 +31,8 @@ SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)
 # 
 # SNR: -2, -1.5, -1, -0.5, 0, 
 # ############################################################
--2, 1.29059, 0.890195, 0.73156, 36578, 50000, 115008
--1.5, 1.79059, 0.840398, 0.48942, 24471, 50000, 137060
--1, 2.29059, 0.793387, 0.25274, 12637, 50000, 143261
--0.5, 2.79059, 0.749005, 0.0992, 4960, 50000, 251179
-0, 3.29059, 0.707107, 0.0282, 1410, 50000, 144162
+-2, 1.29059, 0.890195, 0.7319, 73190, 100000, 272477
+-1.5, 1.79059, 0.840398, 0.49187, 49187, 100000, 275385
+-1, 2.29059, 0.793387, 0.25475, 25475, 100000, 278061
+-0.5, 2.79059, 0.749005, 0.09858, 9858, 100000, 281871
+0, 3.29059, 0.707107, 0.02838, 2838, 100000, 287125
