@@ -181,7 +181,12 @@ BaseDecoder * BuildDecoder(
 	}
 		break;
 	case decoderType::SCListFlipStat: {
-		int L = ExtractInt(decoderParams, "L", "SCList decoder");
+		int L = ExtractInt(decoderParams, "L", "SCListFlipStat decoder");
+		decoderPtr = new ScListFlipStatDecoder(codePtr, L);
+	}
+		break;
+	case decoderType::SCListFlipOracleStat: {
+		int L = ExtractInt(decoderParams, "L", "SCListFlipOracleStat decoder");
 		decoderPtr = new ScListFlipStatDecoder(codePtr, L);
 	}
 	break;

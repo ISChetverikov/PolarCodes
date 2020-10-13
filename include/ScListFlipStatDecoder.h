@@ -10,8 +10,9 @@ private:
 	std::vector<int> _singleFlipStatistic;
 	std::vector<int> _doubleFlipStatistic;
 
+protected:
 	void DecodeFlipListInternal(std::vector<double> inLlr, std::vector<int> flipPositions);
-	std::vector<int> TakeListStatResult(bool & isOriginalCodeword);
+	std::vector<int> TakeListStatResult(std::vector<int> & actualCodeword);
 public:
 	ScListFlipStatDecoder(PolarCode * code, int L);
 

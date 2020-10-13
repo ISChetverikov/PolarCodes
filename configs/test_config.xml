@@ -1,7 +1,7 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\1024\sclsf_1010.results</ResultFile>
-      <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\dummy.stat</AdditionalFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\256\test.results</ResultFile>
+      <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\OracleStats\256_1.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">500000</Param>
         <Param name="maxRejectionsCount">1000</Param>
@@ -18,7 +18,7 @@
         <Param name="CRC12">100000001111</Param>
         <Param name="CRC8">00000111</Param>
       </Code>
-      <Decoder type="SCListFlipStat">
+      <Decoder type="SCListFlipOracleStat">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>
