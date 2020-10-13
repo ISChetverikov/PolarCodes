@@ -4,9 +4,11 @@
 
 class ScListFlipStatDecoder : public ScListDecoder {
 private:
-	std::vector<int> _unfrozenPolarSeqWithCrc;
+	std::vector<int> _singleFlips;
+	std::vector<std::tuple<int, int>> _doubleFlips;
+
 	std::vector<int> _singleFlipStatistic;
-	std::vector<std::vector<int>> _doubleFlipStatistic;
+	std::vector<int> _doubleFlipStatistic;
 
 	void DecodeFlipListInternal(std::vector<double> inLlr, std::vector<int> flipPositions);
 	std::vector<int> TakeListStatResult(bool & isOriginalCodeword);

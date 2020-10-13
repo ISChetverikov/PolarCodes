@@ -3,41 +3,69 @@
 
 #include "../include/ScCrcAidedDecoder.h"
 #include "../include/ScListFlipStatDecoder.h"
-#include "../include/FlipStatistic.h"
+#include "../include/FlipStatistic1024_512_CRC24.h"
 
 #define FROZEN_VALUE 0
 
 ScListFlipStatDecoder::ScListFlipStatDecoder(PolarCode * codePtr, int L) : ScListDecoder(codePtr, L) {
-	_unfrozenPolarSeqWithCrc = _codePtr->UnfrozenPolarSequenceWithCrc();
+	//_unfrozenPolarSeqWithCrc = _codePtr->UnfrozenPolarSequenceWithCrc();
+	bool isUsedStat = true;
+	bool isDoubleFromSingles = false;
+
+	if (isUsedStat) {
+		_singleFlips = FlipStatistic::GetSingles();
+
+		if (isDoubleFromSingles) {
+			_doubleFlips = std::vector<std::tuple<int, int>>();
+
+			for (size_t i = 0; i < _singleFlips.size(); i++)
+			{
+				for (size_t j = i + 1; j < _singleFlips.size(); j++)
+				{
+					_doubleFlips.push_back(std::make_tuple(_singleFlips[i], _singleFlips[j]));
+				}
+			}
+		}
+		else
+			_doubleFlips = FlipStatistic::GetPairs();
+	}
+	else {
+		std::vector<int> unfrozenBitsWithCrc = codePtr->UnfrozenPolarSequenceWithCrc();
+
+		_singleFlips = unfrozenBitsWithCrc;
+		_doubleFlips = std::vector<std::tuple<int, int>>();
+		for (size_t i = 0; i < unfrozenBitsWithCrc.size(); i++)
+		{
+			for (size_t j = i + 1; j < unfrozenBitsWithCrc.size(); j++)
+			{
+				_doubleFlips.push_back(std::make_tuple(unfrozenBitsWithCrc[i], unfrozenBitsWithCrc[j]));
+			}
+		}
+	}
+
 	ClearStatistic();
 }
 
 void ScListFlipStatDecoder::ClearStatistic() {
-	size_t kExt = _codePtr->kExt();
-	_singleFlipStatistic = std::vector<int>(kExt, 0);
-	_doubleFlipStatistic = std::vector<std::vector<int>>(kExt, _singleFlipStatistic);
+	_singleFlipStatistic = std::vector<int>(_singleFlips.size(), 0);
+	_doubleFlipStatistic = std::vector<int>(_doubleFlips.size(), 0);
 }
 
 std::string ScListFlipStatDecoder::GetStatistic() {
 	std::stringstream ss;
 	// std::sort(_singleFlipStatistic.rbegin(), _singleFlipStatistic.rend());
 	ss << "Single Flip:\n";
-	for (size_t i = 0; i < _codePtr->kExt(); i++)
+	for (size_t i = 0; i < _singleFlips.size(); i++)
 	{
 		//if (_singleFlipStatistic[i])
-			ss << "(" << _unfrozenPolarSeqWithCrc[i] << "): " << _singleFlipStatistic[i] << "\n";
+			ss << "(" << _singleFlips[i] << "): " << _singleFlipStatistic[i] << "\n";
 	}
 
 	ss << "Double Flip:\n";
-	for (size_t i = 0; i < _codePtr->kExt(); i++)
+	for (size_t i = 0; i < _doubleFlips.size(); i++)
 	{
-		for (size_t j = 0; j < _codePtr->kExt(); j++)
-		{
-			//std::sort(_doubleFlipStatistic[i].rbegin(), _doubleFlipStatistic[i].rend());
-			if (_doubleFlipStatistic[i][j])
-				ss << "(" << _unfrozenPolarSeqWithCrc[i] << ", " << _unfrozenPolarSeqWithCrc[j] << "): " << _doubleFlipStatistic[i][j] << "\n";
-			
-		}
+		if (_doubleFlipStatistic[i])
+			ss << "(" << std::get<0>(_doubleFlips[i]) << ", " << std::get<1>(_doubleFlips[i]) << "): " << _doubleFlipStatistic[i] << "\n";
 	}
 
 	return ss.str();
@@ -197,36 +225,36 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 
 	std::vector<int> flipPositions;
 
-	auto single = FlipStatistic::GetSingles();
-	for (size_t i = 0; i < single.size(); i++)
+	for (size_t i = 0; i < _singleFlips.size(); i++)
 	{
 		flipPositions.clear();
-		flipPositions.push_back(single[i]);
+		flipPositions.push_back(_singleFlips[i]);
 
 		DecodeFlipListInternal(beliefs, flipPositions);
 		result = TakeListStatResult(isError);
 
 		if (!isError) {
-			//_singleFlipStatistic[i]++;
+			_singleFlipStatistic[i]++;
 			return result;
 		}
 	}
-
-	auto pairs = FlipStatistic::GetPairs();
-	for (size_t i = 0; i < pairs.size(); i++)
+		
+	for (size_t i = 0; i < _doubleFlips.size(); i++)
 	{
 		flipPositions.clear();
-		flipPositions.push_back(std::get<0>(pairs[i]));
-		flipPositions.push_back(std::get<1>(pairs[i]));
+		flipPositions.push_back(std::get<0>(_doubleFlips[i]));
+		flipPositions.push_back(std::get<1>(_doubleFlips[i]));
 
 		DecodeFlipListInternal(beliefs, flipPositions);
 		result = TakeListStatResult(isError);
 
 		if (!isError) {
-			//_singleFlipStatistic[i]++;
+			_doubleFlipStatistic[i]++;
 			return result;
 		}
 	}
+
+	return result;
 
 	/*size_t kExt = _codePtr->kExt();
 	for (size_t i = 0; i < kExt; i++)
@@ -266,6 +294,6 @@ std::vector<int>  ScListFlipStatDecoder::Decode(std::vector<double> beliefs) {
 		}
 	}
 	*/
-	return result;
+	
 
 }

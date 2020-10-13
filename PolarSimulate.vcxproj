@@ -24,7 +24,10 @@
     <ClInclude Include="include\CRC.h" />
     <ClInclude Include="include\Domain.h" />
     <ClInclude Include="include\Encoder.h" />
-    <ClInclude Include="include\FlipStatistic.h" />
+    <ClInclude Include="include\FlipStatistic1024_512_CRC24.h" />
+    <ClInclude Include="include\FlipStatistic128_64_CRC8.h" />
+    <ClInclude Include="include\FlipStatistic256_128_CRC8.h" />
+    <ClInclude Include="include\FlipStatistic512_256_CRC24.h" />
     <ClInclude Include="include\GaussianApproximation.h" />
     <ClInclude Include="include\PolarCode.h" />
     <ClInclude Include="include\ConfigReading.h" />
@@ -125,7 +128,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT_NO;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,7 +140,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT_NO;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,7 +154,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT_NO;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,7 +170,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT_NO;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

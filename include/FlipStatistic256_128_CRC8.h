@@ -4,7 +4,7 @@
 #include <tuple>
 
 // for (256, 128) code!!!!
-class FlipStatistic {
+class FlipStatistic1 {
 private:
 	static const std::vector<int> _singles;
 	static const std::vector<std::tuple<int, int>> _pairs;
@@ -20,10 +20,11 @@ public:
 
 };
 
-const std::vector<int> FlipStatistic::_singles = { 156, 61, 62, 79, 154, 224, 166, 208, 169, 170, 165, 153, 114, 116, 172, 120, 87, 113, 150, 177, 195, 108, 178, 198, 197, 180, 91, 209, 184, 201, 106, 93, 202, 155, 94, 210, 143, 151, 225, 204, 107, 212, 115, 226, 103, 109, 167, 157, 110, 216, 228, 158, 117, 232, 118, 240, 171, 121, 199, 122, 179, 203, 124 };
+const std::vector<int> FlipStatistic1::_singles = { //156, 61, 62, 79, 154, 224, 166, 208, 169, 170,
+													};// 165, 153, 114, 116, 172, 120, 87, 113, 150, 177, 195, 108, 178, 198, 197, 180, 91, 209, 184, 201, 106, 93, 202, 155, 94, 210, 143, 151, 225, 204, 107, 212, 115, 226, 103, 109, 167, 157, 110, 216, 228, 158, 117, 232, 118, 240, 171, 121, 199, 122, 179, 203, 124 };
 
-const std::vector<std::tuple<int, int>> FlipStatistic::_pairs = {
-	{61, 62},
+const std::vector<std::tuple<int, int>> FlipStatistic1::_pairs = {
+{61, 62},
 {153, 154},
 {154, 156},
 {165, 166},
@@ -43,7 +44,7 @@ const std::vector<std::tuple<int, int>> FlipStatistic::_pairs = {
 {165, 170},
 {166, 156},
 {113, 116},
-{113, 120},
+/*{113, 120},
 {166, 169},
 {165, 154},
 {208, 209},
@@ -745,5 +746,5 @@ const std::vector<std::tuple<int, int>> FlipStatistic::_pairs = {
 {210, 216},
 {109, 167},
 {167, 225},
-{167, 171}
+{167, 171}*/
 };
