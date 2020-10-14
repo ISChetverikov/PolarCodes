@@ -15,6 +15,7 @@
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
 #include "../include/ScListFlipStatDecoder.h"
+#include "../include/ScListFlipOracleStatDecoder.h"
 #include "../include/ScListDecoder.h"
 #include "../include/ScFlipProgDecoder.h"
 #include "../include/BaseSimulator.h"
@@ -187,7 +188,7 @@ BaseDecoder * BuildDecoder(
 		break;
 	case decoderType::SCListFlipOracleStat: {
 		int L = ExtractInt(decoderParams, "L", "SCListFlipOracleStat decoder");
-		decoderPtr = new ScListFlipStatDecoder(codePtr, L);
+		decoderPtr = new ScListFlipOracleStatDecoder(codePtr, L);
 	}
 	break;
     default:

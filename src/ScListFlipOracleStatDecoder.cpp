@@ -37,13 +37,13 @@ std::string ScListFlipOracleStatDecoder::GetStatistic() {
 	ss << "Double Flip:\n";
 	for (std::pair<std::tuple<int, int>, int> double_ : _doubleOracleFlipsStat)
 	{
-		ss << "(" << std::get<0>(double_.first) << ', ' << std::get<1>(double_.first) << "): " << double_.second << "\n";
+		ss << "(" << std::get<0>(double_.first) << ", " << std::get<1>(double_.first) << "): " << double_.second << "\n";
 	}
 
 	ss << "Triple Flip:\n";
 	for (std::pair<std::tuple<int, int, int>, int> triple : _tripleOracleFlipsStat)
 	{
-		ss << "(" << std::get<0>(triple.first) << ', ' << std::get<1>(triple.first) << ', ' << std::get<2>(triple.first) << "): " << triple.second << "\n";
+		ss << "(" << std::get<0>(triple.first) << ", " << std::get<1>(triple.first) << ", " << std::get<2>(triple.first) << "): " << triple.second << "\n";
 	}
 
 	return ss.str();
@@ -69,7 +69,7 @@ std::vector<int>  ScListFlipOracleStatDecoder::Decode(std::vector<double> belief
 	flipPositions.push_back(firstErrorInd);
 
 	DecodeFlipListInternal(beliefs, flipPositions);
-	std::vector<int> result = TakeListStatResult(actualCodeword);
+	result = TakeListStatResult(actualCodeword);
 	isError = actualCodeword != _codeword;
 
 	if (!isError) {
@@ -85,7 +85,7 @@ std::vector<int>  ScListFlipOracleStatDecoder::Decode(std::vector<double> belief
 	flipPositions.push_back(secondErrorInd);
 
 	DecodeFlipListInternal(beliefs, flipPositions);
-	std::vector<int> result = TakeListStatResult(actualCodeword);
+	result = TakeListStatResult(actualCodeword);
 	isError = actualCodeword != _codeword;
 
 	if (!isError) {
@@ -103,7 +103,7 @@ std::vector<int>  ScListFlipOracleStatDecoder::Decode(std::vector<double> belief
 	flipPositions.push_back(thirdErrorInd);
 
 	DecodeFlipListInternal(beliefs, flipPositions);
-	std::vector<int> result = TakeListStatResult(actualCodeword);
+	result = TakeListStatResult(actualCodeword);
 	isError = actualCodeword != _codeword;
 
 	if (!isError) {
