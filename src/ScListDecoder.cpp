@@ -285,6 +285,7 @@ std::vector<int> ScListDecoder::TakeListResult() {
 	std::vector<int> result(_codePtr->k(), 0);
 	std::vector<int> candidate(_codePtr->N(), 0);
 	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
+	std::vector<double> metrics = _metrics;
 
 	int maxInd = -1;
 	size_t j = 0;
@@ -301,6 +302,9 @@ std::vector<int> ScListDecoder::TakeListResult() {
 
 	if (j < _L)
 		candidate = _candidates[maxInd];
+
+	if (candidate != _codeword)
+		j = j;
 
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{

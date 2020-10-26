@@ -1,9 +1,9 @@
 #pragma once
 
 #include <map>
-#include "ScListFlipStatDecoder.h"
+#include "ScListDecoder.h"
 
-class ScListFlipOracleStatDecoder : public ScListFlipStatDecoder {
+class ScListFlipOracleStatDecoder : public ScListDecoder {
 private:
 	std::map<int, int> _singleOracleFlipsStat;
 	std::map<std::tuple<int, int>, int> _doubleOracleFlipsStat;
@@ -16,8 +16,9 @@ private:
 	int _tripleSuccessfulFlips = 0;
 	
 protected:
-	int GetFirstErrorPositionMetric(std::vector<std::vector<int>> candidates, std::vector<double> metrics, std::vector<int> originalCodeword);
-	int GetFirstErrorPositionMaxDistance(std::vector<std::vector<int>> candidates, std::vector<int> originalCodeword);
+
+	// Returns exact flips by comparision with _codeword at each step of list decoding
+	std::vector<int> DecodeFlipOracleListInternal(std::vector<double> inLlr);
 
 public:
 	ScListFlipOracleStatDecoder(PolarCode * code, int L);
