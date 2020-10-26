@@ -51,7 +51,24 @@ ScListDecoder::ScListDecoder(PolarCode * codePtr, int L) : ScCrcAidedDecoder(cod
 
 double ScListDecoder::StepMetric(double belief, int decision) {
 #ifdef DOMAIN_LLR
-	return (decision) ? -belief : belief;
+	
+#ifdef MINSUM
+	return (belief < 0 && decision == 0 || belief > 0 && decision == 1) ? -fabs(belief) : 0;
+#else
+	const double limit = 10000000.0;
+
+	if (belief < -limit)
+		belief = -limit;
+
+	if (belief > limit)
+		belief = limit;
+
+	double p0_methric = -log(1 + exp(-belief));
+	double p1_methric = -log(1 + exp(belief));
+	return (decision) ? p1_methric : p0_methric;
+
+#endif // MINSUM
+
 #elif DOMAIN_P1
 	return log((decision) ? belief : 1 - belief);
 #endif // DOMAIN
@@ -183,7 +200,6 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 
 		i_all++;
 	}
-	auto c = _codeword;
 	while (i_all < n)
 	{
 		PassDownList(i_all);
@@ -302,9 +318,6 @@ std::vector<int> ScListDecoder::TakeListResult() {
 
 	if (j < _L)
 		candidate = _candidates[maxInd];
-
-	if (candidate != _codeword)
-		j = j;
 
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
