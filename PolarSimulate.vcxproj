@@ -28,6 +28,7 @@
     <ClInclude Include="include\FlipStatistic128_64_CRC8.h" />
     <ClInclude Include="include\FlipStatistic256_128_CRC8.h" />
     <ClInclude Include="include\FlipStatistic512_256_CRC24.h" />
+    <ClInclude Include="include\FlipStatisticNew256_128.h" />
     <ClInclude Include="include\GaussianApproximation.h" />
     <ClInclude Include="include\PolarCode.h" />
     <ClInclude Include="include\ConfigReading.h" />
