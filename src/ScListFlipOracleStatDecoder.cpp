@@ -23,31 +23,79 @@ void ScListFlipOracleStatDecoder::ClearStatistic() {
 std::string ScListFlipOracleStatDecoder::GetStatistic() {
 	std::stringstream ss;
 	
-	ss << "Single Flip:\n";
-	for (std::pair<int, int> single : _singleOracleFlipsStat)
-	{
-		ss << "(" << single.first << "): " << single.second << "\n";
-	}
+	bool saveStat = true;
+	bool saveLlrs = false;
 
-	ss << "Double Flip:\n";
-	for (std::pair<std::tuple<int, int>, int> double_ : _doubleOracleFlipsStat)
-	{
-		ss << "(" << std::get<0>(double_.first) << ", " << std::get<1>(double_.first) << "): " << double_.second << "\n";
-	}
+	if (saveStat) {
+		ss << "Single Flip:\n";
+		for (std::pair<int, int> single : _singleOracleFlipsStat)
+		{
+			ss << "(" << single.first << "): " << single.second << "\n";
+		}
 
-	ss << "Triple Flip:\n";
-	for (std::pair<std::tuple<int, int, int>, int> triple : _tripleOracleFlipsStat)
-	{
-		ss << "(" << std::get<0>(triple.first) << ", " << std::get<1>(triple.first) << ", " << std::get<2>(triple.first) << "): " << triple.second << "\n";
-	}
+		ss << "Double Flip:\n";
+		for (std::pair<std::tuple<int, int>, int> double_ : _doubleOracleFlipsStat)
+		{
+			ss << "(" << std::get<0>(double_.first) << ", " << std::get<1>(double_.first) << "): " << double_.second << "\n";
+		}
 
-	ss << "Count:" << _count << "\n";
-	ss << "List Error Count: " << _countErrorneous << "\n";
-	ss << "Single: " << _singleSuccessfulFlips << "\n";
-	ss << "Double: " << _doubleSuccessfulFlips << "\n";
-	ss << "Triple: " << _tripleSuccessfulFlips << "\n";
+		ss << "Triple Flip:\n";
+		for (std::pair<std::tuple<int, int, int>, int> triple : _tripleOracleFlipsStat)
+		{
+			ss << "(" << std::get<0>(triple.first) << ", " << std::get<1>(triple.first) << ", " << std::get<2>(triple.first) << "): " << triple.second << "\n";
+		}
+
+		ss << "Count:" << _count << "\n";
+		ss << "List Error Count: " << _countErrorneous << "\n";
+		ss << "Single: " << _singleSuccessfulFlips << "\n";
+		ss << "Double: " << _doubleSuccessfulFlips << "\n";
+		ss << "Triple: " << _tripleSuccessfulFlips << "\n";
+	}
+	
+	if (saveLlrs) {
+		ss << "Lllrs when flip occurs:\n";
+		for (size_t i = 0; i < _llrWhenFlip.size(); i++)
+		{
+			ss << "(" << std::get<0>(_llrWhenFlip[i]) << ") {";
+
+			for (size_t j = 0; j < _L; j++)
+			{
+				ss << std::get<1>(_llrWhenFlip[i])[j] << " ";
+			}
+
+			ss << "} [";
+
+			for (size_t j = 0; j < 2 * _L; j++)
+			{
+				if (j == _L)
+					ss << "| ";
+				ss << std::get<2>(_llrWhenFlip[i])[j] << " ";
+			}
+			ss << "]\n";
+		}
+	}
 	
 	return ss.str();
+}
+
+void ScListFlipOracleStatDecoder::SaveLlrs(int i_all) {
+	std::vector<double> llrs(_L, 0);
+	size_t m = _codePtr->m();
+
+	for (size_t j = 0; j < _L; j++)
+	{
+		llrs[j] = _beliefTrees[j][m][i_all];
+	}
+
+	std::vector<double> metrics(2 * _L, 0);
+	for (size_t j = 0; j < _L; j++)
+	{
+		metrics[j] = _metrics[j] + StepMetric(_beliefTrees[j][m][i_all], 0);
+		metrics[j + _L] = _metrics[j] + StepMetric(_beliefTrees[j][m][i_all], 1);
+	}
+
+	auto tuple = std::make_tuple(i_all, llrs, metrics);
+	_llrWhenFlip.push_back(tuple);
 }
 
 std::vector<int> ScListFlipOracleStatDecoder::DecodeFlipOracleListInternal(std::vector<double> inLlr) {
@@ -123,7 +171,6 @@ std::vector<int> ScListFlipOracleStatDecoder::DecodeFlipOracleListInternal(std::
 					_areTakenOne[i] = !_areTakenOne[i];
 					_areTakenZero[i] = !_areTakenZero[i];
 				}
-
 				flips.push_back((int)i_all);
 			}
 				
