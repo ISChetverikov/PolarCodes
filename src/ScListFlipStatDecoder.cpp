@@ -1,13 +1,13 @@
 #include <sstream>
 #include <algorithm>
-
+#include <iostream>
 #include "../include/ScCrcAidedDecoder.h"
 #include "../include/ScListFlipStatDecoder.h"
 #include "../include/FlipStatisticNew256_128.h"
 
 #define FROZEN_VALUE 0
 
-ScListFlipStatDecoder::ScListFlipStatDecoder(PolarCode * codePtr, int L) : ScListDecoder(codePtr, L) {
+ScListFlipStatDecoder::ScListFlipStatDecoder(PolarCode * codePtr, int L, double omega) : ScListDecoder(codePtr, L) {
 	//_unfrozenPolarSeqWithCrc = _codePtr->UnfrozenPolarSequenceWithCrc();
 	int singleNumber = 40; // TODO
 	int doubleNumber = -1;
@@ -45,7 +45,33 @@ ScListFlipStatDecoder::ScListFlipStatDecoder(PolarCode * codePtr, int L) : ScLis
 		}
 	}
 
+	singleNumber = _singleFlips.size();
 	_singleFlips = std::vector<int>(_singleFlips.begin(), _singleFlips.begin() + singleNumber);
+	_omega = omega;
+}
+
+bool ScListFlipStatDecoder::IsThresholdPassed(int i_all) {
+	return false;
+
+	// turned off
+	auto maxIt = std::max_element(_metrics.begin(), _metrics.end());
+	int maxInd = (int)std::distance(_metrics.begin(), maxIt);
+
+	size_t m = _codePtr->m();
+	return fabs(_beliefTrees[maxInd][m][i_all]) > _omega;
+}
+
+void ScListFlipStatDecoder::ClearStatistic() {
+	_countThreasholdTries = 0;
+	_countThresholdNotPassed = 0;
+}
+
+std::string ScListFlipStatDecoder::GetStatistic() {
+	std::stringstream ss;
+
+	ss << _countThresholdNotPassed << " from " << _countThreasholdTries << ": " << (double)_countThresholdNotPassed / _countThreasholdTries << "\n";
+
+	return ss.str();
 }
 
 void ScListFlipStatDecoder::DecodeFlipListInternal(std::vector<double> inLlr, std::vector<int> flipPositions) {
@@ -100,11 +126,19 @@ void ScListFlipStatDecoder::DecodeFlipListInternal(std::vector<double> inLlr, st
 			FillListMask(i_all);
 
 			// Flip action
-			if (std::find(flipPositions.begin(), flipPositions.end(), i_all) != flipPositions.end())
+			if (std::find(flipPositions.begin(), flipPositions.end(), i_all) != flipPositions.end()) {
+				_countThreasholdTries++;
+				
+				if (IsThresholdPassed(i_all)) {
+					break;
+				}
+				_countThresholdNotPassed++;
+
 				for (size_t i = 0; i < _L; i++) {
 					_areTakenOne[i] = !_areTakenOne[i];
 					_areTakenZero[i] = !_areTakenZero[i];
 				}
+			}
 
 			for (size_t j = 0, i = 0; i < _L; i++) {
 				// add new path

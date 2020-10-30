@@ -19,6 +19,8 @@ private:
 	int _doubleSuccessfulFlips = 0;
 	int _tripleSuccessfulFlips = 0;
 	
+	int _level = 0;
+
 	void SaveLlrs(int i);
 protected:
 

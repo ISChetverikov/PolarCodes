@@ -7,6 +7,7 @@
 #define FROZEN_VALUE 0
 
 ScListFlipOracleStatDecoder::ScListFlipOracleStatDecoder(PolarCode * codePtr, int L) : ScListDecoder(codePtr, L) {
+	_level = 2;
 }
 
 void ScListFlipOracleStatDecoder::ClearStatistic() {
@@ -14,6 +15,8 @@ void ScListFlipOracleStatDecoder::ClearStatistic() {
 	_doubleOracleFlipsStat.clear();
 	_tripleOracleFlipsStat.clear();
 
+	_llrWhenFlip.clear();
+	_count = 0;
 	_countErrorneous = 0;
 	_singleSuccessfulFlips = 0;
 	_doubleSuccessfulFlips = 0;
@@ -23,7 +26,7 @@ void ScListFlipOracleStatDecoder::ClearStatistic() {
 std::string ScListFlipOracleStatDecoder::GetStatistic() {
 	std::stringstream ss;
 	
-	bool saveStat = true;
+	bool saveStat = false;
 	bool saveLlrs = false;
 
 	if (saveStat) {
@@ -44,12 +47,6 @@ std::string ScListFlipOracleStatDecoder::GetStatistic() {
 		{
 			ss << "(" << std::get<0>(triple.first) << ", " << std::get<1>(triple.first) << ", " << std::get<2>(triple.first) << "): " << triple.second << "\n";
 		}
-
-		ss << "Count:" << _count << "\n";
-		ss << "List Error Count: " << _countErrorneous << "\n";
-		ss << "Single: " << _singleSuccessfulFlips << "\n";
-		ss << "Double: " << _doubleSuccessfulFlips << "\n";
-		ss << "Triple: " << _tripleSuccessfulFlips << "\n";
 	}
 	
 	if (saveLlrs) {
@@ -75,6 +72,12 @@ std::string ScListFlipOracleStatDecoder::GetStatistic() {
 		}
 	}
 	
+	ss << "Count:" << _count << "\n";
+	ss << "List Error Count: " << _countErrorneous << "\n";
+	ss << "Single: " << _singleSuccessfulFlips << "\n";
+	ss << "Double: " << _doubleSuccessfulFlips << "\n";
+	ss << "Triple: " << _tripleSuccessfulFlips << "\n";
+
 	return ss.str();
 }
 
@@ -167,6 +170,10 @@ std::vector<int> ScListFlipOracleStatDecoder::DecodeFlipOracleListInternal(std::
 
 			int rightBit = _codeword[i_all];
 			if (rightBit == 1 && _areTakenOne[j] == 0 || rightBit == 0 && _areTakenZero[j] == 0) {
+
+				if (flips.size() >= _level)
+					break;
+
 				for (size_t i = 0; i < _L; i++) {
 					_areTakenOne[i] = !_areTakenOne[i];
 					_areTakenZero[i] = !_areTakenZero[i];
