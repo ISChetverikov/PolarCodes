@@ -14,6 +14,7 @@
 #include "../include/ScDecoder.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
+#include "../include/ScListFanoDecoder.h"
 #include "../include/ScListFlipStatDecoder.h"
 #include "../include/ScListFlipOracleStatDecoder.h"
 #include "../include/ScListDecoder.h"
@@ -158,6 +159,15 @@ BaseDecoder * BuildDecoder(
 		double T = ExtractDouble(decoderParams, "T", "SCFano decoder");
 		double delta = ExtractDouble(decoderParams, "delta", "SCFano decoder");
 		decoderPtr = new ScFanoDecoder(codePtr, T, delta);
+		return decoderPtr;
+	}
+	case decoderType::SCListFano: {
+		double T = ExtractDouble(decoderParams, "T", "SCFanoList decoder");
+		double delta = ExtractDouble(decoderParams, "delta", "SCFanoList decoder");
+		double approximationSnr = ExtractDouble(decoderParams, "ApproximationSnr", "SCFanoList decoder");
+		double L = ExtractInt(decoderParams, "L", "SCFanoList decoder");
+
+		decoderPtr = new ScListFanoDecoder(codePtr, T, delta, approximationSnr, L);
 		return decoderPtr;
 	}
 		break;
