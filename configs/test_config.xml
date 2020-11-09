@@ -1,6 +1,6 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\256\sclfano_test.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\256\sclfano2_test.results</ResultFile>
       <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\OracleStats\dummy.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">10000</Param>
@@ -18,7 +18,7 @@
         <Param name="CRC12">100000001111</Param>
         <Param name="CRC2">00000111</Param>
       </Code>
-      <Decoder type="SCFano">
+      <Decoder type="SCLFano">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>

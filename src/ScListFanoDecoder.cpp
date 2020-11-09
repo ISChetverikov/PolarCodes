@@ -42,7 +42,7 @@ void ScListFanoDecoder::BackwardMove(double & T, bool & B, int & j, int rootInde
 	while (true) {
 		double mu = 0;
 
-		if (j <= rootIndex - 1)
+		if (j <= rootIndex)
 			mu = -1000;
 
 		if (j >= 1)
