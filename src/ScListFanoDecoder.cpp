@@ -27,6 +27,7 @@ ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, d
 
 	// Inners states
 	_beta = std::vector<double>(k, 0.0); // only for unfrozen bits
+	_alternativeBeta = std::vector<double>(k, 0.0);
 	_metrics = std::vector<double>(n, 0); // for all bits
 	_gamma = std::vector<bool>(k, 0);
 	_A = _codePtr->UnfrozenBitsWithCrc(); // info set
@@ -45,7 +46,7 @@ void ScListFanoDecoder::BackwardMove(double & T, bool & B, int & j, int rootInde
 		if (j <= rootIndex)
 			mu = -1000;
 
-		if (j >= 1)
+		if (j >= 1) // or the rootIndex, mmm?
 			mu = _beta[j - 1];
 
 		if (mu >= T) {
@@ -65,6 +66,7 @@ void ScListFanoDecoder::BackwardMove(double & T, bool & B, int & j, int rootInde
 	}
 }
 
+// rootIndex - index before the root (e.g. -1 for 0)
 void ScListFanoDecoder::DecodeFrom(int rootIndex) {
 	size_t n = _codePtr->N();
 	size_t m = _codePtr->m();
@@ -93,6 +95,9 @@ void ScListFanoDecoder::DecodeFrom(int rootIndex) {
 			int argmax = (m1 > m0) ? 1 : 0;
 
 			double min = (m1 > m0) ? m0 : m1;
+			if (min < -10000.0)
+				min = -10000.0;
+
 			int argmin = (m1 > m0) ? 0 : 1;
 
 			if (max > T) {
@@ -103,10 +108,11 @@ void ScListFanoDecoder::DecodeFrom(int rootIndex) {
 
 					_metrics[i] = max;
 					_beta[j + 1] = max;
+					_alternativeBeta[j + 1] = min;
 					_gamma[j + 1] = false;
 
 					double mu = 0;
-					if (j != -1)
+					if (j != rootIndex)
 						mu = _beta[j];
 
 					if (mu < T + _delta)
@@ -129,7 +135,7 @@ void ScListFanoDecoder::DecodeFrom(int rootIndex) {
 						j++;
 					}
 					else {
-						if (j == -1) {
+						if (j == rootIndex) {
 							T = T - _delta;
 							B = false;
 						}
@@ -141,7 +147,7 @@ void ScListFanoDecoder::DecodeFrom(int rootIndex) {
 				}
 			}
 			else {
-				if (j == -1)
+				if (j == rootIndex)
 					T = T - _delta;
 
 				else {
@@ -169,6 +175,7 @@ void ScListFanoDecoder::DecodeFrom(int rootIndex) {
 
 std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 	size_t n = beliefs.size();
+	size_t k = _codePtr->kExt();
 	for (size_t i = 0; i < n; i++)
 	{
 		_beliefTree[0][i] = beliefs[i];
@@ -176,6 +183,17 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 
 	int rootIndex = -1; // j started position
 	DecodeFrom(rootIndex);
-
+	auto altIndex = _alternativeBeta;
+	double min = -10000.0;
+	int minInd = 0;
+	for (int i = 0; i < k; i++) {
+		_alternativeBeta[i] = _beta[i] - _alternativeBeta[i];
+		if (_alternativeBeta[i] < min) {
+			min = _alternativeBeta[i];
+			minInd = i;
+		}
+	}
+		
+	DecodeFrom(minInd);
 	return TakeResult();
 }

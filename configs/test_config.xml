@@ -7,7 +7,7 @@
         <Param name="maxRejectionsCount">1000</Param>
         <Param name="isSigmaDependOnR">0</Param>
       </Simulator>
-      <SnrRange start="-0.5" stop="0.0" step="0.5"></SnrRange>
+      <SnrRange start="-2" stop="0.0" step="0.5"></SnrRange>
       <SnrArray>
       </SnrArray>
       <Code type="Polar">

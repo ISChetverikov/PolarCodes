@@ -79,7 +79,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		}
 		
 		decoded = _decoderPtr->Decode(beliefs);
-		if (tests % 1000 == 0)
+		if (tests % 100 == 0)
 			std::cout << tests << std::endl;
 		// LIST4 parallel decoder
 		/*auto d = new ScListDecoder(_codePtr, 4);
