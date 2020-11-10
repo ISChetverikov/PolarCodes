@@ -15,6 +15,7 @@ private:
 	std::vector<double> _beta; // only for unfrozen bits
 	std::vector<double> _metrics; // for all bits
 	std::vector<double> _alternativeBeta; // unfrozenBits alternative metric
+	std::vector<double> _betDifference; // unfrozenBits alternative metric
 	std::vector<bool> _gamma;
 	std::vector<int> _A; // info set
 

@@ -74,8 +74,15 @@ void ScListFanoDecoder::DecodeFrom(int rootIndex) {
 	
 	int j = rootIndex;
 	int i = 0;
-	if (j >= 0)
-		i = _A[j + 1];
+	if (j >= 0) {
+		i = _A[j];
+		_x[i] = !_x[i];
+		_metrics[i] = _alternativeBeta[j];
+		_beta[j] = _alternativeBeta[j];
+		_uhatTree[m][i] = _x[i];
+		PassUp(i);
+		i++;
+	}
 
 	bool B = false;
 	double T = _T;
@@ -184,15 +191,18 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 	int rootIndex = -1; // j started position
 	DecodeFrom(rootIndex);
 	auto altIndex = _alternativeBeta;
-	double min = -10000.0;
+	double min = 10000.0;
 	int minInd = 0;
 	for (int i = 0; i < k; i++) {
-		_alternativeBeta[i] = _beta[i] - _alternativeBeta[i];
-		if (_alternativeBeta[i] < min) {
-			min = _alternativeBeta[i];
+		_betaDifference[i] = _beta[i] - _alternativeBeta[i];
+		if (_betaDifference[i] < min) {
+			min = _betaDifference[i];
 			minInd = i;
 		}
 	}
+
+	if (IsCrcPassed(_x))
+		return TakeResult();
 		
 	DecodeFrom(minInd);
 	return TakeResult();
