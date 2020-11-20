@@ -1,7 +1,10 @@
 
+#include <algorithm>
+
 #include "../include/PolarCode.h"
 #include "../include/ScDecoder.h"
-#include "../include/ScListFanoDecoder.h"
+#include "../include/ScCrcAidedDecoder.h"
+#include "../include/ScFlipFanoDecoder.h"
 #include "../include/Exceptions.h"
 #include "../include/Domain.h"
 #include "../include/GaussianApproximation.h"
@@ -9,7 +12,7 @@
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
 
-ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, double approximationSnr, double L) : ScCrcAidedDecoder(code) {
+ScFlipFanoDecoder::ScFlipFanoDecoder(PolarCode * code, double T, double delta, double approximationSnr, double L) : ScCrcAidedDecoder(code) {
 	size_t n = _codePtr->N();
 	size_t k = _codePtr->kExt();
 
@@ -17,7 +20,7 @@ ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, d
 	_delta = delta;
 	_L = L;
 
-	double approximationSigma = sqrt(pow(10, -approximationSnr / 10.0) / 2);
+	double approximationSigma = sqrt(pow(10, -approximationSnr / 10.0));
 	GaussianApproximation ga(approximationSigma);
 	_p = std::vector<double>(n, 0);
 	for (size_t i = 0; i < n; i++)
@@ -29,16 +32,17 @@ ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, d
 	_beta = std::vector<double>(k, 0.0); // only for unfrozen bits
 	_alternativeBeta = std::vector<double>(k, 0.0);
 	_metrics = std::vector<double>(n, 0); // for all bits
+	_betaDifference = std::vector<double>(k, 0.0);
 	_gamma = std::vector<bool>(k, 0);
 	_A = _codePtr->UnfrozenBitsWithCrc(); // info set
 }
 
-void ScListFanoDecoder::UpdateT(double & T, double & tau) {
+void ScFlipFanoDecoder::UpdateT(double & T, double & tau) {
 	while (T + _delta < tau)
 		T += _delta;
 }
 
-void ScListFanoDecoder::BackwardMove(double & T, bool & B, int & j, int rootIndex) {
+void ScFlipFanoDecoder::BackwardMove(double & T, bool & B, int & j, int rootIndex) {
 
 	while (true) {
 		double mu = 0;
@@ -67,22 +71,15 @@ void ScListFanoDecoder::BackwardMove(double & T, bool & B, int & j, int rootInde
 }
 
 // rootIndex - index before the root (e.g. -1 for 0)
-void ScListFanoDecoder::DecodeFrom(int rootIndex) {
+void ScFlipFanoDecoder::DecodeFrom(int rootIndex) {
 	size_t n = _codePtr->N();
 	size_t m = _codePtr->m();
 	size_t k = _codePtr->kExt();
 	
 	int j = rootIndex;
 	int i = 0;
-	if (j >= 0) {
-		i = _A[j];
-		_x[i] = !_x[i];
-		_metrics[i] = _alternativeBeta[j];
-		_beta[j] = _alternativeBeta[j];
-		_uhatTree[m][i] = _x[i];
-		PassUp(i);
-		i++;
-	}
+	if (j >= 0)
+		i = _A[j] + 1;
 
 	bool B = false;
 	double T = _T;
@@ -180,30 +177,74 @@ void ScListFanoDecoder::DecodeFrom(int rootIndex) {
 	}
 }
 
-std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
+void ScFlipFanoDecoder::Flip(int j) {
+	size_t m = _codePtr->m();
+
+	int i = _A[j];
+	_x[i] = !_x[i];
+	_metrics[i] = _alternativeBeta[j];
+	_beta[j] = _alternativeBeta[j];
+	_uhatTree[m][i] = _x[i];
+	PassUp(i);
+}
+
+std::vector<int> ScFlipFanoDecoder::Decode(std::vector<double> beliefs) {
 	size_t n = beliefs.size();
 	size_t k = _codePtr->kExt();
+	size_t m = _codePtr->m();
+
 	for (size_t i = 0; i < n; i++)
 	{
 		_beliefTree[0][i] = beliefs[i];
 	}
 
 	int rootIndex = -1; // j started position
+	std::vector<int> flipPositions; // array of j which are needed to be flipped
+	std::vector<double> candidatesMetric;
+
 	DecodeFrom(rootIndex);
-	auto altIndex = _alternativeBeta;
-	double min = 10000.0;
-	int minInd = 0;
-	for (int i = 0; i < k; i++) {
-		_betaDifference[i] = _beta[i] - _alternativeBeta[i];
-		if (_betaDifference[i] < min) {
-			min = _betaDifference[i];
-			minInd = i;
-		}
-	}
 
 	if (IsCrcPassed(_x))
 		return TakeResult();
+
+	for (size_t i = 0; i < k; i++)
+	{
+		_betaDifference[i] = fabs(_beliefTree[m][_A[i]] - 0.5);
+	}
+	
+	for (size_t j = 0; j < _L - 1; j++)
+	{
+		double minBelief = 100000.0;
+		int minInd = -1;
+
+		for (size_t i = 0; i < k; i++)
+		{
+			if (_betaDifference[i] < minBelief) {
+				minBelief = _betaDifference[i];
+				minInd = i;
+			}
+		}
+
+		if (minInd == -1)
+			break;
+
+		_betaDifference[minInd] = 100000.0;
+
+		flipPositions.push_back(minInd);
+	}
+
+	for (size_t l = 0; l < flipPositions.size(); l++)
+	{
+		Flip(flipPositions[l]);
+		DecodeFrom(flipPositions[l]);
 		
-	DecodeFrom(minInd);
+		if (IsCrcPassed(_x))
+			return TakeResult();
+		
+		Flip(flipPositions[l]);
+		DecodeFrom(flipPositions[l]);
+	}
+	   
+
 	return TakeResult();
 }

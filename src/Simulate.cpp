@@ -161,7 +161,7 @@ BaseDecoder * BuildDecoder(
 		decoderPtr = new ScFanoDecoder(codePtr, T, delta);
 		return decoderPtr;
 	}
-	case decoderType::SCListFano: {
+	case decoderType::SCFlipFano: {
 		double T = ExtractDouble(decoderParams, "T", "SCFanoList decoder");
 		double delta = ExtractDouble(decoderParams, "delta", "SCFanoList decoder");
 		double approximationSnr = ExtractDouble(decoderParams, "ApproximationSnr", "SCFanoList decoder");
