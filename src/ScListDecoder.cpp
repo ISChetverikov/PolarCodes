@@ -168,7 +168,6 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 		_metrics[j] = 0;
 	}
 		
-	
 	int logL = (int)FirstBitPos(_L) - 1;
 	// first log(_L) bits
 	size_t i_all = 0; // number of bit (j - number of condidate in list)
@@ -293,6 +292,7 @@ void ScListDecoder::FillListMask(size_t iter) {
 			_areTakenZero[indices[maxInd]] = true;
 
 		indices.erase(indices.begin() + maxInd);
+		
 		metricsNew.erase(metricsNew.begin() + maxInd);
 	}
 }

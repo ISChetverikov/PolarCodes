@@ -167,7 +167,7 @@ BaseDecoder * BuildDecoder(
 		double approximationSnr = ExtractDouble(decoderParams, "ApproximationSnr", "SCFanoList decoder");
 		double L = ExtractInt(decoderParams, "L", "SCFanoList decoder");
 
-		decoderPtr = new ScListFanoDecoder(codePtr, T, delta, approximationSnr, L);
+		decoderPtr = new ScFlipFanoDecoder(codePtr, T, delta, approximationSnr, L);
 		return decoderPtr;
 	}
 		break;
