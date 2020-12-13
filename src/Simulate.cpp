@@ -22,6 +22,7 @@
 #include "../include/BaseSimulator.h"
 #include "../include/ConfigReading.h"
 #include "../include/Exceptions.h"
+#include "../include/BpskAwgnChannel.h"
 
 int ExtractInt(std::unordered_map<std::string, std::string> map, std::string key, std::string section) {
 	if (map.count(key) <= 0)
@@ -225,8 +226,15 @@ BaseSimulator * BuildSimulator(
         int maxTestsCount = ExtractInt(simulationTypeParams, "maxTestsCount", "MC simulator");
         int maxRejectionsCount = ExtractInt(simulationTypeParams, "maxRejectionsCount", "MC simulator");
 		std::string additionalInfoFilename = ExtractString(simulationTypeParams, "additionalInfoFilename", "MC simulator", false);
-            
-        simulator = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, decoderPtr, isSigmaDependOnR);
+		std::string channelStr = ExtractString(simulationTypeParams, "channel", "MC simmulator" , false);
+		
+		BaseChannel * channelPtr;
+		if (channelStr == "BPSK-AWGN")
+			channelPtr = new BpskAwgnChannel();
+		else
+			throw UnknownChannelException("Unknown channel: " + channelStr + " in simulator params section");
+
+        simulator = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, channelPtr, decoderPtr, isSigmaDependOnR);
     }
         break;
     default:

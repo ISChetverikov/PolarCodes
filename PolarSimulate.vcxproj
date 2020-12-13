@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClInclude Include="include\BaseSimulator.h" />
     <ClInclude Include="include\BaseDecoder.h" />
+    <ClInclude Include="include\BaseChannel.h" />
+    <ClInclude Include="include\BpskAwgnChannel.h" />
     <ClInclude Include="include\CRC.h" />
     <ClInclude Include="include\Domain.h" />
     <ClInclude Include="include\Encoder.h" />
@@ -47,6 +49,8 @@
     <ClInclude Include="include\Simulate.h" />
     <ClInclude Include="include\SimulationParameters.h" />
     <ClInclude Include="include\SimulationType.h" />
+    <ClCompile Include="src\BaseChannel.cpp" />
+    <ClCompile Include="src\BpskAwgnChannel.cpp" />
     <ClCompile Include="src\ScCrcAidedDecoder.cpp" />
     <ClInclude Include="include\ScListFlipStatDecoder.h" />
   </ItemGroup>
