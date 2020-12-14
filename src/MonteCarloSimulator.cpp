@@ -39,7 +39,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 
 
 	_decoderPtr->SetSigma(sigma);
-	_channelPtr->SetSigma(sigma);
+	_channelPtr->SetSnr(snr);
 
 	while ((tests < _maxTestsCount || _maxTestsCount == -1) && (wrong_dec < _maxRejectionsCount)) {
 		tests++;

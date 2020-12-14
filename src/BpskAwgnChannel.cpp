@@ -2,14 +2,23 @@
 #include <random>
 #include "../include/BpskAwgnChannel.h"
 
+double snrToSigma(double snr) {
+	return sqrt(pow(10, -snr / 10) / 2);
+}
+
 BpskAwgnChannel::BpskAwgnChannel() : BaseChannel() {
+	_snr = 1.0; // trash value
+	_sigma = snrToSigma(_snr);
+
 	std::normal_distribution<double> normal_dist(0, _sigma);
 	_normal_dist = normal_dist;
 }
 
-void BpskAwgnChannel::SetSigma(double sigma) {
-	BaseChannel::SetSigma(sigma);
 
+
+void BpskAwgnChannel::SetSnr(double snr) {
+	BaseChannel::SetSnr(snr);
+	_sigma = snrToSigma(snr);
 	std::normal_distribution<double> normal_dist(0, _sigma);
 	_normal_dist = normal_dist;
 }

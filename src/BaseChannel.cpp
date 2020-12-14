@@ -2,6 +2,6 @@
 
 BaseChannel::BaseChannel() {}
 
-void BaseChannel::SetSigma(double sigma) {
-	_sigma = sigma;
+void BaseChannel::SetSnr(double snr) {
+	_snr = snr;
 }

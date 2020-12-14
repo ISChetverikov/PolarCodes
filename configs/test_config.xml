@@ -6,8 +6,8 @@
         <Param name="maxTestsCount">10000</Param>
         <Param name="maxRejectionsCount">100</Param>
         <Param name="isSigmaDependOnR">0</Param>
-        <Param name="channel">BPSK-AWGN</Param>
-        <Param name="channel1">BSC</Param>
+        <Param name="channel3">BPSK-AWGN</Param>
+        <Param name="channel">BSC</Param>
       </Simulator>
       <SnrRange start="-3" stop="1.0" step="0.5"></SnrRange>
       <SnrArray>

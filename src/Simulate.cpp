@@ -23,6 +23,7 @@
 #include "../include/ConfigReading.h"
 #include "../include/Exceptions.h"
 #include "../include/BpskAwgnChannel.h"
+#include "../include/BscChannel.h"
 
 int ExtractInt(std::unordered_map<std::string, std::string> map, std::string key, std::string section) {
 	if (map.count(key) <= 0)
@@ -231,6 +232,8 @@ BaseSimulator * BuildSimulator(
 		BaseChannel * channelPtr;
 		if (channelStr == "BPSK-AWGN")
 			channelPtr = new BpskAwgnChannel();
+		else if (channelStr == "BSC")
+			channelPtr = new BscChannel((double)codePtr->k() / codePtr->N());
 		else
 			throw UnknownChannelException("Unknown channel: " + channelStr + " in simulator params section");
 
