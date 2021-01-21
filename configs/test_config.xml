@@ -20,7 +20,7 @@
         <Param name="CRC12">100000001111</Param>
         <Param name="CRC1">00000111</Param>
       </Code>
-      <Decoder type="SCLIstFano">
+      <Decoder type="SCListFano">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>

@@ -3,6 +3,7 @@
 
 ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, double approximationSnr, int L) : ScCrcAidedDecoder(code) {
 	size_t n = _codePtr->N();
+	size_t k = _codePtr->kExt();
 
 	_T = T;
 	_delta = delta;
@@ -14,6 +15,20 @@ ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, d
 	{
 		_p[i] = ga.GetChannelErrorProbability(i + 1, n);
 	}
+
+	_betaJ = std::vector<double>(k, 0.0); // only for frozen bits
+	_betaI = std::vector<double>(n, 0); // for all bits
+	_gamma = std::vector<bool>(k, 0);
+}
+
+FanoState ScListFanoDecoder::SaveState() {
+	FanoState state = {};
+
+	return state;
+}
+
+void ScListFanoDecoder::LoadState(FanoState state) {
+
 }
 
 void ScListFanoDecoder::UpdateT(double & T, double & delta, double & tau) {
@@ -58,12 +73,10 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 		_beliefTree[0][i] = beliefs[i];
 	}
 
-	int i = 0;
-	int j = -1;
-	bool B = false;
-	std::vector<double> beta(k, 0.0); // only for frozen bits
-	std::vector<double> metrics(n, 0); // for all bits
-	std::vector<bool> gamma(k, 0);
+	_i = 0;
+	_j = -1;
+	_B = false;
+	
 	std::vector<int> A = _codePtr->UnfrozenBits(); // info set
 	double T = _T;
 	double delta = _delta;
@@ -76,16 +89,16 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 			break;
 		}
 	}
-	while (i < n)
+	while (_i < n)
 	{
-		PassDown(i); // get p1 metric in _beliefTree[m][i]
-		double p0 = 1 - _beliefTree[m][i];
-		double p1 = _beliefTree[m][i];
+		PassDown(_i); // get p1 metric in _beliefTree[m][i]
+		double p0 = 1 - _beliefTree[m][_i];
+		double p1 = _beliefTree[m][_i];
 
-		if (_maskWithCrc[i]) {
-			double previous = (i == 0) ? 0 : metrics[i - 1];
-			double m0 = previous + log(p0 / (1 - _p[i]));
-			double m1 = previous + log(p1 / (1 - _p[i]));
+		if (_maskWithCrc[_i]) {
+			double previous = (_i == 0) ? 0 : _betaI[_i - 1];
+			double m0 = previous + log(p0 / (1 - _p[_i]));
+			double m1 = previous + log(p1 / (1 - _p[_i]));
 
 			double max = (m1 > m0) ? m1 : m0;
 			int argmax = (m1 > m0) ? 1 : 0;
@@ -94,73 +107,73 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 			int argmin = (m1 > m0) ? 0 : 1;
 
 			if (max > T) {
-				if (!B) {
-					_x[i] = argmax;
-					_uhatTree[m][i] = _x[i];
-					PassUp(i);
+				if (!_B) {
+					_x[_i] = argmax;
+					_uhatTree[m][_i] = _x[_i];
+					PassUp(_i);
 
-					metrics[i] = max;
-					beta[j + 1] = max;
-					gamma[j + 1] = false;
+					_betaI[_i] = max;
+					_betaJ[_j + 1] = max;
+					_gamma[_j + 1] = false;
 
 					double mu = 0;
-					if (j != -1)
-						mu = beta[j];
+					if (_j != -1)
+						mu = _betaJ[_j];
 
 					if (mu < T + delta)
-						UpdateT(T, delta, beta[j + 1]);
-					i++;
-					j++;
+						UpdateT(T, delta, _betaJ[_j + 1]);
+					_i++;
+					_j++;
 				}
 				else {
 					if (min > T) {
-						_x[i] = argmin;
-						_uhatTree[m][i] = _x[i];
-						PassUp(i);
+						_x[_i] = argmin;
+						_uhatTree[m][_i] = _x[_i];
+						PassUp(_i);
 
-						metrics[i] = min;
-						beta[j + 1] = min;
-						gamma[j + 1] = true;
-						B = false;
+						_betaI[_i] = min;
+						_betaJ[_j + 1] = min;
+						_gamma[_j + 1] = true;
+						_B = false;
 
-						i++;
-						j++;
+						_i++;
+						_j++;
 					}
 					else {
-						if (j == -1) {
+						if (_j == -1) {
 							T = T - delta;
-							B = false;
+							_B = false;
 						}
 						else {
-							BackwardMove(beta, gamma, i, T, delta, B, j);
-							i = A[j + 1];
+							BackwardMove(_betaJ, _gamma, _i, T, delta, _B, _j);
+							_i = A[_j + 1];
 						}
 					}
 				}
 			}
 			else {
-				if (j == -1)
+				if (_j == -1)
 					T = T - delta;
 
 				else {
-					BackwardMove(beta, gamma, i, T, delta, B, j);
-					i = A[j + 1];
+					BackwardMove(_betaJ, _gamma, _i, T, delta, _B, _j);
+					_i = A[_j + 1];
 				}
 
 			}
 		}
 		else {
-			_x[i] = 0;
-			_uhatTree[m][i] = _x[i];
-			PassUp(i);
+			_x[_i] = 0;
+			_uhatTree[m][_i] = _x[_i];
+			PassUp(_i);
 
-			double currentMetric = log(p0) - log(1 - _p[i]);
+			double currentMetric = log(p0) - log(1 - _p[_i]);
 			// cumulative
-			metrics[i] = currentMetric;
-			if (i != 0)
-				metrics[i] += metrics[i - 1];
+			_betaI[_i] = currentMetric;
+			if (_i != 0)
+				_betaI[_i] += _betaI[_i - 1];
 
-			i++;
+			_i++;
 		}
 	}
 

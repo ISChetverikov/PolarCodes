@@ -3,7 +3,7 @@
 #include <exception>
 #include "../include/SimulationParameters.h"
 #include "../include/MonteCarloSimulator.h"
-#include "../include/ScListDecoder.h"
+#include "../include/ScFanoDecoder.h"
 
 MonteCarloSimulator::MonteCarloSimulator(int maxTestsCount,
 	int maxRejectionsCount,
@@ -40,6 +40,8 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 
 	_decoderPtr->SetSigma(sigma);
 	_channelPtr->SetSnr(snr);
+
+
 
 	while ((tests < _maxTestsCount || _maxTestsCount == -1) && (wrong_dec < _maxRejectionsCount)) {
 		tests++;
