@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-enum decoderType { SC, SCRecursive, SCFano, UnknownDecoder, SCFlip, SCFlipProg, SCList, SCListFlipStat, SCListFlipOracleStat, SCFlipFano };
+enum decoderType { SC, SCRecursive, SCFano, UnknownDecoder, SCFlip, SCFlipProg, SCList, SCListFlipStat, SCListFlipOracleStat, SCFlipFano, SCListFano };
 
 decoderType decoderTypeFromString(std::string str);
 std::string decoderTypeToString(decoderType type);

@@ -2,30 +2,37 @@
 
 #include "ScCrcAidedDecoder.h"
 
-class ScFlipFanoDecoder : public ScCrcAidedDecoder {
+struct FanoState {
+	int i;
+	int j;
+
+	std::vector<std::vector<double>> beliefTree;
+	std::vector<std::vector<int>> uhatTree;
+	
+	std::vector<double> beta;
+	std::vector<double> metrics;
+	std::vector<bool> gamma;
+};
+
+class ScListFanoDecoder : public ScCrcAidedDecoder {
 
 private:
 	double _T;
 	double _delta;
-	double _L;
+	int _L;
 
 	std::vector<double> _p; // channel error probabilities 
 
-	// inner state
-	std::vector<double> _beta; // only for unfrozen bits
-	std::vector<double> _metrics; // for all bits
-	std::vector<double> _alternativeBeta; // unfrozenBits alternative metric
-	std::vector<double> _betaDifference; // unfrozenBits alternative metric
-	std::vector<bool> _gamma;
-	std::vector<int> _A; // info set
+	// list stuff
+	std::vector<FanoState> states;
+	std::vector<double> metrics;
 
-	void UpdateT(double & T, double & tau);
-	void BackwardMove(double & T, bool & B, int & j, int rootIndex);
-	void DecodeFrom(int rootIndex);
-	void Flip(int i);
+	void UpdateT(double & T, double & delta, double & tau);
+	void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, int & i, double & T, double & delta, bool & B, int & j);
 
 public:
-	ScFlipFanoDecoder(PolarCode * code, double T, double delta, double approximationSnr, double L);
-	std::vector<int> Decode(std::vector<double> llr) override;
-	~ScFlipFanoDecoder() {};
+	ScListFanoDecoder(PolarCode * code, double T, double delta, double approximationSnr, int L);
+	// All fano decoders works only with P1 domain
+	std::vector<int> Decode(std::vector<double> p1) override;
+	~ScListFanoDecoder() {};
 };

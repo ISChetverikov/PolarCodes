@@ -42,6 +42,7 @@
     <ClInclude Include="include\ScDecoder.h" />
     <ClInclude Include="include\ScFlipFanoDecoder.h" />
     <ClInclude Include="include\ScListDecoder.h" />
+    <ClInclude Include="include\ScListFanoDecoder.h" />
     <ClInclude Include="include\ScListFlipOracleStatDecoder.h" />
     <ClInclude Include="include\ScRecursiveDecoder.h" />
     <ClInclude Include="include\ScFanoDecoder.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="src\PolarCode.cpp" />
     <ClCompile Include="src\ScDecoder.cpp" />
     <ClCompile Include="src\ScFlipFanoDecoder.cpp" />
+    <ClCompile Include="src\ScListFanoDecoder.cpp" />
     <ClCompile Include="src\ScListFlipOracleStatDecoder.cpp" />
     <ClCompile Include="src\ScListFlipStatDecoder.cpp" />
     <ClCompile Include="src\ScListDecoder.cpp" />
