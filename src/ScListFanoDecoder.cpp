@@ -1,6 +1,8 @@
 #include "../include/ScListFanoDecoder.h"
 #include "../include/GaussianApproximation.h"
 
+#define MIN_METRIC -10000.0
+
 ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, double approximationSnr, int L) : ScCrcAidedDecoder(code) {
 	size_t n = _codePtr->N();
 	size_t k = _codePtr->kExt();
@@ -19,16 +21,35 @@ ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, d
 	_betaJ = std::vector<double>(k, 0.0); // only for frozen bits
 	_betaI = std::vector<double>(n, 0); // for all bits
 	_gamma = std::vector<bool>(k, 0);
+
+	_states = std::vector<FanoState>();
+	FanoState stubState;
+	stubState.isVisited = true;
+	stubState.metric = MIN_METRIC;
+	for (size_t i = 0; i < _L; i++)
+	{
+		_states.push_back(stubState);
+	}
+	
 }
 
 FanoState ScListFanoDecoder::SaveState() {
-	FanoState state = {};
+	size_t m = _codePtr->m();
+	FanoState state = { _beliefTree, _uhatTree, _x, _i, _j, _B, _betaJ, _betaI, _gamma, _betaJ[_j], false };
 
 	return state;
 }
 
 void ScListFanoDecoder::LoadState(FanoState state) {
-
+	_beliefTree = state.beliefTree;
+	_uhatTree = state.uhatTree;
+	_x = state.x;
+	_i = state.i;
+	_j = state.j;
+	_B = state.B;
+	_betaJ = state.betaJ;
+	_betaI = state.betaI;
+	_gamma = state.gamma;
 }
 
 void ScListFanoDecoder::UpdateT(double & T, double & delta, double & tau) {
@@ -56,6 +77,18 @@ void ScListFanoDecoder::BackwardMove(std::vector<double> & beta, std::vector<boo
 			}
 		}
 		else {
+			// HERE
+			int s = 0;
+			for (s = 0; s < _L; s++)
+			{
+				if (_states[s].isVisited)
+					continue;
+			}
+			if (s != _L) {
+				LoadState(_states[s]);
+				return;
+			}
+			/////////
 			T -= delta;
 			B = false;
 			return;
@@ -81,14 +114,6 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 	double T = _T;
 	double delta = _delta;
 
-	size_t firstInfoBit = 0;
-	for (size_t i = 0; i < n; i++)
-	{
-		if (_maskWithCrc[i]) {
-			firstInfoBit = i;
-			break;
-		}
-	}
 	while (_i < n)
 	{
 		PassDown(_i); // get p1 metric in _beliefTree[m][i]
@@ -124,6 +149,17 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 						UpdateT(T, delta, _betaJ[_j + 1]);
 					_i++;
 					_j++;
+					// HERE
+					double lowestMetric = _states[_L - 1].metric;
+					if (lowestMetric < max) {
+						FanoState state = SaveState();
+						int s = 0;
+						while (max < _states[s].metric) {
+							s++;
+						}
+						_states[s] = state;
+					}
+					/////////////////////
 				}
 				else {
 					if (min > T) {
@@ -138,6 +174,17 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 
 						_i++;
 						_j++;
+						// HERE
+						double lowestMetric = _states[_L - 1].metric;
+						if (lowestMetric < min) {
+							FanoState state = SaveState();
+							int s = 0;
+							while (min < _states[s].metric) {
+								s++;
+							}
+							_states[s] = state;
+						}
+						/////////////////////
 					}
 					else {
 						if (_j == -1) {

@@ -9,7 +9,7 @@
         <Param name="channel">BPSK-AWGN</Param>
         <Param name="channel1">BSC</Param>
       </Simulator>
-      <SnrRange start="-3" stop="0.0" step="0.5"></SnrRange>
+      <SnrRange start="-1" stop="0.0" step="0.5"></SnrRange>
       <SnrArray>
       </SnrArray>
       <Code type="Polar">

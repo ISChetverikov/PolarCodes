@@ -3,17 +3,21 @@
 #include "ScCrcAidedDecoder.h"
 
 struct FanoState {
-	int i;
-	int j;
-	bool B;
-
 	std::vector<std::vector<double>> beliefTree;
 	std::vector<std::vector<int>> uhatTree;
 	std::vector<int> x;
+
+	int i;
+	int j;
+	bool B;
 	
-	std::vector<double> beta;
-	std::vector<double> metrics;
+	std::vector<double> betaJ;
+	std::vector<double> betaI;
 	std::vector<bool> gamma;
+
+	// list mechanism
+	double metric;
+	bool isVisited;
 };
 
 class ScListFanoDecoder : public ScCrcAidedDecoder {
@@ -26,8 +30,7 @@ private:
 	std::vector<double> _p; // channel error probabilities 
 
 	// list stuff
-	std::vector<FanoState> states;
-	std::vector<double> metrics;
+	std::vector<FanoState> _states;
 
 	// current state
 	int _i;
