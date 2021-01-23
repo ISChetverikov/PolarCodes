@@ -81,8 +81,8 @@ void ScListFanoDecoder::BackwardMove(std::vector<double> & beta, std::vector<boo
 			int s = 0;
 			for (s = 0; s < _L; s++)
 			{
-				if (_states[s].isVisited)
-					continue;
+				if (!_states[s].isVisited)
+					break;
 			}
 			if (s != _L) {
 				LoadState(_states[s]);
@@ -158,6 +158,11 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 							s++;
 						}
 						_states[s] = state;
+
+						/*for (int s = 0; s < _L; s++)
+						{
+							_states[s].isVisited = false;
+						}*/
 					}
 					/////////////////////
 				}
@@ -183,6 +188,11 @@ std::vector<int> ScListFanoDecoder::Decode(std::vector<double> beliefs) {
 								s++;
 							}
 							_states[s] = state;
+
+							/*for (int s = 0; s < _L; s++)
+							{
+								_states[s].isVisited = false;
+							}*/
 						}
 						/////////////////////
 					}
