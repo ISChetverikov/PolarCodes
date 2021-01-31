@@ -36,7 +36,7 @@ void UpdateT(double & T, double & delta, double & tau) {
 		T += delta;
 }
 
-void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::vector<int> & mask, int & i, double & T, double & delta, bool & B, int & j) {
+void ScFanoDecoder::BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::vector<int> & mask, int & i, double & T, double & delta, bool & B, int & j) {
 
 	while (true) {
 		double mu = 0;
@@ -49,6 +49,9 @@ void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::ve
 
 		if (mu >= T) {
 			j--;
+			// HERE trace
+			_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", back, T=" + std::to_string(T) + "\n";
+			///////
 			if (!gamma[j + 1])
 			{
 				B = true;
@@ -65,6 +68,8 @@ void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::ve
 }
 
 std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
+	_path = "";
+
 	size_t n = inP1.size();
 	size_t m = _codePtr->m();
 	size_t k = _codePtr->k();
@@ -126,6 +131,9 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 						UpdateT(T, delta, beta[j+1]);
 					i++;
 					j++;
+					// HERE trace
+					_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", right, T=" + std::to_string(T) + "\n";
+					///////
 				}
 				else {
 					if (min > T) {
@@ -140,11 +148,19 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 
 						i++;
 						j++;
+
+						// HERE trace
+						_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", left, T=" + std::to_string(T) + "\n";
+						///////
 					}
 					else {
 						if (j == -1) {
 							T = T - delta;
 							B = false;
+
+							// HERE trace
+							_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", lower, T=" + std::to_string(T) + "\n";
+							///////
 						}
 						else {
 							BackwardMove(beta, gamma, _maskWithCrc, i, T, delta, B, j);
@@ -154,9 +170,12 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 				}
 			}
 			else {
-				if (j == -1)
+				if (j == -1) {
 					T = T - delta;
-
+					// HERE trace
+					_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", lower, T=" + std::to_string(T) + "\n";
+					///////
+				}
 				else {
 					BackwardMove(beta, gamma, _maskWithCrc, i, T, delta, B, j);
 					i = A[j + 1];
@@ -177,6 +196,10 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 
 			i++;
 		}
+
+		// HERE trace
+		// _path += std::to_string(i) + ": " + std::to_string(metrics[i]) + "\n";
+		///////
 	}
 
 	return TakeResult();

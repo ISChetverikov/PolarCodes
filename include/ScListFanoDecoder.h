@@ -48,6 +48,7 @@ private:
 	void LoadState(FanoState state);
 public:
 	ScListFanoDecoder(PolarCode * code, double T, double delta, double approximationSnr, int L);
+
 	// All fano decoders works only with P1 domain
 	std::vector<int> Decode(std::vector<double> p1) override;
 	~ScListFanoDecoder() {};

@@ -1,9 +1,12 @@
 #include <random>
+#include <string>
+#include <fstream>
 #include <chrono>
 #include <exception>
 #include "../include/SimulationParameters.h"
 #include "../include/MonteCarloSimulator.h"
 #include "../include/ScFanoDecoder.h"
+#include "../include/ScDecoder.h"
 
 MonteCarloSimulator::MonteCarloSimulator(int maxTestsCount,
 	int maxRejectionsCount,
@@ -17,6 +20,25 @@ MonteCarloSimulator::MonteCarloSimulator(int maxTestsCount,
 	_maxRejectionsCount = maxRejectionsCount;
 }
 
+void DumpInfo(std::string filename, std::string info) {
+	std::ofstream resultsFileStream;
+	resultsFileStream.open(filename, std::fstream::out | std::fstream::app);
+	resultsFileStream << info << std::endl;
+
+	resultsFileStream.close();
+}
+
+std::string VecToStr(std::vector<double> vec) {
+	std::string result;
+
+	for (size_t i = 0; i < vec.size(); i++)
+	{
+		result += std::to_string(vec[i]) + ", ";
+	}
+
+	return result;
+}
+
 SimulationIterationResults MonteCarloSimulator::Run(double snr)
 {	
 	SimulationIterationResults result;
@@ -27,6 +49,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	std::vector<int> codeword(n, 0);
 	std::vector<double> channelOuput(n, 0);
 	std::vector<int> decoded(n, 0);
+	std::vector<int> parallelDecoded(n, 0);
 
 	auto t1 = std::chrono::steady_clock::now();
 
@@ -37,11 +60,10 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	std::random_device randomDevice;
 	std::uniform_int_distribution<> uniform_discrete_dist(0, 1);
 
+	ScDecoder parallelDecoder(_codePtr);
 
 	_decoderPtr->SetSigma(sigma);
 	_channelPtr->SetSnr(snr);
-
-
 
 	while ((tests < _maxTestsCount || _maxTestsCount == -1) && (wrong_dec < _maxRejectionsCount)) {
 		tests++;
@@ -55,6 +77,19 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		channelOuput = _channelPtr->Pass(codeword);
 		
 		decoded = _decoderPtr->Decode(channelOuput);
+
+		// HERE parallel decoder to comparision, SC - worse decoder
+		parallelDecoded = parallelDecoder.Decode(channelOuput);
+
+		if (word == decoded && parallelDecoded != word) {
+			std::string debugInfo = _decoderPtr->GetPathInfo();
+			std::string filename = "C:\\Users\\ische\\source\\repos\\PolarCodes\\results\\dump.debug";
+			DumpInfo(filename, VecToStr(channelOuput));
+			DumpInfo(filename, debugInfo);
+			DumpInfo(filename, "");
+		}
+		///////////
+
 		if (tests % 1000 == 0)
 			std::cout << tests << std::endl;
 		

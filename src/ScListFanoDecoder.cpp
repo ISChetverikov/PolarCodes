@@ -33,6 +33,7 @@ ScListFanoDecoder::ScListFanoDecoder(PolarCode * code, double T, double delta, d
 	
 }
 
+
 FanoState ScListFanoDecoder::SaveState() {
 	size_t m = _codePtr->m();
 	FanoState state = { _beliefTree, _uhatTree, _x, _i, _j, _B, _betaJ, _betaI, _gamma, _betaJ[_j], false };

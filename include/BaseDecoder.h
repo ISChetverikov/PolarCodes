@@ -13,6 +13,8 @@ protected:
 	double _sigma;
 	std::vector<int> _codeword;
 
+	std::string _path;
+
 	double f(double p1, double p2);
 	double g(double p1, double p2, int b);
 	int L(double p1);
@@ -29,5 +31,7 @@ public:
 	virtual std::string GetStatistic();
 	virtual void ClearStatistic();
 	
+	std::string GetPathInfo();
+
 	~BaseDecoder() {};
 };

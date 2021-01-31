@@ -93,3 +93,6 @@ void BaseDecoder::ClearStatistic() {
 	
 }
 
+std::string BaseDecoder::GetPathInfo() {
+	return _path;
+}

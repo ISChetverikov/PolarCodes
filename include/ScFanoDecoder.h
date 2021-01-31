@@ -12,8 +12,11 @@ private:
 
 	std::vector<double> _p; // channel error probabilities 
 
+	void BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::vector<int> & mask, int & i, double & T, double & delta, bool & B, int & j);
+
 public:
 	ScFanoDecoder(PolarCode * code, double T, double delta);
 	std::vector<int> Decode(std::vector<double> llr) override;
+
 	~ScFanoDecoder() {};
 };
