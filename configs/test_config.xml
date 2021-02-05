@@ -13,9 +13,9 @@
       <SnrArray>
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">3</Param>
-        <Param name="k">4</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt</Param>
+        <Param name="m">4</Param>
+        <Param name="k">7</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\16.txt</Param>
         <Param name="CRC24">100000000000000001100011</Param>
         <Param name="CRC12">100000001111</Param>
         <Param name="CRC1">00000111</Param>

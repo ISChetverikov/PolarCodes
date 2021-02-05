@@ -50,7 +50,7 @@ void ScFanoDecoder::BackwardMove(std::vector<double> & beta, std::vector<bool> &
 		if (mu >= T) {
 			j--;
 			// HERE trace
-			_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", back, T=" + std::to_string(T) + "\n";
+			_path += std::to_string(j) + ": " + std::to_string((j != -1) ? beta[j] : 0.0) + ", back, T=" + std::to_string(T) + "\n";
 			///////
 			if (!gamma[j + 1])
 			{
@@ -132,7 +132,8 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 					i++;
 					j++;
 					// HERE trace
-					_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", right, T=" + std::to_string(T) + "\n";
+					_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", right, T=" + std::to_string(T) 
+						+ ", x[i]=" + std::to_string(argmax) + ", p=" + std::to_string(argmax == 1 ? p1 : p0) + "\n";
 					///////
 				}
 				else {
@@ -150,7 +151,8 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 						j++;
 
 						// HERE trace
-						_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", left, T=" + std::to_string(T) + "\n";
+						_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", left, T=" + std::to_string(T) 
+							+ ", x[i]=" + std::to_string(argmin) + ", p=" + std::to_string(argmin == 1 ? p1 : p0) + "\n";
 						///////
 					}
 					else {
@@ -159,7 +161,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 							B = false;
 
 							// HERE trace
-							_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", lower, T=" + std::to_string(T) + "\n";
+							_path += std::to_string(j) + ": " + "0.0" + ", lower, T=" + std::to_string(T) + "\n";
 							///////
 						}
 						else {
@@ -173,7 +175,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 				if (j == -1) {
 					T = T - delta;
 					// HERE trace
-					_path += std::to_string(j) + ": " + std::to_string(beta[j]) + ", lower, T=" + std::to_string(T) + "\n";
+					_path += std::to_string(j) + ": " + "0.0" + ", lower, T=" + std::to_string(T) + "\n";
 					///////
 				}
 				else {

@@ -7,6 +7,7 @@
 #include "../include/MonteCarloSimulator.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScDecoder.h"
+#include "../include/ScListDecoder.h"
 
 MonteCarloSimulator::MonteCarloSimulator(int maxTestsCount,
 	int maxRejectionsCount,
@@ -28,7 +29,8 @@ void DumpInfo(std::string filename, std::string info) {
 	resultsFileStream.close();
 }
 
-std::string VecToStr(std::vector<double> vec) {
+template<class T>
+std::string VecToStr(std::vector<T> vec) {
 	std::string result;
 
 	for (size_t i = 0; i < vec.size(); i++)
@@ -60,8 +62,12 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	std::random_device randomDevice;
 	std::uniform_int_distribution<> uniform_discrete_dist(0, 1);
 
-	ScDecoder parallelDecoder(_codePtr);
-
+	// HERE parallel decoder
+	size_t m = _codePtr->m();
+	PolarCode * parallelCodePtr = new PolarCode(m, k, { 0, 1, 2, 4, 3,5,6,7 }, {1,1,1});
+	ScListDecoder parallelDecoder(parallelCodePtr, 8);
+	//////
+	
 	_decoderPtr->SetSigma(sigma);
 	_channelPtr->SetSnr(snr);
 
@@ -81,10 +87,11 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		// HERE parallel decoder to comparision, SC - worse decoder
 		parallelDecoded = parallelDecoder.Decode(channelOuput);
 
-		if (word == decoded && parallelDecoded != word) {
+		if (word != decoded && parallelDecoded == word) {
 			std::string debugInfo = _decoderPtr->GetPathInfo();
 			std::string filename = "C:\\Users\\ische\\source\\repos\\PolarCodes\\results\\dump.debug";
-			DumpInfo(filename, VecToStr(channelOuput));
+			DumpInfo(filename, VecToStr<double>(channelOuput));
+			DumpInfo(filename, VecToStr<int>(word));
 			DumpInfo(filename, debugInfo);
 			DumpInfo(filename, "");
 		}

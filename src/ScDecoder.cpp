@@ -149,7 +149,6 @@ void ScDecoder::PassUp(size_t iter) {
 			_uhatTree[level - 1][offset + length + i] = _uhatTree[level][offset + length + i];
 		}
 
-
 		iterCopy = iterCopy >> 1;
 		bit = iterCopy % 2;
 		length *= 2;
