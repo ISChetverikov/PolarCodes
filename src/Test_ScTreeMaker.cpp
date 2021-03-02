@@ -26,9 +26,9 @@ std::string VecToStr1(std::vector<double> vec) {
 }
 
 
-int main5() {
-	std::vector<double> output = { 0.070364, 0.884861, 0.831962, 0.013296, 0.987174, 0.584293, 0.677645, 0.134929 };
-	auto code = new PolarCode(3, 4, { 0, 1, 2, 4, 3,5,6,7 }, {});
+int main() {
+	std::vector<double> output = { 0.010119, 0.269376, 0.714051, 0.025632, 0.421688, 0.062596, 0.928681, 0.009483, 0.929548, 0.969867, 0.948404, 0.005403, 0.266173, 0.957171, 0.011451, 0.715712, };
+	auto code = new PolarCode(4, 7, { 0, 1, 2, 4, 8, 3, 5, 9, 6, 10, 12, 7, 11, 13, 14, 15 }, {});
 	auto decoderPtr = new ScDecoderTreeMaker(code, 1.0);
 	decoderPtr->Decode(output);
 	auto fullTree = decoderPtr->GetPathInfo();

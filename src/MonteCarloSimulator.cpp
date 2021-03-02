@@ -62,12 +62,14 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	std::random_device randomDevice;
 	std::uniform_int_distribution<> uniform_discrete_dist(0, 1);
 
+#ifdef PARALLEL_DECODER
 	// HERE parallel decoder
 	size_t m = _codePtr->m();
-	PolarCode * parallelCodePtr = new PolarCode(m, k, { 0, 1, 2, 4, 3,5,6,7 }, {1,1,1});
+	PolarCode * parallelCodePtr = new PolarCode(m, k, { 0, 1, 2, 4, 8, 3, 5, 9, 6, 10, 12, 7, 11, 13, 14, 15 }, { 1,1,1 });
 	ScListDecoder parallelDecoder(parallelCodePtr, 8);
 	//////
-	
+#endif // PARALLEL_DECODER
+
 	_decoderPtr->SetSigma(sigma);
 	_channelPtr->SetSnr(snr);
 
@@ -84,10 +86,12 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		
 		decoded = _decoderPtr->Decode(channelOuput);
 
+#ifdef PARALLEL_DECODER
 		// HERE parallel decoder to comparision, SC - worse decoder
 		parallelDecoded = parallelDecoder.Decode(channelOuput);
 
 		if (word != decoded && parallelDecoded == word) {
+			std::cout << "Find" << std::endl;
 			std::string debugInfo = _decoderPtr->GetPathInfo();
 			std::string filename = "C:\\Users\\ische\\source\\repos\\PolarCodes\\results\\dump.debug";
 			DumpInfo(filename, VecToStr<double>(channelOuput));
@@ -96,6 +100,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 			DumpInfo(filename, "");
 		}
 		///////////
+#endif //PARALLEL_DECODER
 
 		if (tests % 1000 == 0)
 			std::cout << tests << std::endl;

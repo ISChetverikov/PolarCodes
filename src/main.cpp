@@ -12,7 +12,7 @@ void PrintUsage() {
 #endif
 }
 
-int main(int argc, char* argv[]) {
+int main3(int argc, char* argv[]) {
 
 	if (argc != 2) {
 		PrintUsage();
