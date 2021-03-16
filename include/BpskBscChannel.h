@@ -3,7 +3,7 @@
 #include "BaseChannel.h"
 #include <vector>
 
-class BscChannel : public BaseChannel {
+class BpskBscChannel : public BaseChannel {
 protected:
 	std::random_device _randomDevice;
 	std::bernoulli_distribution _bernoulli_dist;
@@ -11,8 +11,8 @@ protected:
 	double _fixedLlr;
 
 public:
-	BscChannel(double coderate);
-	~BscChannel() {};
+	BpskBscChannel(double coderate);
+	~BpskBscChannel() {};
 	std::vector<double> Pass(std::vector<int> codeword) override;
 	void SetSnr(double snr) override;
 };

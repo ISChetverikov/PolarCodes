@@ -10,8 +10,8 @@ BaseSimulator::BaseSimulator(PolarCode * codePtr, Encoder * encoderPtr, BaseChan
 
 double BaseSimulator::GetSigma(double snr, double R) {
 	double result = sqrt(pow(10, -snr / 10) / 2);
-	if (_isSigmaDependOnR)
-		result /= R;
+	//if (_isSigmaDependOnR)
+		//result /= R;
 
 	return result;
 }

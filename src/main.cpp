@@ -12,7 +12,7 @@ void PrintUsage() {
 #endif
 }
 
-int main3(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
 
 	if (argc != 2) {
 		PrintUsage();
@@ -21,5 +21,5 @@ int main3(int argc, char* argv[]) {
 		
 	Simulate(argv[1]);
 
-
+	return 0;
 }

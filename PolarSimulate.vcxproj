@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CommonTransformations.cpp" />
+    <ClCompile Include="src\Test_AwgnBer.cpp" />
     <ClCompile Include="src\Test_ScTreeMaker.cpp" />
     <ClInclude Include="include\BaseSimulator.h" />
     <ClInclude Include="include\BaseDecoder.h" />
     <ClInclude Include="include\BaseChannel.h" />
     <ClInclude Include="include\BpskAwgnChannel.h" />
-    <ClInclude Include="include\BscChannel.h" />
+    <ClInclude Include="include\BpskBscChannel.h" />
+    <ClInclude Include="include\CommonTransformations.h" />
     <ClInclude Include="include\CRC.h" />
     <ClInclude Include="include\Domain.h" />
     <ClInclude Include="include\Encoder.h" />
@@ -39,6 +42,7 @@
     <ClInclude Include="include\DecoderType.h" />
     <ClInclude Include="include\Exceptions.h" />
     <ClInclude Include="include\MonteCarloSimulator.h" />
+    <ClInclude Include="include\QpskBscChannel.h" />
     <ClInclude Include="include\ScCrcAidedDecoder.h" />
     <ClInclude Include="include\ScDecoder.h" />
     <ClInclude Include="include\ScFlipFanoDecoder.h" />
@@ -54,7 +58,7 @@
     <ClInclude Include="include\SimulationType.h" />
     <ClCompile Include="src\BaseChannel.cpp" />
     <ClCompile Include="src\BpskAwgnChannel.cpp" />
-    <ClCompile Include="src\BscChannel.cpp" />
+    <ClCompile Include="src\BpskBscChannel.cpp" />
     <ClCompile Include="src\ScCrcAidedDecoder.cpp" />
     <ClInclude Include="include\ScListFlipStatDecoder.h" />
     <ClInclude Include="include\ScDecoderTreeMaker.h" />
@@ -64,7 +68,7 @@
     <ClCompile Include="src\BaseDecoder.cpp" />
     <ClCompile Include="src\ConfigReading.cpp" />
     <ClCompile Include="src\CRC.cpp" />
-    <ClCompile Include="src\crcTest.cpp" />
+    <ClCompile Include="src\Test_CRC.cpp" />
     <ClCompile Include="src\DecoderType.cpp" />
     <ClCompile Include="src\Encoder.cpp" />
     <ClCompile Include="src\GaussianApproximation.cpp" />
@@ -84,7 +88,7 @@
     <ClCompile Include="src\ScFlipProgDecoder.cpp" />
     <ClCompile Include="src\Simulate.cpp" />
     <ClCompile Include="src\SimulationType.cpp" />
-    <ClCompile Include="src\gaTe.cpp" />
+    <ClCompile Include="src\Test_GA.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -144,7 +148,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT1;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT1;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,7 +160,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DECODER_STAT1;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT1;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -170,7 +174,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>PARALLEL_DECODER;DECODER_STAT1;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT1;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -186,7 +190,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>PARALLEL_DECODER;DECODER_STAT1;DOMAIN_P1;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER_STAT1;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

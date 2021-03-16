@@ -1,8 +1,9 @@
-
+#include <iostream>
 #include <random>
-#include "../include/BscChannel.h"
+#include "../include/BpskBscChannel.h"
+#include "../include/CommonTransformations.h"
 
-BscChannel::BscChannel(double coderate) : BaseChannel() {
+BpskBscChannel::BpskBscChannel(double coderate) : BaseChannel() {
 	std::bernoulli_distribution bernoulli_dist(0.5);
 	_bernoulli_dist = bernoulli_dist;
 	
@@ -10,36 +11,20 @@ BscChannel::BscChannel(double coderate) : BaseChannel() {
 	_fixedLlr = 1.0;
 }
 
-double snrToEbN0(double snr, double coderate) {
-	return snr - 10 * log10(coderate);
-}
 
-double ebnoToPErr(double ebno) {
-	return 1.0 / 2 * erfc(sqrt(ebno));
-}
-
-
-void BscChannel::SetSnr(double snr) {
+void BpskBscChannel::SetSnr(double snr) {
 	BaseChannel::SetSnr(snr);
 
-	double p = ebnoToPErr(snrToEbN0(_snr, _coderate));
+	//double p = ebnoToPErr(snrToEbN0(_snr, _coderate));
+	double p = ebnoToPErr(snrToSigma(snr));
+
 	_fixedLlr = log((1 - p) / p);
 	std::bernoulli_distribution b(p);
 	_bernoulli_dist = b;
 }
 
-double LlrToP12(double llr) {
-	if (llr > 300.0)
-		return 0.0;
 
-	if (llr < -300.0)
-		return 1.0;
-
-	return 1.0 / (1 + exp(llr));
-}
-
-
-std::vector<double> BscChannel::Pass(std::vector<int> codeword) {
+std::vector<double> BpskBscChannel::Pass(std::vector<int> codeword) {
 	size_t n = codeword.size();
 	std::vector<double> output(n, 0);
 
