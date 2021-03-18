@@ -27,6 +27,8 @@ protected:
 public:
 	PolarCode();
 	PolarCode(int m, int k, std::vector<int> reliabilitySequence, std::vector<int> crcPoly);
+	// Build code from k indeices of usedBits
+	PolarCode(int m, std::vector<int> usedBits);
 
 	size_t m();
 	size_t N();

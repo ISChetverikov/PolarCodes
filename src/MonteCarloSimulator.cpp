@@ -58,7 +58,8 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	double sigma = GetSigma(snr, (double)k / n);
 	int tests = 0;
 	int wrong_dec = 0;
-	
+	//int wrong_bits = 0;
+
 	std::random_device randomDevice;
 	std::uniform_int_distribution<> uniform_discrete_dist(0, 1);
 
@@ -105,9 +106,20 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		//if (tests % 1000 == 0)
 			//std::cout << tests << std::endl;
 		
-		if (decoded != word)
+		if (decoded != word) {
 			wrong_dec += 1;
+
+			/*for (size_t i = 0; i < n; i++)
+			{
+				if (decoded[i] != word[i])
+					wrong_bits += 1;
+			}*/
+		}
+
+		
 	}
+
+	//std::cout << "BER: " << (double)wrong_bits / n / tests << std::endl;
 
 	auto t2 = std::chrono::steady_clock::now();
 

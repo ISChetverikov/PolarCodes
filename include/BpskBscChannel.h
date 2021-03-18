@@ -2,6 +2,7 @@
 
 #include "BaseChannel.h"
 #include <vector>
+#include <random>
 
 class BpskBscChannel : public BaseChannel {
 protected:

@@ -1,6 +1,6 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\1024\awgn.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\32\seq_stat_32.results</ResultFile>
       <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\OracleStats\dummy.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">100000</Param>
@@ -9,18 +9,18 @@
         <Param name="channel1">BPSK-AWGN</Param>
         <Param name="channel">BPSK-BSC</Param>
       </Simulator>
-      <SnrRange start="-1" stop="2" step="0.5"></SnrRange>
+      <SnrRange start="0.0" stop="5.0" step="0.5"></SnrRange>
       <SnrArray>
         <!--<Snr>-1.0</Snr>-->
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">10</Param>
-        <Param name="k">488</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\1024.txt</Param>
-        <Param name="CRC">100000000000000001100011</Param>
+        <Param name="m">5</Param>
+        <Param name="k">23</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\Stat\32</Param>
+        <Param name="CRC1">100000000000000001100011</Param>
         <Param name="CRC12">100000001111</Param>
         <Param name="CRC1">00000111</Param>
-        <Param name="CRC1">111</Param>
+        <Param name="CRC">111</Param>
       </Code>
       <Decoder type="SCL">
     
@@ -49,7 +49,7 @@
         <!--SC List Fano decoder-->
         <Param name="T">0</Param>
         <Param name="delta">1.0</Param>
-        <Param name="L">8</Param>
+        <Param name="L">32</Param>
         <Param name="ApproximationSnr">1.0</Param>
       </Decoder>
     </Simulation>

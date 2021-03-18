@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommonTransformations.cpp" />
+    <ClCompile Include="src\StatisticalSequence.cpp" />
     <ClCompile Include="src\Test_AwgnBer.cpp" />
     <ClCompile Include="src\Test_ScTreeMaker.cpp" />
     <ClInclude Include="include\BaseSimulator.h" />
@@ -62,6 +63,7 @@
     <ClCompile Include="src\ScCrcAidedDecoder.cpp" />
     <ClInclude Include="include\ScListFlipStatDecoder.h" />
     <ClInclude Include="include\ScDecoderTreeMaker.h" />
+    <ClInclude Include="include\StatisticalSequence.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseSimulator.cpp" />
@@ -175,6 +177,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>DECODER_STAT1;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -191,6 +194,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>DECODER_STAT1;DOMAIN_LLR;MINSUM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

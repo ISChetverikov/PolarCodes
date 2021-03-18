@@ -27,6 +27,7 @@
 #include "../include/BpskAwgnChannel.h"
 #include "../include/BpskBscChannel.h"
 #include "../include/QpskBscChannel.h"
+#include "../include/StatisticalSequence.h"
 
 int ExtractInt(std::unordered_map<std::string, std::string> map, std::string key, std::string section) {
 	if (map.count(key) <= 0)
@@ -137,8 +138,13 @@ PolarCode * BuildCode(std::unordered_map<std::string, std::string> codeParams) {
 	int k = ExtractInt(codeParams, "k", "PolarCode");
 	std::string crcPolyString = ExtractString(codeParams, "CRC", "PolarCode", false);
 	std::vector<int> crcPoly = PolyStrToVector(crcPolyString);
-	std::string sequenceFilePath = ExtractString(codeParams, "sequenceFile", "PolarCode", true);
-	std::vector<int> reliabilitySequence = ReadSequenceFromFile(sequenceFilePath);
+	std::string sequenceFilePath = ExtractString(codeParams, "sequenceFile", "PolarCode", false);
+	std::vector<int> reliabilitySequence;
+
+	//if (sequenceFilePath == "")
+		//reliabilitySequence = BuiltSequenceStatistically(m, k);
+	//else
+		reliabilitySequence = ReadSequenceFromFile(sequenceFilePath);
 
 	codePtr = new PolarCode(m, k, reliabilitySequence, crcPoly);
 	return codePtr;
