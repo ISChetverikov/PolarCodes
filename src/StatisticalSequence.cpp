@@ -157,7 +157,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 	
 	auto t1 = std::chrono::steady_clock::now();
 
-	double snr =PickUpSnr(m, k);
+	double snr = 0.0;//PickUpSnr(m, k);
 	std::cout << "SNR: " << snr << std::endl;
 	
 	vector<int> leader = {};
@@ -194,7 +194,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 			
 			#pragma omp critical
 			{
-				if (p <= p_best) {
+				if (p < p_best) {
 					p_best = p;
 					leader = frozenCombinations[j];
 					if (p_best == 0.0)
@@ -203,6 +203,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 			}
 
 			delete simulatorPtr;
+			delete channelPtr;
 			delete decoderPtr;
 			delete encoderPtr;
 			delete codePtr;
