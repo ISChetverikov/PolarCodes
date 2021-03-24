@@ -14,5 +14,5 @@ public:
 
 	std::vector<int> PolarTransform(std::vector<int> x);
 	std::vector<int> Encode(std::vector<int> x);
-	~Encoder();
+	virtual ~Encoder();
 };

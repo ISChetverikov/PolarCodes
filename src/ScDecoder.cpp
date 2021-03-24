@@ -20,11 +20,11 @@ ScDecoder::ScDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 	size_t n = _codePtr->N();
 	_treeHeight = m + 1;
 
+	std::vector<double> b(n, -10000.0);
+	std::vector<int> u(n, -1);
+
 	for (size_t i = 0; i < _treeHeight; i++)
 	{
-		std::vector<double> b(n, -10000.0);
-		std::vector<int> u(n, -1);
-
 		_beliefTree.push_back(b);
 		_uhatTree.push_back(u);
 	}
@@ -44,6 +44,9 @@ ScDecoder::ScDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 
 	// optimization allocation
 	_binaryIter = std::vector<int>(m, 0);
+}
+
+ScDecoder::~ScDecoder() {
 }
 
 void ScDecoder::FillLeftMessageInTree(std::vector<double>::iterator leftIt,

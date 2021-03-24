@@ -157,7 +157,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 	
 	auto t1 = std::chrono::steady_clock::now();
 
-	double snr = 0.0;//PickUpSnr(m, k);
+	double snr = PickUpSnr(m, k);
 	std::cout << "SNR: " << snr << std::endl;
 	
 	vector<int> leader = {};
@@ -175,7 +175,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 
 		volatile bool break_flag = false;
 
-		#pragma omp parallel for shared(break_flag) num_threads(8)
+		//#pragma omp parallel for shared(break_flag) num_threads(1)
 		for (int j = (int)frozenCombinations.size() - 1; j >= 0 ; j--)
 		{
 			if (break_flag)
@@ -192,15 +192,15 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 			double p = simulatorPtr->Run(snr).fer;
 			//std::cout << p << std::endl;
 			
-			#pragma omp critical
-			{
+			//#pragma omp critical
+			/*{
 				if (p < p_best) {
 					p_best = p;
 					leader = frozenCombinations[j];
-					if (p_best == 0.0)
+					if (p_best == 2.0)
 						break_flag = true;
 				}
-			}
+			}*/
 
 			delete simulatorPtr;
 			delete channelPtr;

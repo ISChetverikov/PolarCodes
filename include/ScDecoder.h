@@ -36,5 +36,5 @@ public:
 
 	std::vector<int> Decode(std::vector<double> llr) override;
 
-	~ScDecoder() {};
+	~ScDecoder();
 };

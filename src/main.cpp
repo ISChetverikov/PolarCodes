@@ -55,10 +55,10 @@ int main(int argc, char* argv[]) {
 	bool stat_gathering = true;
 	if (stat_gathering) {
 		auto folder = "C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\Stat\\";
-		int maxTestsCount = 25000;
-		int maxRejectionsCount = 50;
-		int m = 10;
-		int k = 512;
+		int maxTestsCount = 1000;
+		int maxRejectionsCount = 10;
+		int m = 8;
+		int k = 128;
 		double snr = 1.0;
 		BuiltSequenceStatistically(folder, m, k, maxTestsCount, maxRejectionsCount);
 		

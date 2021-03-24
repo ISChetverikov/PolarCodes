@@ -33,5 +33,5 @@ public:
 	
 	std::string GetPathInfo();
 
-	~BaseDecoder() {};
+	virtual ~BaseDecoder() {};
 };
