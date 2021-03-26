@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <algorithm>
-#include <omp.h>
+#include <mpi.h>
 
 #include "../include/ScDecoder.h"
 #include "../include/PolarCode.h"
@@ -175,7 +175,6 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 
 		volatile bool break_flag = false;
 
-		#pragma omp parallel for shared(break_flag) num_threads(8)
 		for (int j = (int)frozenCombinations.size() - 1; j >= 0 ; j--)
 		{
 			if (break_flag)
@@ -192,16 +191,13 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 			double p = simulatorPtr->Run(snr).fer;
 			//std::cout << p << std::endl;
 			
-			#pragma omp critical
-			{
-				if (p < p_best) {
-					p_best = p;
-					leader = frozenCombinations[j];
-					if (p_best == 0.0)
-						break_flag = true;
-				}
+			if (p < p_best) {
+				p_best = p;
+				leader = frozenCombinations[j];
+				if (p_best == 0.0)
+					break_flag = true;
 			}
-
+			
 			delete simulatorPtr;
 			delete channelPtr;
 			delete decoderPtr;
