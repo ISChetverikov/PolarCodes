@@ -2,7 +2,6 @@
 #include <vector>
 #include <chrono>
 #include "../include/Simulate.h"
-#include "../include/StatisticalSequence.h"
 
 void PrintUsage() {
 #ifdef __linux__ 
@@ -52,20 +51,7 @@ int main(int argc, char* argv[]) {
 		testRoutine();
 	}
 
-	bool stat_gathering = true;
-	if (stat_gathering) {
-		auto folder = "C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\Stat\\";
-		int maxTestsCount = 1000;
-		int maxRejectionsCount = 10;
-		int m = 8;
-		int k = 128;
-		double snr = 1.0;
-		BuiltSequenceStatistically(folder, m, k, maxTestsCount, maxRejectionsCount);
-		
-		return 0;
-	}
-
-	bool isMainRun = false;
+	bool isMainRun = true;
 	if (isMainRun) {
 		Simulate(argv[1]);
 	}

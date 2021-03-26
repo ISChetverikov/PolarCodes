@@ -27,7 +27,6 @@
 #include "../include/BpskAwgnChannel.h"
 #include "../include/BpskBscChannel.h"
 #include "../include/QpskBscChannel.h"
-#include "../include/StatisticalSequence.h"
 
 int ExtractInt(std::unordered_map<std::string, std::string> map, std::string key, std::string section) {
 	if (map.count(key) <= 0)

@@ -8,3 +8,8 @@
 /results
 /src/trash.cpp
 /src/ScFanoTrashDecoder.cpp
+/BuildSequence/x64/Release
+/BuildSequence/BuildSequence.vcxproj.filters
+/BuildSequence/BuildSequence.vcxproj
+/polar_sequences/Stat/leader.dump
+/BuildSequence/leader.dump

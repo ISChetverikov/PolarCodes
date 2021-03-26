@@ -4,13 +4,14 @@
 #include <algorithm>
 #include <omp.h>
 
-#include "../include/StatisticalSequence.h"
 #include "../include/ScDecoder.h"
 #include "../include/PolarCode.h"
 #include "../include/Encoder.h"
 #include "../include/BpskBscChannel.h"
 #include "../include/MonteCarloSimulator.h"
 #include "../include/Exceptions.h"
+
+#include "StatisticalSequence.h"
 
 using std::vector;
 
@@ -151,18 +152,17 @@ void ClearDump(std::string filename) {
 		throw FileIsNotOpennedException("Could not clear dump file: " + filename);
 }
 
-void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCount, int maxRejectionsCount) {
+void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCount, int maxRejectionsCount, double snr) {
 
 	size_t n = 1 << m;
 	
 	auto t1 = std::chrono::steady_clock::now();
 
-	double snr = PickUpSnr(m, k);
 	std::cout << "SNR: " << snr << std::endl;
 	
 	vector<int> leader = {};
 
-	std::string dumpFilename = "leader.dump";
+	std::string dumpFilename = folder + "leader.dump";
 
 	TryCreateDump(dumpFilename);
 	TryLoadDump(dumpFilename, leader);
@@ -175,7 +175,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 
 		volatile bool break_flag = false;
 
-		//#pragma omp parallel for shared(break_flag) num_threads(1)
+		#pragma omp parallel for shared(break_flag) num_threads(8)
 		for (int j = (int)frozenCombinations.size() - 1; j >= 0 ; j--)
 		{
 			if (break_flag)
@@ -192,15 +192,15 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 			double p = simulatorPtr->Run(snr).fer;
 			//std::cout << p << std::endl;
 			
-			//#pragma omp critical
-			/*{
+			#pragma omp critical
+			{
 				if (p < p_best) {
 					p_best = p;
 					leader = frozenCombinations[j];
-					if (p_best == 2.0)
+					if (p_best == 0.0)
 						break_flag = true;
 				}
-			}*/
+			}
 
 			delete simulatorPtr;
 			delete channelPtr;
@@ -209,9 +209,9 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 			delete codePtr;
 		}
 
-		std::cout << "P best: " << p_best << std::endl;
 		std::cout << "------- " << k_current << " ------" << std::endl;
-
+		std::cout << "P best: " << p_best << std::endl;
+		
 		SaveDump(dumpFilename, leader);
 	}
 

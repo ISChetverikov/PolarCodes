@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommonTransformations.cpp" />
-    <ClCompile Include="src\StatisticalSequence.cpp" />
     <ClCompile Include="src\Test_AwgnBer.cpp" />
     <ClCompile Include="src\Test_ScTreeMaker.cpp" />
     <ClInclude Include="include\BaseSimulator.h" />
@@ -63,7 +62,6 @@
     <ClCompile Include="src\ScCrcAidedDecoder.cpp" />
     <ClInclude Include="include\ScListFlipStatDecoder.h" />
     <ClInclude Include="include\ScDecoderTreeMaker.h" />
-    <ClInclude Include="include\StatisticalSequence.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseSimulator.cpp" />
