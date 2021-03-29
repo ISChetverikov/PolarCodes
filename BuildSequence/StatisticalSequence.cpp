@@ -3,6 +3,10 @@
 #include <fstream>
 #include <algorithm>
 #include <mpi.h>
+#include <ctime>
+#include <chrono>
+#include <sstream>
+#include <iomanip>
 
 #include "../include/ScDecoder.h"
 #include "../include/PolarCode.h"
@@ -14,22 +18,41 @@
 #include "StatisticalSequence.h"
 
 using std::vector;
+using std::chrono::steady_clock;
+using std::chrono::time_point;
+using std::cout;
 
-vector<vector<int>> GenerateTrialFrozenSets(int n, vector<int> leader) {
-	vector<vector<int>> result;
+vector<vector<int>> GenerateTrialFrozenSets(int n, vector<int> leader, int ProcRank, int ProcNum) {
+	
+	vector<int> remainedBits;
 
 	for (size_t i = 0; i < n; i++)
 	{
 		if (std::find(leader.begin(), leader.end(), i) != leader.end())
 			continue;
 
+		remainedBits.push_back(i);
+	}
+
+
+	vector<vector<int>> result;
+	for (size_t j = 0; j < remainedBits.size(); j+= 1)
+	{
 		vector<int> copy = leader;
-		copy.push_back(i);
+		copy.push_back(remainedBits[j]);
 		result.push_back(copy);
 	}
 
-	return result;
+	int max_count = remainedBits.size() / ProcNum;
+	if (remainedBits.size() % ProcNum != 0)
+		max_count += 1;
+	
+	//cout << "Rank: " << ProcRank << " max_count: " << max_count << std::endl;
 
+	if (result.size() < max_count)
+		result.push_back(result[result.size() - 1]);
+
+	return result;
 }
 
 vector<int> bitsToSequence(int n, vector<int> usedBits) {
@@ -45,7 +68,6 @@ vector<int> bitsToSequence(int n, vector<int> usedBits) {
 		result[j] = i;
 		j++;
 	}
-
 
 	result.insert(result.end(), usedBits.rbegin(), usedBits.rend());
 
@@ -152,33 +174,81 @@ void ClearDump(std::string filename) {
 		throw FileIsNotOpennedException("Could not clear dump file: " + filename);
 }
 
-void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCount, int maxRejectionsCount, double snr) {
+std::string GetDumpFilename(int k, int n, double snr) {
+	auto t = std::time(nullptr);
+	auto tm = *std::localtime(&t);
+
+	std::ostringstream oss;
+	oss << std::setprecision(3);
+	oss << snr;
+	oss << "_";
+	oss << std::put_time(&tm, "%m-%d_%H-%M-%S");
+	auto snrTimeStr = oss.str();
+
+	std::string dumpFilename =  "leader_" + std::to_string(n) +
+		"_" + std::to_string(k) + "_" + snrTimeStr + ".dump";
+
+	return dumpFilename;
+}
+
+std::string GetOuputFilename(int n, int k, double snr) {
+	auto t = std::time(nullptr);
+	auto tm = *std::localtime(&t);
+
+	std::ostringstream oss;
+	oss << std::setprecision(3);
+	oss << snr;
+	oss << "_";
+	oss << std::put_time(&tm, "%m-%d-%H-%M-%S");
+	auto snrTimeStr = oss.str();
+
+	std::string dumpFilename = "sequence_" + std::to_string(n) +
+		"_" + std::to_string(k) + "_"  + snrTimeStr + ".dump";
+
+	return dumpFilename;
+}
+
+// Only the root process writes into the files of the folder
+void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCount, int maxRejectionsCount, double snr,
+	int ProcRank, int ProcNum) {
 
 	size_t n = 1 << m;
 	
-	auto t1 = std::chrono::steady_clock::now();
-
-	std::cout << "SNR: " << snr << std::endl;
-	
 	vector<int> leader = {};
 
-	std::string dumpFilename = folder + "leader.dump";
+	time_point<steady_clock> t1;
+	//std::string dumpFilename;
+	if (ProcRank == 0) {
 
-	TryCreateDump(dumpFilename);
-	TryLoadDump(dumpFilename, leader);
+		std::cout << "SNR: " << snr << std::endl;
 
-	for (size_t k_current = leader.size() + 1; k_current <= k; k_current++)
+		t1 = steady_clock::now();
+		//dumpFilename = folder + GetDumpFilename(k, n, snr);
+
+		//TryCreateDump(dumpFilename);
+		//TryLoadDump(dumpFilename, leader);
+	}
+	MPI_Bcast(leader.data(), leader.size(), MPI_INT, 0, MPI_COMM_WORLD);
+
+	size_t k_current = leader.size() + 1;
+	for (; k_current <= k; k_current++)
 	{
-		vector<vector<int>> frozenCombinations = GenerateTrialFrozenSets(n, leader);
+		struct {
+			double value;
+			int   index;
+		} p_best_struct;
 
-		double p_best = 1.0;
+		double p_best = 1.1;
 
-		volatile bool break_flag = false;
+		short break_flag = 0;
+		vector<vector<int>> frozenCombinations;
+
+		frozenCombinations = GenerateTrialFrozenSets(n, leader, ProcRank, ProcNum);
+		//MPI_Barrier(MPI_COMM_WORLD);
+		cout << "Rank: " << ProcRank << " size: " << frozenCombinations.size() << std::endl;
 
 		for (int j = (int)frozenCombinations.size() - 1; j >= 0 ; j--)
 		{
-			if (break_flag)
-				continue;
 
 			PolarCode * codePtr = new PolarCode(m, frozenCombinations[j]);
 
@@ -188,52 +258,101 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 
 			BaseSimulator * simulatorPtr = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, channelPtr, decoderPtr, 0);
 
-			double p = simulatorPtr->Run(snr).fer;
+			// filler if size of condidates array is not devided by ProcNum
+			//if (j != ((int)frozenCombinations.size() - 1) || frozenCombinations[j].size() != 0) {
+				p_best_struct.value = simulatorPtr->Run(snr).fer;
+				p_best_struct.index = ProcRank;
+			//}
+			//else {
+				//cout << "Rank: " << ProcRank << ". There is null in\n";
+				//p_best_struct.value = 1.1;
+				//p_best_struct.index = -1;
+			//}
 			//std::cout << p << std::endl;
 			
-			if (p < p_best) {
-				p_best = p;
+			MPI_Allreduce(MPI_IN_PLACE, &p_best_struct, 1, MPI_DOUBLE_INT, MPI_MINLOC, MPI_COMM_WORLD);
+			cout << "Rank: " << ProcRank << " P_best_value: " << p_best_struct.value << " p_best_index: " << p_best_struct.index << std::endl;
+
+			if (p_best_struct.value < p_best) {
+				//std::cout << "Rank: " << ProcRank << " leader index: " << p_best_struct.index << std::endl;
 				leader = frozenCombinations[j];
-				if (p_best == 0.0)
-					break_flag = true;
+				int leaderSize = leader.size();
+				MPI_Bcast(&leaderSize, 1, MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
+				//std::cout << "Rank: " << ProcRank << " leadersize: " << leaderSize << std::endl;
+
+				//if (ProcRank != p_best_struct.index)
+					//leader = vector<int>(leaderSize);
+
+				cout << "Rank: " << ProcRank << " leader size: " << leader.size() << std::endl;
+				MPI_Bcast(leader.data(), leader.size(), MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
+				//p_best = p_best_struct.value;
 			}
 			
+			if (p_best_struct.value == 0.0)
+				break_flag = 1;
+			
+			/*cout << "Rank: " << ProcRank << " leader: ";
+			for (size_t i = 0; i < leader.size(); i++)
+			{
+				cout << leader[i] << " ";
+			}
+			cout << std::endl*/;
+
+			MPI_Allreduce(MPI_IN_PLACE, &break_flag, 1, MPI_SHORT, MPI_LOR, MPI_COMM_WORLD);
+
+			
+
 			delete simulatorPtr;
 			delete channelPtr;
 			delete decoderPtr;
 			delete encoderPtr;
 			delete codePtr;
+
+			//MPI_Barrier(MPI_COMM_WORLD);
+
+			if (break_flag) {
+				std::cout << "Rank: " << ProcRank << " want to break free\n";
+				break;
+			}
+			//MPI_Barrier(MPI_COMM_WORLD);
 		}
 
-		std::cout << "------- " << k_current << " ------" << std::endl;
-		std::cout << "P best: " << p_best << std::endl;
-		
-		SaveDump(dumpFilename, leader);
+		//MPI_Barrier(MPI_COMM_WORLD);
+		if (ProcRank == 0) {
+			std::cout << "------- " << k_current << " ------" << std::endl;
+			std::cout << "P best: " << p_best_struct.value << std::endl;
+			std::cout << "-------------------------------" << std::endl;
+
+			//SaveDump(dumpFilename, leader);
+		}
+
 	}
 
-	ClearDump(dumpFilename);
-	std::cout << "Dump is succesfully cleared..." << std::endl;
-
-	auto t2 = std::chrono::steady_clock::now();
-	auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-
-	std::cout << "Time: " << dt << std::endl;
-
-	std::string filename = folder + std::to_string(n);
-	std::ofstream file(filename);
-	//for (size_t i = 0; i < leader.size(); i++)
-	//{
-		//std::cout << leader[i] << " ";
-		//file << leader[i] << " ";
+	//if (ProcRank == 0) {
+		//ClearDump(dumpFilename);
+		//std::cout << "Dump is succesfully cleared..." << std::endl;
 	//}
-	//std::cout << "\n";
+	
+	//std::cout << "Waiting barrier: " << ProcRank << std::endl;
+	MPI_Barrier(MPI_COMM_WORLD);
+	//std::cout << "Waited barrier: " << ProcRank << std::endl;
 
-	//file << std::endl;
 
-	vector<int> sequence = bitsToSequence(n, leader);
-	for (size_t i = 0; i < sequence.size(); i++)
-	{
-		file << sequence[i] << " ";
+	if (ProcRank == 0) {
+		auto t2 = std::chrono::steady_clock::now();
+		auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+		// continue barrier
+		std::cout << "Time: " << dt << std::endl;
+
+		std::string filename = folder + GetOuputFilename(n, k, snr);
+		std::ofstream file(filename);
+
+		vector<int> sequence = bitsToSequence(n, leader);
+		for (size_t i = 0; i < sequence.size(); i++)
+		{
+			file << sequence[i] << " ";
+		}
 	}
+	
 
 }
