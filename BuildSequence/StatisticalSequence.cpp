@@ -258,7 +258,6 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 
 		frozenCombinations = GenerateTrialFrozenSets(n, leader, ProcRank, ProcNum);
 		
-
 		/*int rank = 0;
 		while (rank < ProcNum) {
 
@@ -295,8 +294,12 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 			p_best_struct.value = simulatorPtr->Run(snr).fer;
 			p_best_struct.index = ProcRank;
 			
+			cout << "Rank: " << ProcRank << " p_value: " << p_best_struct.value << std::endl;
 			
 			MPI_Allreduce(MPI_IN_PLACE, &p_best_struct, 1, MPI_DOUBLE_INT, MPI_MINLOC, MPI_COMM_WORLD);
+
+			cout << "Rank: " << ProcRank << " p_best: " << p_best << std::endl;
+			cout << "Rank: " << ProcRank << " p_value: " << p_best_struct.value << " p_index: " << p_best_struct.index << std::endl;
 
 			if (p_best_struct.value < p_best) {
 				
@@ -330,7 +333,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 		MPI_Barrier(MPI_COMM_WORLD);
 		if (ProcRank == 0) {
 			std::cout << "------- " << k_current << " ------" << std::endl;
-			std::cout << "P best: " << p_best_struct.value << std::endl;
+			std::cout << "P best: " << p_best << std::endl;
 			std::cout << "-------------------------------" << std::endl;
 
 			//SaveDump(dumpFilename, leader);

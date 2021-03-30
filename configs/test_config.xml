@@ -1,6 +1,6 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\128\seq_stat_32.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\512\seq_stat_32_check.results</ResultFile>
       <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\OracleStats\dummy.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">20000</Param>
@@ -14,12 +14,12 @@
         <!--<Snr>-1.0</Snr>-->
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">7</Param>
-        <Param name="k">64</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\Stat\128_64</Param>
-        <Param name="CRC24">100000000000000001100011</Param>
+        <Param name="m">9</Param>
+        <Param name="k">232</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\Stat\512</Param>
+        <Param name="CRC">100000000000000001100011</Param>
         <Param name="CRC12">100000001111</Param>
-        <Param name="CRC">00000111</Param>
+        <Param name="CRC1">00000111</Param>
         <Param name="CRC1">111</Param>
       </Code>
       <Decoder type="SCL">
