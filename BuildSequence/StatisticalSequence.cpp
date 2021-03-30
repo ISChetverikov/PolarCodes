@@ -36,7 +36,7 @@ vector<vector<int>> GenerateTrialFrozenSets(int n, vector<int> leader, int ProcR
 
 
 	vector<vector<int>> result;
-	for (size_t j = 0; j < remainedBits.size(); j+= 1)
+	for (size_t j = ProcRank; j < remainedBits.size(); j += ProcNum)
 	{
 		vector<int> copy = leader;
 		copy.push_back(remainedBits[j]);
@@ -223,12 +223,25 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 		std::cout << "SNR: " << snr << std::endl;
 
 		t1 = steady_clock::now();
-		//dumpFilename = folder + GetDumpFilename(k, n, snr);
+		std::string dumpFilename = folder + "leader.dump";//GetDumpFilename(k, n, snr);
 
 		//TryCreateDump(dumpFilename);
 		//TryLoadDump(dumpFilename, leader);
+		//std::reverse(leader.begin(), leader.end());
+		
 	}
-	MPI_Bcast(leader.data(), leader.size(), MPI_INT, 0, MPI_COMM_WORLD);
+	/*int leaderSize = leader.size();
+	MPI_Bcast(&leaderSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+	if (ProcRank != 0)
+		leader = vector<int>(leaderSize);
+	MPI_Bcast(leader.data(), leaderSize, MPI_INT, 0, MPI_COMM_WORLD);
+
+	for (size_t i = 0; i < leader.size(); i++)
+	{
+		cout << leader[i] << " ";
+	}
+	cout << std::endl;*/
 
 	size_t k_current = leader.size() + 1;
 	for (; k_current <= k; k_current++)
@@ -244,9 +257,30 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 		vector<vector<int>> frozenCombinations;
 
 		frozenCombinations = GenerateTrialFrozenSets(n, leader, ProcRank, ProcNum);
-		//MPI_Barrier(MPI_COMM_WORLD);
-		cout << "Rank: " << ProcRank << " size: " << frozenCombinations.size() << std::endl;
+		
 
+		/*int rank = 0;
+		while (rank < ProcNum) {
+
+			if (rank == ProcRank) {
+				cout << "Rank: " << ProcRank << std::endl;
+				for (size_t i = 0; i < frozenCombinations.size(); i++)
+				{
+					cout << "\t";
+					for (size_t j = 0; j < frozenCombinations[i].size(); j++)
+					{
+						cout << frozenCombinations[i][j] << " ";
+					}
+
+					cout << std::endl;
+				}
+
+			}
+			
+			rank++;
+			MPI_Barrier(MPI_COMM_WORLD);
+		}*/
+		
 		for (int j = (int)frozenCombinations.size() - 1; j >= 0 ; j--)
 		{
 
@@ -258,66 +292,42 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 
 			BaseSimulator * simulatorPtr = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, channelPtr, decoderPtr, 0);
 
-			// filler if size of condidates array is not devided by ProcNum
-			//if (j != ((int)frozenCombinations.size() - 1) || frozenCombinations[j].size() != 0) {
-				p_best_struct.value = simulatorPtr->Run(snr).fer;
-				p_best_struct.index = ProcRank;
-			//}
-			//else {
-				//cout << "Rank: " << ProcRank << ". There is null in\n";
-				//p_best_struct.value = 1.1;
-				//p_best_struct.index = -1;
-			//}
-			//std::cout << p << std::endl;
+			p_best_struct.value = simulatorPtr->Run(snr).fer;
+			p_best_struct.index = ProcRank;
+			
 			
 			MPI_Allreduce(MPI_IN_PLACE, &p_best_struct, 1, MPI_DOUBLE_INT, MPI_MINLOC, MPI_COMM_WORLD);
-			cout << "Rank: " << ProcRank << " P_best_value: " << p_best_struct.value << " p_best_index: " << p_best_struct.index << std::endl;
 
 			if (p_best_struct.value < p_best) {
-				//std::cout << "Rank: " << ProcRank << " leader index: " << p_best_struct.index << std::endl;
+				
 				leader = frozenCombinations[j];
 				int leaderSize = leader.size();
 				MPI_Bcast(&leaderSize, 1, MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
-				//std::cout << "Rank: " << ProcRank << " leadersize: " << leaderSize << std::endl;
 
-				//if (ProcRank != p_best_struct.index)
-					//leader = vector<int>(leaderSize);
-
-				cout << "Rank: " << ProcRank << " leader size: " << leader.size() << std::endl;
 				MPI_Bcast(leader.data(), leader.size(), MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
-				//p_best = p_best_struct.value;
+				p_best = p_best_struct.value;
+				MPI_Bcast(&p_best, 1, MPI_DOUBLE, p_best_struct.index, MPI_COMM_WORLD);
 			}
 			
 			if (p_best_struct.value == 0.0)
 				break_flag = 1;
 			
-			/*cout << "Rank: " << ProcRank << " leader: ";
-			for (size_t i = 0; i < leader.size(); i++)
-			{
-				cout << leader[i] << " ";
-			}
-			cout << std::endl*/;
 
 			MPI_Allreduce(MPI_IN_PLACE, &break_flag, 1, MPI_SHORT, MPI_LOR, MPI_COMM_WORLD);
 
 			
-
 			delete simulatorPtr;
 			delete channelPtr;
 			delete decoderPtr;
 			delete encoderPtr;
 			delete codePtr;
 
-			//MPI_Barrier(MPI_COMM_WORLD);
-
 			if (break_flag) {
-				std::cout << "Rank: " << ProcRank << " want to break free\n";
 				break;
 			}
-			//MPI_Barrier(MPI_COMM_WORLD);
 		}
 
-		//MPI_Barrier(MPI_COMM_WORLD);
+		MPI_Barrier(MPI_COMM_WORLD);
 		if (ProcRank == 0) {
 			std::cout << "------- " << k_current << " ------" << std::endl;
 			std::cout << "P best: " << p_best_struct.value << std::endl;
@@ -333,10 +343,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 		//std::cout << "Dump is succesfully cleared..." << std::endl;
 	//}
 	
-	//std::cout << "Waiting barrier: " << ProcRank << std::endl;
 	MPI_Barrier(MPI_COMM_WORLD);
-	//std::cout << "Waited barrier: " << ProcRank << std::endl;
-
 
 	if (ProcRank == 0) {
 		auto t2 = std::chrono::steady_clock::now();

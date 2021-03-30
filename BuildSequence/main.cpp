@@ -11,19 +11,15 @@ int main(int argc, char * argv[]) {
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
 	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
-
-	cout << "Start sleep...\n" << std::flush;
-	//std::this_thread::sleep_for(std::chrono::milliseconds(20000));
-	cout << "End sleep...\n";
-
-	int maxTestsCount = 1000;
-	int maxRejectionsCount = 10;
+	
+	int maxTestsCount = 50000;
+	int maxRejectionsCount = 200;
 	
 	//auto folder = "C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\Stat\\OpenMPI\\";
 	string folder = "";
 	double snr = 0.0;
-	int m = 5;
-	int k = 16;
+	int m = 0;
+	int k = 0;
 	//double snr = PickUpSnr(m, k);
 
 	int isChecked = 1;
@@ -41,7 +37,6 @@ int main(int argc, char * argv[]) {
 		}
 	}
 	MPI_Bcast(&isChecked, 1, MPI_INT, 0, MPI_COMM_WORLD);
-	//cout << "Rank: " << ProcRank << " isChecked: " << isChecked << std::endl;
 	if (isChecked == 0) {
 		MPI_Finalize();
 		return 1;
