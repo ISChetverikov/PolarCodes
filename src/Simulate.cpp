@@ -251,7 +251,7 @@ BaseSimulator * BuildSimulator(
 		if (channelStr == "BPSK-AWGN")
 			channelPtr = new BpskAwgnChannel();
 		else if (channelStr == "BPSK-BSC")
-			channelPtr = new BpskBscChannel((double)codePtr->k() / codePtr->N());
+			channelPtr = new BpskBscChannel();
 		//else if (channelStr == "BPSK-BSC")
 			//channelPtr = new QpskBscChannel();
 		else

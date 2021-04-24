@@ -3,11 +3,10 @@
 #include "../include/BpskBscChannel.h"
 #include "../include/CommonTransformations.h"
 
-BpskBscChannel::BpskBscChannel(double coderate) : BaseChannel() {
+BpskBscChannel::BpskBscChannel() : BaseChannel() {
 	std::bernoulli_distribution bernoulli_dist(0.5);
 	_bernoulli_dist = bernoulli_dist;
 	
-	_coderate = coderate;
 	_fixedLlr = 1.0;
 }
 
@@ -17,6 +16,8 @@ void BpskBscChannel::SetSnr(double snr) {
 
 	//double p = ebnoToPErr(snrToEbN0(_snr, _coderate));
 	double p = ebnoToPErr(snrToSigma(snr));
+
+	std::cout << p << std::endl;
 
 	_fixedLlr = log((1 - p) / p);
 	std::bernoulli_distribution b(p);
@@ -50,7 +51,7 @@ std::vector<double> BpskBscChannel::Pass(std::vector<int> codeword) {
 
 	for (size_t i = 0; i < n; i++)
 	{
-		output[i] = LlrToP12(output[i]);
+		output[i] = LlrToP1(output[i]);
 	}
 
 #endif // DOMAIN_P1

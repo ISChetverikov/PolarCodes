@@ -30,6 +30,8 @@ public:
 	// Build code from k indeices of usedBits
 	PolarCode(int m, std::vector<int> usedBits);
 
+	void InitWithNewSequence(int m, std::vector<int> usedBits);
+
 	size_t m();
 	size_t N();
 	size_t k();

@@ -1,10 +1,25 @@
 #include "../include/GaussianApproximation.h"
+#include "../include/Exceptions.h"
 
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
+
+using std::vector;
+
+void SaveDumpGA(std::string filename, vector<int> leader) {
+	std::ofstream file(filename, std::ios::trunc);
+
+	if (!file.is_open())
+		throw FileIsNotOpennedException("Could not open for writing dump file: " + filename);
+
+	for (size_t i = 0; i < leader.size(); i++)
+	{
+		file << leader[i] << " ";
+	}
+}
 
 std::vector<int> ReadSequenceFromFile1(std::string path) {
 	std::vector<int> seq;
@@ -58,17 +73,18 @@ std::vector<int> SortProb1(std::vector<double> p) {
 }
 
 // test correctness of GA
-int main2(int argc, char* argv[]) {
+int main12(int argc, char* argv[]) {
 
-	int n = 16;
+	int n = 128;
 	GaussianApproximation ga(1);
 	
-	std::vector<int> seq = ReadSequenceFromFile1("C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\16.txt");
+	//std::vector<int> seq = ReadSequenceFromFile1("C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\16.txt");
 	std::vector<double> p(n, 0);
 	for (size_t i = 0; i < n; i++)
 	{
 		p[i] = ga.GetChannelErrorProbability(i + 1, n);
 	}
 	std::vector<int> seq0 = SortProb1(p);
+	SaveDumpGA("GaSeq.dump", seq0);
 	return 0;
 }

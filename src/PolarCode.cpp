@@ -70,6 +70,27 @@ PolarCode::PolarCode(int m, std::vector<int> usedBits) {
 	_unfrozenBitsWithCrc = _unfrozenBits;
 }
 
+// CRC is not supported yet
+void PolarCode::InitWithNewSequence(int m, std::vector<int> usedBits) {
+	_crcPoly = {};
+	_crcDeg = 0;
+
+	_m = m;
+	_k_extended = _k = usedBits.size();
+	_N = 1 << _m;
+
+	_bitsMask = std::vector<int>(_N, 0);
+	for (size_t i = 0; i < _k; i++)
+		_bitsMask[usedBits[i]] = 1;
+
+	_unfrozenPolarSequence = usedBits;
+	_unfrozenBits = _unfrozenPolarSequence;
+	sort(_unfrozenBits.begin(), _unfrozenBits.end());
+
+	_unfrozenPolarSequenceWithCrc = _unfrozenPolarSequence;
+	_unfrozenBitsWithCrc = _unfrozenBits;
+}
+
 size_t PolarCode::m() {
 	return _m;
 }

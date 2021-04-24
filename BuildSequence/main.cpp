@@ -12,8 +12,8 @@ int main(int argc, char * argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
 	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	
-	int maxTestsCount = 50000;
-	int maxRejectionsCount = 200;
+	int maxTestsCount = 10000;
+	int maxRejectionsCount = 50;
 	
 	//auto folder = "C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\Stat\\OpenMPI\\";
 	string folder = "";

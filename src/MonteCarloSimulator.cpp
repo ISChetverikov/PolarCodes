@@ -51,8 +51,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	std::vector<int> codeword(n, 0);
 	std::vector<double> channelOuput(n, 0);
 	std::vector<int> decoded(n, 0);
-	std::vector<int> parallelDecoded(n, 0);
-
+	
 	auto t1 = std::chrono::steady_clock::now();
 
 	double sigma = GetSigma(snr, (double)k / n);
@@ -65,6 +64,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 
 #ifdef PARALLEL_DECODER
 	// HERE parallel decoder
+	//std::vector<int> parallelDecoded(n, 0);
 	size_t m = _codePtr->m();
 	PolarCode * parallelCodePtr = new PolarCode(m, k, { 0, 1, 2, 4, 8, 3, 5, 9, 6, 10, 12, 7, 11, 13, 14, 15 }, { 1,1,1 });
 	ScListDecoder parallelDecoder(parallelCodePtr, 8);
@@ -103,8 +103,8 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		///////////
 #endif //PARALLEL_DECODER
 
-		//if (tests % 1000 == 0)
-			//std::cout << tests << std::endl;
+		if (tests % 1000 == 0)
+			std::cout << tests << std::endl;
 		
 		if (decoded != word) {
 			wrong_dec += 1;

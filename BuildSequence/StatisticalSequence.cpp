@@ -114,7 +114,7 @@ double PickUpSnr(int m, int k) {
 	}
 
 	// Normal CDF dihotomy relative to sigma
-	double sigma_right = 2.0;
+	double sigma_right = 100.0;
 	double sigma_left = 0.1;
 	double sigma = 1.0;
 	double cdf_zero = NormalCdfOfZero(sigma);
@@ -130,7 +130,8 @@ double PickUpSnr(int m, int k) {
 			sigma_left = sigma;
 	}
 
-	double snr = -10 * log10(2 * sigma *sigma);
+	//double snr = pow(2, 2 * capacity) - 1 - 10 * log10(R);
+	double snr = -10 * log10(2 * sigma *sigma) - 10 * log10(R);
 
 	return snr;
 }
@@ -209,7 +210,7 @@ std::string GetOuputFilename(int n, int k, double snr) {
 }
 
 // Only the root process writes into the files of the folder
-void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCount, int maxRejectionsCount, double snr,
+void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCount, int maxRejectionsCount, double _snr,
 	int ProcRank, int ProcNum) {
 
 	size_t n = 1 << m;
@@ -217,41 +218,45 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 	vector<int> leader = {};
 
 	time_point<steady_clock> t1;
-	//std::string dumpFilename;
+	std::string dumpFilename;
 	if (ProcRank == 0) {
 
-		std::cout << "SNR: " << snr << std::endl;
+		std::cout << "SNR is omitted: " << _snr << std::endl;
 
 		t1 = steady_clock::now();
-		std::string dumpFilename = folder + "leader.dump";//GetDumpFilename(k, n, snr);
+		dumpFilename = folder + "leader.dump";//GetDumpFilename(k, n, snr);
 
-		//TryCreateDump(dumpFilename);
-		//TryLoadDump(dumpFilename, leader);
+		TryCreateDump(dumpFilename);
+		TryLoadDump(dumpFilename, leader);
 		//std::reverse(leader.begin(), leader.end());
 		
 	}
-	/*int leaderSize = leader.size();
+	int leaderSize = leader.size();
 	MPI_Bcast(&leaderSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 	if (ProcRank != 0)
 		leader = vector<int>(leaderSize);
 	MPI_Bcast(leader.data(), leaderSize, MPI_INT, 0, MPI_COMM_WORLD);
-
+	/*
 	for (size_t i = 0; i < leader.size(); i++)
 	{
 		cout << leader[i] << " ";
 	}
 	cout << std::endl;*/
 
+	// Init objects
+
 	size_t k_current = leader.size() + 1;
 	for (; k_current <= k; k_current++)
 	{
+		double snr = PickUpSnr(m, k_current);
 		struct {
 			double value;
 			int   index;
 		} p_best_struct;
 
 		double p_best = 1.1;
+		double p = 1.1;
 
 		short break_flag = 0;
 		vector<vector<int>> frozenCombinations;
@@ -287,38 +292,37 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 
 			Encoder * encoderPtr = new Encoder(codePtr);
 			BaseDecoder * decoderPtr = new ScDecoder(codePtr);
-			BaseChannel * channelPtr = new BpskBscChannel(double(k_current) / n);
+			BaseChannel * channelPtr = new BpskBscChannel();
 
 			BaseSimulator * simulatorPtr = new MonteCarloSimulator(maxTestsCount, maxRejectionsCount, codePtr, encoderPtr, channelPtr, decoderPtr, 0);
 
-			p_best_struct.value = simulatorPtr->Run(snr).fer;
-			p_best_struct.index = ProcRank;
+			p = simulatorPtr->Run(snr).fer;
+			//p_best_struct.index = ProcRank;
 			
-			cout << "Rank: " << ProcRank << " p_value: " << p_best_struct.value << std::endl;
+			//cout << "Rank: " << ProcRank << " p_value: " << p_best_struct.value << std::endl;
 			
-			MPI_Allreduce(MPI_IN_PLACE, &p_best_struct, 1, MPI_DOUBLE_INT, MPI_MINLOC, MPI_COMM_WORLD);
+			//MPI_Allreduce(MPI_IN_PLACE, &p_best_struct, 1, MPI_DOUBLE_INT, MPI_MINLOC, MPI_COMM_WORLD);
 
-			cout << "Rank: " << ProcRank << " p_best: " << p_best << std::endl;
-			cout << "Rank: " << ProcRank << " p_value: " << p_best_struct.value << " p_index: " << p_best_struct.index << std::endl;
+			//cout << "Rank: " << ProcRank << " p_best: " << p_best << std::endl;
+			//cout << "Rank: " << ProcRank << " p_value: " << p_best_struct.value << " p_index: " << p_best_struct.index << std::endl;
 
-			if (p_best_struct.value < p_best) {
+			if (p < p_best) {
 				
 				leader = frozenCombinations[j];
-				int leaderSize = leader.size();
-				MPI_Bcast(&leaderSize, 1, MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
+				p_best = p;
 
-				MPI_Bcast(leader.data(), leader.size(), MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
-				p_best = p_best_struct.value;
-				MPI_Bcast(&p_best, 1, MPI_DOUBLE, p_best_struct.index, MPI_COMM_WORLD);
+				//int leaderSize = leader.size();
+				//MPI_Bcast(&leaderSize, 1, MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
+
+				//MPI_Bcast(leader.data(), leader.size(), MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
+				//p_best = p_best_struct.value;
+				//MPI_Bcast(&p_best, 1, MPI_DOUBLE, p_best_struct.index, MPI_COMM_WORLD);
+				if (p_best == 0.0)
+					break_flag = 1;
 			}
 			
-			if (p_best_struct.value == 0.0)
-				break_flag = 1;
-			
-
 			MPI_Allreduce(MPI_IN_PLACE, &break_flag, 1, MPI_SHORT, MPI_LOR, MPI_COMM_WORLD);
 
-			
 			delete simulatorPtr;
 			delete channelPtr;
 			delete decoderPtr;
@@ -330,13 +334,22 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 			}
 		}
 
-		MPI_Barrier(MPI_COMM_WORLD);
+		p_best_struct.value = p_best;
+		p_best_struct.index = ProcRank;
+
+		//cout << "Rank: " << ProcRank << " leaderSize: " << leader.size() << std::endl;
+
+		MPI_Allreduce(MPI_IN_PLACE, &p_best_struct, 1, MPI_DOUBLE_INT, MPI_MINLOC, MPI_COMM_WORLD);
+		MPI_Bcast(leader.data(), leader.size(), MPI_INT, p_best_struct.index, MPI_COMM_WORLD);
+
+		//MPI_Barrier(MPI_COMM_WORLD);
 		if (ProcRank == 0) {
 			std::cout << "------- " << k_current << " ------" << std::endl;
+			std::cout << "SNR: " << snr << std::endl;
 			std::cout << "P best: " << p_best << std::endl;
 			std::cout << "-------------------------------" << std::endl;
 
-			//SaveDump(dumpFilename, leader);
+			SaveDump(dumpFilename, leader);
 		}
 
 	}
@@ -354,7 +367,7 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 		// continue barrier
 		std::cout << "Time: " << dt << std::endl;
 
-		std::string filename = folder + GetOuputFilename(n, k, snr);
+		std::string filename = folder + GetOuputFilename(n, k, _snr);
 		std::ofstream file(filename);
 
 		vector<int> sequence = bitsToSequence(n, leader);

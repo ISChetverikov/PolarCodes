@@ -12,7 +12,7 @@ protected:
 	double _fixedLlr;
 
 public:
-	BpskBscChannel(double coderate);
+	BpskBscChannel();
 	~BpskBscChannel() {};
 	std::vector<double> Pass(std::vector<int> codeword) override;
 	void SetSnr(double snr) override;
