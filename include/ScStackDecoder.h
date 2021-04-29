@@ -1,0 +1,27 @@
+#pragma once
+
+#include "ScCrcAidedDecoder.h"
+
+class ScStackDecoder : public ScCrcAidedDecoder {
+protected:
+	int _L;
+	int _D;
+
+	std::vector<std::vector<std::vector<double>>> _beliefTrees;
+	std::vector<std::vector<std::vector<int>>> _uhatTrees;
+	std::vector<std::vector<int>> _candidates;
+	std::vector<std::pair<double, int>> _metrics; // metric and index of structures
+	std::vector<int> _current_bits;
+	std::vector<int> _paths_limits;
+
+	void PassDownAll(size_t iter);
+	void PassUpAll(size_t iter);
+	void PassDownStackLeader(size_t iter);
+	void PassUpStackSelectevely(size_t iter, std::vector<int> elements);
+	double StepMetric(double belief, int decision);
+
+public:
+	ScStackDecoder(PolarCode * code, int L, int D);
+	std::vector<int> Decode(std::vector<double> belief) override;
+	~ScStackDecoder() {};
+};

@@ -1,28 +1,28 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\128\fano_prop.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\128\for_Max.results</ResultFile>
       <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\OracleStats\dummy.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">5000</Param>
         <Param name="maxRejectionsCount">100</Param>
         <Param name="isSigmaDependOnR">0</Param>
-        <Param name="channel1">BPSK-AWGN</Param>
-        <Param name="channel">BPSK-BSC</Param>
+        <Param name="channel">BPSK-AWGN</Param>
+        <Param name="channel1">BPSK-BSC</Param>
       </Simulator>
-      <SnrRange start="0.0" stop="4.1" step="0.5"></SnrRange>
+      <SnrRange start="-1.0" stop="1.1" step="0.5"></SnrRange>
       <SnrArray>
         <!--<Snr>-1.0</Snr>-->
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">7</Param>
-        <Param name="k">64</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\128.txt</Param>
+        <Param name="m">5</Param>
+        <Param name="k">16</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\32.txt</Param>
         <Param name="CRC24">100000000000000001100011</Param>
         <Param name="CRC12">100000001111</Param>
-        <Param name="CRC">00000111</Param>
+        <Param name="CRC1">00000111</Param>
         <Param name="CRC1">111</Param>
       </Code>
-      <Decoder type="SCL">
+      <Decoder type="SCS">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>
@@ -38,7 +38,11 @@
         <Param name="T-">200</Param>
         
         <!--SC List decoder params-->
+        <Param name="L-">4</Param>
+
+        <!--SC Stack decoder params-->
         <Param name="L">4</Param>
+        <Param name="D">4</Param>
 
         <!--SC Flip Stat decoder-->
         <Param name="Omega-">10</Param>

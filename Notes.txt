@@ -1,0 +1,2 @@
+1) Parameters L and D of LIST and STACK decoders works only with powers of 2. reason is integer log of them is calculated.
+2) 

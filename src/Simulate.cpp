@@ -20,6 +20,7 @@
 #include "../include/ScListFlipStatDecoder.h"
 #include "../include/ScListFlipOracleStatDecoder.h"
 #include "../include/ScListDecoder.h"
+#include "../include/ScStackDecoder.h"
 #include "../include/ScFlipProgDecoder.h"
 #include "../include/BaseSimulator.h"
 #include "../include/ConfigReading.h"
@@ -140,10 +141,7 @@ PolarCode * BuildCode(std::unordered_map<std::string, std::string> codeParams) {
 	std::string sequenceFilePath = ExtractString(codeParams, "sequenceFile", "PolarCode", false);
 	std::vector<int> reliabilitySequence;
 
-	//if (sequenceFilePath == "")
-		//reliabilitySequence = BuiltSequenceStatistically(m, k);
-	//else
-		reliabilitySequence = ReadSequenceFromFile(sequenceFilePath);
+	reliabilitySequence = ReadSequenceFromFile(sequenceFilePath);
 
 	codePtr = new PolarCode(m, k, reliabilitySequence, crcPoly);
 	return codePtr;
@@ -199,6 +197,12 @@ BaseDecoder * BuildDecoder(
 	case decoderType::SCList: {
 		int L = ExtractInt(decoderParams, "L", "SCList decoder");
 		decoderPtr = new ScListDecoder(codePtr, L);
+	}
+	break;
+	case decoderType::SCStack: {
+		int L = ExtractInt(decoderParams, "L", "SCStack decoder");
+		int D = ExtractInt(decoderParams, "D", "SCStack decoder");
+		decoderPtr = new ScStackDecoder(codePtr, L, D);
 	}
 	break;
 	case decoderType::SCFlipProg: {
