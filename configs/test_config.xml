@@ -1,10 +1,10 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\128\for_Max.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\128\SCS1024_for_stack.results</ResultFile>
       <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\OracleStats\dummy.stat</AdditionalFile>
       <Simulator type="MC">
-        <Param name="maxTestsCount">5000</Param>
-        <Param name="maxRejectionsCount">100</Param>
+        <Param name="maxTestsCount">50000</Param>
+        <Param name="maxRejectionsCount">1000</Param>
         <Param name="isSigmaDependOnR">0</Param>
         <Param name="channel">BPSK-AWGN</Param>
         <Param name="channel1">BPSK-BSC</Param>
@@ -14,9 +14,9 @@
         <!--<Snr>-1.0</Snr>-->
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">5</Param>
-        <Param name="k">16</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\32.txt</Param>
+        <Param name="m">3</Param>
+        <Param name="k">7</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt</Param>
         <Param name="CRC24">100000000000000001100011</Param>
         <Param name="CRC12">100000001111</Param>
         <Param name="CRC1">00000111</Param>
@@ -41,7 +41,7 @@
         <Param name="L-">4</Param>
 
         <!--SC Stack decoder params-->
-        <Param name="L">4</Param>
+        <Param name="L">2</Param>
         <Param name="D">4</Param>
 
         <!--SC Flip Stat decoder-->

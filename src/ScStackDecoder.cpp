@@ -11,6 +11,7 @@
 
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
+#define MIN_METRIC -100000.0
 
 using std::pair;
 using std::vector;
@@ -48,7 +49,7 @@ ScStackDecoder::ScStackDecoder(PolarCode * codePtr, int L, int D) : ScCrcAidedDe
 
 	_metrics = std::vector<pair<double, int>>(0);
 	_current_bits = std::vector<int>(_D, 0);
-	_paths_limits = std::vector<int>(_D, 0);
+	_paths_limits = std::vector<int>(n, 0);
 	
 }
 
@@ -239,17 +240,30 @@ void ScStackDecoder::PassUpStackSelectevely(size_t iter, vector<int> elements) {
 	}
 }
 
+void ScStackDecoder::EliminatePaths(size_t iter) {
+	for (size_t i = 0; i < _D; i++)
+	{
+		int j = _metrics[i].second;
+		if (_current_bits[j] < iter)
+			_metrics[i].first = MIN_METRIC;
+	}
+
+	std::sort(_metrics.rbegin(), _metrics.rend());
+}
+
 
 vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 	size_t n = inLlr.size();
 	size_t m = _codePtr->m();
 
+	_metrics.clear();
 	// Fill each tree in the forrest with input llrs
 	for (size_t j = 0; j < _D; j++) {
 		for (size_t i = 0; i < n; i++)
 			_beliefTrees[j][0][i] = inLlr[i];
 
 		_metrics.push_back(std::make_pair(0.0, j));
+		_current_bits[j] = 0;
 	}
 
 	int logD = (int)FirstBitPos(_D) - 1;
@@ -283,6 +297,10 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 		PassUpAll(i_all);
 
 		i_all++;
+	}
+	for (size_t i = 0; i < logD; i++)
+	{
+		_paths_limits[i] = _L;
 	}
 	std::sort(_metrics.rbegin(), _metrics.rend());
 	while (_current_bits[_metrics[0].second] < n)
@@ -321,6 +339,8 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 			_candidates[leaderIndex][i_all] = highBit;
 			_uhatTrees[leaderIndex][m][i_all] = highBit;
 			_current_bits[leaderIndex]++;
+			_paths_limits[i_all]++;
+		
 			_metrics[0].first = highMetric;
 
 			newElements.push_back(leaderIndex);
@@ -334,6 +354,8 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 				_candidates[lastIndex][i_all] = lowBit;
 				_uhatTrees[lastIndex][m][i_all] = lowBit;
 				_metrics.back().first = lowMetric;
+				_paths_limits[i_all]++;
+				
 
 				newElements.push_back(lastIndex);
 
@@ -347,10 +369,14 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 
 			// sorting routine for high bit
 			int i = 0;
-			while (_metrics[i + 1].first > highMetric)
+			while ((i < _D - 1) && (_metrics[i + 1].first > highMetric)) // constraint on length
 				i++;
+				
 			_metrics.insert(_metrics.begin() + i, _metrics[0]);
 			_metrics.erase(_metrics.begin());
+
+			if (_paths_limits[i_all] >= _L)
+				EliminatePaths(i_all);
 		}
 		else {
 			_candidates[leaderIndex][i_all] = FROZEN_VALUE;
