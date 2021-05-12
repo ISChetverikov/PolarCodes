@@ -14,6 +14,9 @@ protected:
 	std::vector<int> _codeword;
 
 	std::string _path;
+	int _operationsCount;
+	int _normilizedComplexity;
+	int _normalizer;
 
 	double f(double p1, double p2);
 	double g(double p1, double p2, int b);
@@ -21,6 +24,9 @@ protected:
 
 public:
 	BaseDecoder(PolarCode * codePtr);
+
+	double GetOperationsCount();
+	void ClearOperationsCount();
 
 	virtual domain GetDomain();
 	virtual void SetSigma(double sigma);

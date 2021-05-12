@@ -1,3 +1,5 @@
 1) Parameters L and D of LIST and STACK decoders works only with powers of 2. reason is integer log of them is calculated.
 2) SCS decoder works only with P1 domain
 3) D > L, log D < n
+4) OPerations count for LLR and MINSUM
+5) define for operations counting`

@@ -244,7 +244,7 @@ void ScStackDecoder::EliminatePaths(size_t iter) {
 	for (size_t i = 0; i < _D; i++)
 	{
 		int j = _metrics[i].second;
-		if (_current_bits[j] < iter)
+		if (_current_bits[j] <= iter)
 			_metrics[i].first = MIN_METRIC;
 	}
 
@@ -264,6 +264,11 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 
 		_metrics.push_back(std::make_pair(0.0, j));
 		_current_bits[j] = 0;
+	}
+
+	for (size_t i = 0; i < n; i++)
+	{
+		_paths_limits[i] = 0;
 	}
 
 	int logD = (int)FirstBitPos(_D) - 1;
@@ -291,6 +296,7 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 				_uhatTrees[j][m][i_all] = FROZEN_VALUE;
 				_candidates[j][i_all] = FROZEN_VALUE;
 				_current_bits[j] ++;
+				_metrics[j].first += StepMetric(_beliefTrees[j][m][i_all], FROZEN_VALUE);
 			}
 		}
 
@@ -298,14 +304,22 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 
 		i_all++;
 	}
-	for (size_t i = 0; i < logD; i++)
+	for (size_t i = 0; i < i_all - 1; i++)
 	{
 		_paths_limits[i] = _L;
 	}
 	std::sort(_metrics.rbegin(), _metrics.rend());
-	while (_current_bits[_metrics[0].second] < n)
+	bool isExited = false;
+	while (!isExited)
 	{
+		if (_metrics[0].first == MIN_METRIC)
+			break;
+
 		i_all = _current_bits[_metrics[0].second];
+		_paths_limits[i_all-1]++;
+		if (_paths_limits[i_all-1] >= _L)
+			EliminatePaths(i_all-1);
+
 		PassDownStackLeader(i_all);
 		std::vector<int> newElements(0);
 
@@ -339,7 +353,7 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 			_candidates[leaderIndex][i_all] = highBit;
 			_uhatTrees[leaderIndex][m][i_all] = highBit;
 			_current_bits[leaderIndex]++;
-			_paths_limits[i_all]++;
+			//_paths_limits[i_all]++;
 		
 			_metrics[0].first = highMetric;
 
@@ -354,38 +368,46 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 				_candidates[lastIndex][i_all] = lowBit;
 				_uhatTrees[lastIndex][m][i_all] = lowBit;
 				_metrics.back().first = lowMetric;
-				_paths_limits[i_all]++;
+				//_paths_limits[i_all]++;
 				
 
 				newElements.push_back(lastIndex);
 
 				// sorting routine for low bit
-				int i = _metrics.size() - 1;
+				/*int i = _metrics.size() - 1;
 				while (_metrics[i - 1].first < lowMetric)
 					i--;
 				_metrics.insert(_metrics.begin() + i, _metrics.back());
-				_metrics.pop_back();
+				_metrics.pop_back();*/
 			}
 
 			// sorting routine for high bit
-			int i = 0;
+			/*int i = 0;
 			while ((i < _D - 1) && (_metrics[i + 1].first > highMetric)) // constraint on length
 				i++;
 				
-			_metrics.insert(_metrics.begin() + i, _metrics[0]);
-			_metrics.erase(_metrics.begin());
-
-			if (_paths_limits[i_all] >= _L)
-				EliminatePaths(i_all);
+			_metrics.insert(_metrics.begin() + i + 1, _metrics[0]);
+			_metrics.erase(_metrics.begin());*/
 		}
 		else {
 			_candidates[leaderIndex][i_all] = FROZEN_VALUE;
 			_uhatTrees[leaderIndex][m][i_all] = FROZEN_VALUE;
 			newElements.push_back(leaderIndex); // leader remained
 			_current_bits[leaderIndex]++;
+			_metrics[0].first += StepMetric(_beliefTrees[leaderIndex][m][i_all], FROZEN_VALUE);
 		}
-
+		std::sort(_metrics.rbegin(), _metrics.rend());
 		PassUpStackSelectevely(i_all, newElements);
+
+		if (i_all == (n - 1)) {
+			if (IsCrcPassed(_candidates[_metrics[0].second]) || _paths_limits[i_all] >= _L)
+				isExited = true;
+			else if (_paths_limits[i_all] < _L) {
+				_paths_limits[i_all]++;
+				_metrics[0].first = MIN_METRIC;
+				std::sort(_metrics.rbegin(), _metrics.rend());
+			}
+		}
 	}
 
 	std::vector<int> result(_codePtr->k(), 0);

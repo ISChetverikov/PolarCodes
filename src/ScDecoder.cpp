@@ -44,6 +44,7 @@ ScDecoder::ScDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 
 	// optimization allocation
 	_binaryIter = std::vector<int>(m, 0);
+
 }
 
 ScDecoder::~ScDecoder() {
@@ -79,6 +80,10 @@ size_t ScDecoder::FirstBitPos(size_t n) {
 	{
 		n = n >> 1;
 		m++;
+
+		// operations count
+		_operationsCount += 2;
+		///////////////////
 	}
 
 	return m;
@@ -93,6 +98,10 @@ void ScDecoder::PassDown(size_t iter) {
 	if (iter) {
 		iterXor = iter ^ (iter - 1);
 		level = m - FirstBitPos(iterXor);
+
+		// operations count
+		_operationsCount += 3;
+		///////////////////
 	}
 	else {
 		level = 0;
@@ -100,11 +109,19 @@ void ScDecoder::PassDown(size_t iter) {
 
 	//std::vector<int> binaryIter(m - level, 0);
 	int size = (int)(m - level);
+
+	// operations count
+	_operationsCount++;
+	///////////////////
 	size_t iterCopy = iter;
 	for (int i = size - 1; i >= 0; i--)
 	{
 		_binaryIter[i] = iterCopy % 2;
 		iterCopy = iterCopy >> 1;
+
+		// operations count
+		_operationsCount += 2;
+		///////////////////
 	}
 
 	size_t length = (size_t)1 << (m - level - 1);
@@ -129,6 +146,10 @@ void ScDecoder::PassDown(size_t iter) {
 		}
 
 		length = length / 2;
+
+		// operations count
+		_operationsCount += 4;
+		///////////////////
 	}
 }
 
@@ -156,6 +177,10 @@ void ScDecoder::PassUp(size_t iter) {
 		bit = iterCopy % 2;
 		length *= 2;
 		level -= 1;
+
+		// operations count
+		_operationsCount += 8;
+		///////////////////
 	}
 }
 
@@ -197,6 +222,8 @@ std::vector<int> ScDecoder::TakeResult() {
 std::vector<int> ScDecoder::Decode(std::vector<double> inLlr) {
 	
 	DecodeInternal(inLlr);
+
+	_normalizer++;
 
 	return TakeResult();
 }

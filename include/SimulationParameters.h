@@ -77,17 +77,18 @@ struct SimulationIterationResults {
 
 	int rejectionsCount;
 	int testsCount;
+	int operationsCount;
 	std::chrono::milliseconds elapsedTime;
 
 	static std::string GetHeader() {
-		return "SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)";
+		return "SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms), operationsCount";
 	}
 
 	std::string ToString() {
 		std::stringstream ss;
 		
 		ss << snr << ", " << ebn0 << ", " << sigma << ", " << fer << ", " << rejectionsCount
-			<< ", " << testsCount << ", " << elapsedTime.count();
+			<< ", " << testsCount << ", " << elapsedTime.count() << ", " << operationsCount;
 		
 		return ss.str();
 	}

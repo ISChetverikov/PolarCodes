@@ -1,6 +1,6 @@
 <Config>
     <Simulation>
-      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\128\SCS1024_for_stack.results</ResultFile>
+      <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\128\trash.results</ResultFile>
       <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\OracleStats\dummy.stat</AdditionalFile>
       <Simulator type="MC">
         <Param name="maxTestsCount">50000</Param>
@@ -14,15 +14,15 @@
         <!--<Snr>-1.0</Snr>-->
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">3</Param>
-        <Param name="k">7</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt</Param>
+        <Param name="m">7</Param>
+        <Param name="k">64</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\128.txt</Param>
         <Param name="CRC24">100000000000000001100011</Param>
         <Param name="CRC12">100000001111</Param>
-        <Param name="CRC1">00000111</Param>
+        <Param name="CRC">00000111</Param>
         <Param name="CRC1">111</Param>
       </Code>
-      <Decoder type="SCS">
+      <Decoder type="SC">
     
         <!--SC Flip Progressive decoder params-->
         <Param name="gammaLeft">4</Param>
@@ -41,8 +41,8 @@
         <Param name="L-">4</Param>
 
         <!--SC Stack decoder params-->
-        <Param name="L">2</Param>
-        <Param name="D">4</Param>
+        <Param name="L">4</Param>
+        <Param name="D">512</Param>
 
         <!--SC Flip Stat decoder-->
         <Param name="Omega-">10</Param>

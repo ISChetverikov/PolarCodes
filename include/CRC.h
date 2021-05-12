@@ -10,9 +10,13 @@ private:
 	size_t _deg = 0;
 	int _paddingSymbol = 0;
 
+	int _operationsCount = 0;
+
 public:
 
 	CRC(std::vector<int> poly);
 	std::vector<int> Calculate(std::vector<int> bits);
 
+	int GetLastOperationsCount();
+	void ClearOperationsCount();
 };
