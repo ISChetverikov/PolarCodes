@@ -77,7 +77,7 @@ struct SimulationIterationResults {
 
 	int rejectionsCount;
 	int testsCount;
-	int operationsCount;
+	double operationsCount;
 	std::chrono::milliseconds elapsedTime;
 
 	static std::string GetHeader() {

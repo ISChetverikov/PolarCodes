@@ -146,7 +146,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 
 	//std::cout << "BER: " << (double)wrong_bits / n / tests << std::endl;
 
-	int operationsCount = _decoderPtr->GetOperationsCount();
+	double operationsCount = _decoderPtr->GetOperationsCount();
 
 	auto t2 = std::chrono::steady_clock::now();
 

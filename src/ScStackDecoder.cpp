@@ -57,6 +57,10 @@ double ScStackDecoder::StepMetric(double belief, int decision) {
 #ifdef DOMAIN_LLR
 
 #ifdef MINSUM
+	// operations count
+	_operationsCount += 8;
+	///////////////////
+
 	return (belief < 0 && decision == 0 || belief > 0 && decision == 1) ? -fabs(belief) : 0;
 #else
 	const double limit = 10000000.0;
@@ -67,6 +71,10 @@ double ScStackDecoder::StepMetric(double belief, int decision) {
 	if (belief > limit)
 		belief = limit;
 
+	// operations count
+	_operationsCount += 5;
+	///////////////////
+
 	double p0_methric = -log(1 + exp(-belief));
 	double p1_methric = -log(1 + exp(belief));
 	return (decision) ? p1_methric : p0_methric;
@@ -74,6 +82,10 @@ double ScStackDecoder::StepMetric(double belief, int decision) {
 #endif // MINSUM
 
 #elif DOMAIN_P1
+	// operations count
+	_operationsCount += 2;
+	///////////////////
+
 	return log((decision) ? belief : 1 - belief);
 #endif // DOMAIN
 }
@@ -87,6 +99,10 @@ void ScStackDecoder::PassDownAll(size_t iter) {
 	if (iter) {
 		iterXor = iter ^ (iter - 1);
 		level = m - FirstBitPos(iterXor);
+
+		// operations count
+		_operationsCount += 4;
+		///////////////////
 	}
 	else {
 		level = 0;
@@ -99,7 +115,15 @@ void ScStackDecoder::PassDownAll(size_t iter) {
 	{
 		_binaryIter[i] = iterCopy % 2;
 		iterCopy = iterCopy >> 1;
+
+		// operations count
+		_operationsCount += 4;
+		///////////////////
 	}
+
+	// operations count
+	_operationsCount += 4;
+	///////////////////
 
 	size_t length = (size_t)1 << (m - level - 1);
 	for (size_t i = level; i < m; i++)
@@ -114,6 +138,8 @@ void ScStackDecoder::PassDownAll(size_t iter) {
 					_beliefTrees[j][i].begin() + offset + length,
 					_beliefTrees[j][i + 1].begin() + offset,
 					length);
+
+				
 			}
 			else {
 
@@ -122,11 +148,19 @@ void ScStackDecoder::PassDownAll(size_t iter) {
 					_uhatTrees[j][i + 1].begin() + offset,
 					_beliefTrees[j][i + 1].begin() + offset + length,
 					length);
+
 			}
 
+			// operations count
+			_operationsCount += 3;
+			///////////////////
 		}
 
 		length = length / 2;
+
+		// operations count
+		_operationsCount += 6;
+		///////////////////
 	}
 }
 
@@ -139,6 +173,10 @@ void ScStackDecoder::PassDownStackLeader(size_t iter) {
 	if (iter) {
 		iterXor = iter ^ (iter - 1);
 		level = m - FirstBitPos(iterXor);
+
+		// operations count
+		_operationsCount += 4;
+		///////////////////
 	}
 	else {
 		level = 0;
@@ -151,9 +189,18 @@ void ScStackDecoder::PassDownStackLeader(size_t iter) {
 	{
 		_binaryIter[i] = iterCopy % 2;
 		iterCopy = iterCopy >> 1;
+
+		// operations count
+		_operationsCount += 4;
+		///////////////////
 	}
 
 	size_t length = (size_t)1 << (m - level - 1);
+
+	// operations count
+	_operationsCount += 4;
+	///////////////////
+
 	for (size_t i = level; i < m; i++)
 	{
 		size_t ones = ~0u;
@@ -176,6 +223,10 @@ void ScStackDecoder::PassDownStackLeader(size_t iter) {
 		}
 
 		length = length / 2;
+
+		// operations count
+		_operationsCount += 7;
+		///////////////////
 	}
 }
 
@@ -196,18 +247,38 @@ void ScStackDecoder::PassUpAll(size_t iter) {
 			for (size_t i = 0; i < length; i++)
 			{
 				_uhatTrees[j][level - 1][offset + i] = _uhatTrees[j][level][offset + i] ^ _uhatTrees[j][level][offset + length + i];
+
+				// operations count
+				_operationsCount += 6;
+				///////////////////
 			}
 			for (size_t i = 0; i < length; i++)
 			{
 				_uhatTrees[j][level - 1][offset + length + i] = _uhatTrees[j][level][offset + length + i];
+
+				// operations count
+				_operationsCount += 4;
+				///////////////////
 			}
+
+			// operations count
+			_operationsCount += 2;
+			///////////////////
 		}
 
 		iterCopy = iterCopy >> 1;
 		bit = iterCopy % 2;
 		length *= 2;
 		level -= 1;
+
+		// operations count
+		_operationsCount += 6;
+		///////////////////
 	}
+
+	// operations count
+	_operationsCount += 1;
+	///////////////////
 }
 
 void ScStackDecoder::PassUpStackSelectevely(size_t iter, vector<int> elements) {
@@ -218,6 +289,11 @@ void ScStackDecoder::PassUpStackSelectevely(size_t iter, vector<int> elements) {
 	size_t length = 1;
 	size_t level = m;
 	size_t offset = iter;
+
+	// operations count
+	_operationsCount += 1;
+	///////////////////
+
 	while (bit != 0)
 	{
 		offset -= length;
@@ -226,26 +302,55 @@ void ScStackDecoder::PassUpStackSelectevely(size_t iter, vector<int> elements) {
 			for (size_t i = 0; i < length; i++)
 			{
 				_uhatTrees[j][level - 1][offset + i] = _uhatTrees[j][level][offset + i] ^ _uhatTrees[j][level][offset + length + i];
+
+				// operations count
+				_operationsCount += 4;
+				///////////////////
 			}
 			for (size_t i = 0; i < length; i++)
 			{
 				_uhatTrees[j][level - 1][offset + length + i] = _uhatTrees[j][level][offset + length + i];
+
+				// operations count
+				_operationsCount += 2;
+				///////////////////
 			}
+
+			// operations count
+			_operationsCount += 1;
+			///////////////////
 		}
 
 		iterCopy = iterCopy >> 1;
 		bit = iterCopy % 2;
 		length *= 2;
 		level -= 1;
+
+		// operations count
+		_operationsCount += 6;
+		///////////////////
 	}
+
+	// operations count
+	_operationsCount += 1;
+	///////////////////
 }
 
 void ScStackDecoder::EliminatePaths(size_t iter) {
 	for (size_t i = 0; i < _D; i++)
 	{
 		int j = _metrics[i].second;
-		if (_current_bits[j] <= iter)
+		if (_current_bits[j] <= iter) {
 			_metrics[i].first = MIN_METRIC;
+
+			// operations count
+			_operationsCount += (_D - i);
+			///////////////////
+		}
+			
+		// operations count
+		_operationsCount += 3;
+		///////////////////
 	}
 
 	std::sort(_metrics.rbegin(), _metrics.rend());
@@ -264,16 +369,29 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 
 		_metrics.push_back(std::make_pair(0.0, j));
 		_current_bits[j] = 0;
+
+		// operations count
+		_operationsCount += 4;
+		///////////////////
 	}
 
 	for (size_t i = 0; i < n; i++)
 	{
 		_paths_limits[i] = 0;
+
+		// operations count
+		_operationsCount += 2;
+		///////////////////
 	}
 
 	int logD = (int)FirstBitPos(_D) - 1;
 	size_t i_all = 0; // number of bit (j - index of candidate in the stack)
 	size_t i_unfrozen = 0;
+
+	// operations count
+	_operationsCount += 1;
+	///////////////////
+
 	while (i_unfrozen < logD)
 	{
 		PassDownAll(i_all);
@@ -288,8 +406,16 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 
 				if ((j + 1) % (1 << i_unfrozen) == 0) // all paths at the logD first steps 
 					value = !value;
+
+				// operations count
+				_operationsCount += 8;
+				///////////////////
 			}
 			i_unfrozen++;
+
+			// operations count
+			_operationsCount += 2;
+			///////////////////
 		}
 		else {
 			for (size_t j = 0; j < _D; j++) {
@@ -297,18 +423,35 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 				_candidates[j][i_all] = FROZEN_VALUE;
 				_current_bits[j] ++;
 				_metrics[j].first += StepMetric(_beliefTrees[j][m][i_all], FROZEN_VALUE);
+
+				// operations count
+				_operationsCount += 4;
+				///////////////////
 			}
 		}
 
 		PassUpAll(i_all);
 
 		i_all++;
+
+		// operations count
+		_operationsCount += 2;
+		///////////////////
 	}
 	for (size_t i = 0; i < i_all - 1; i++)
 	{
 		_paths_limits[i] = _L;
+
+		// operations count
+		_operationsCount += 2;
+		///////////////////
 	}
+	
 	std::sort(_metrics.rbegin(), _metrics.rend());
+	// operations count
+	_operationsCount += _D * log (_D);
+	///////////////////
+
 	bool isExited = false;
 	while (!isExited)
 	{
@@ -325,6 +468,10 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 
 		int leaderIndex = _metrics[0].second;
 		int lastIndex = _metrics.back().second;
+
+		// operations count
+		_operationsCount += 4;
+		///////////////////
 
 		if (_maskWithCrc[i_all]) {
 
@@ -349,6 +496,10 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 				lowMetric = metricsNew1;
 			}
 
+			// operations count
+			_operationsCount += 4;
+			///////////////////
+
 			// high bit structures
 			_candidates[leaderIndex][i_all] = highBit;
 			_uhatTrees[leaderIndex][m][i_all] = highBit;
@@ -370,24 +521,10 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 				_metrics.back().first = lowMetric;
 				//_paths_limits[i_all]++;
 				
-
 				newElements.push_back(lastIndex);
 
-				// sorting routine for low bit
-				/*int i = _metrics.size() - 1;
-				while (_metrics[i - 1].first < lowMetric)
-					i--;
-				_metrics.insert(_metrics.begin() + i, _metrics.back());
-				_metrics.pop_back();*/
 			}
 
-			// sorting routine for high bit
-			/*int i = 0;
-			while ((i < _D - 1) && (_metrics[i + 1].first > highMetric)) // constraint on length
-				i++;
-				
-			_metrics.insert(_metrics.begin() + i + 1, _metrics[0]);
-			_metrics.erase(_metrics.begin());*/
 		}
 		else {
 			_candidates[leaderIndex][i_all] = FROZEN_VALUE;
@@ -395,9 +532,17 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 			newElements.push_back(leaderIndex); // leader remained
 			_current_bits[leaderIndex]++;
 			_metrics[0].first += StepMetric(_beliefTrees[leaderIndex][m][i_all], FROZEN_VALUE);
+
+			// operations count
+			_operationsCount += 2;
+			///////////////////
 		}
 		std::sort(_metrics.rbegin(), _metrics.rend());
 		PassUpStackSelectevely(i_all, newElements);
+
+		// operations count
+		_operationsCount += _D;
+		///////////////////
 
 		if (i_all == (n - 1)) {
 			if (IsCrcPassed(_candidates[_metrics[0].second]) || _paths_limits[i_all] >= _L)
@@ -406,7 +551,15 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 				_paths_limits[i_all]++;
 				_metrics[0].first = MIN_METRIC;
 				std::sort(_metrics.rbegin(), _metrics.rend());
+
+				// operations count
+				_operationsCount += 1 + _D;
+				///////////////////
 			}
+
+			// operations count
+			_operationsCount += 2;
+			///////////////////
 		}
 	}
 
@@ -415,7 +568,13 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
 		result[i] = _candidates[_metrics[0].second][codewordBits[i]];
+
+		// operations count
+		_operationsCount += 2;
+		///////////////////
 	}
+
+	_normalizer++;
 
 	return result;
 }

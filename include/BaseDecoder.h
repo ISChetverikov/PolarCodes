@@ -14,7 +14,7 @@ protected:
 	std::vector<int> _codeword;
 
 	std::string _path;
-	int _operationsCount;
+	double _operationsCount;
 	int _normilizedComplexity;
 	int _normalizer;
 
