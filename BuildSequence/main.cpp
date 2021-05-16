@@ -20,18 +20,17 @@ int main(int argc, char * argv[]) {
 	double snr = 0.0;
 	int m = 0;
 	int k = 0;
-	//double snr = PickUpSnr(m, k);
+	// double snr = PickUpSnr(m, k);
 
 	int isChecked = 1;
 	if (ProcRank == 0) {
-		if (argc != 5) {
-			cout << "Usage: " << argv[0] << " <folder> <snr> <m> <k>" << std::endl;
+		if (argc != 4) {
+			cout << "Usage: " << argv[0] << " <ouptut folder> <m> <k>" << std::endl;
 			isChecked = 0;
 		}
 		else {
-			snr = std::stod(argv[2]);
-			m = std::stoi(argv[3]);
-			k = std::stoi(argv[4]);
+			m = std::stoi(argv[2]);
+			k = std::stoi(argv[3]);
 
 			folder = argv[1];
 		}

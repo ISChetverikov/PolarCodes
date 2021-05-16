@@ -14,6 +14,9 @@ BaseDecoder::BaseDecoder(PolarCode * codePtr) {
 }
 
 double BaseDecoder::GetOperationsCount() {
+	if (_normalizer == 0)
+		return 0;
+
 	return (double)_operationsCount / _normalizer;
 }
 

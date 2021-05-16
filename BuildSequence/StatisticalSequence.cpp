@@ -221,10 +221,10 @@ void BuiltSequenceStatistically(std::string folder, int m, int k, int maxTestsCo
 	std::string dumpFilename;
 	if (ProcRank == 0) {
 
-		std::cout << "SNR is omitted: " << _snr << std::endl;
+		//std::cout << "SNR is omitted: " << _snr << std::endl;
 
 		t1 = steady_clock::now();
-		dumpFilename = folder + "leader.dump";//GetDumpFilename(k, n, snr);
+		dumpFilename = folder + "leader.dump"; // GetDumpFilename(k, n, snr);
 
 		TryCreateDump(dumpFilename);
 		TryLoadDump(dumpFilename, leader);

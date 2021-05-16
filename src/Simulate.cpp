@@ -12,6 +12,7 @@
 #include "../include/Encoder.h"
 #include "../include/ScRecursiveDecoder.h"
 #include "../include/ScDecoder.h"
+#include "../include/ScOptimized.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
 #include "../include/ScFlipFanoDecoder.h"
@@ -163,12 +164,17 @@ BaseDecoder * BuildDecoder(
 		decoderPtr = new ScDecoder(codePtr);
 	}
 		break;
+	case decoderType::SCOptimized: {
+		decoderPtr = new ScOptimizedDecoder(codePtr);
+	}
+		break;
 	case decoderType::SCFano: {
 		double T = ExtractDouble(decoderParams, "T", "SCFano decoder");
 		double delta = ExtractDouble(decoderParams, "delta", "SCFano decoder");
 		decoderPtr = new ScFanoDecoder(codePtr, T, delta);
 		return decoderPtr;
 	}
+		break;
 	case decoderType::SCFlipFano: {
 		double T = ExtractDouble(decoderParams, "T", "SCFanoList decoder");
 		double delta = ExtractDouble(decoderParams, "delta", "SCFanoList decoder");

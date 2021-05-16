@@ -3,3 +3,4 @@
 3) D > L, log D < n
 4) OPerations count for LLR and MINSUM
 5) define for operations counting`
+6) optimized decoder only with minsum LLR

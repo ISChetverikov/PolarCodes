@@ -17,7 +17,7 @@ void BpskBscChannel::SetSnr(double snr) {
 	//double p = ebnoToPErr(snrToEbN0(_snr, _coderate));
 	double p = ebnoToPErr(snrToSigma(snr));
 
-	std::cout << p << std::endl;
+	//std::cout << p << std::endl;
 
 	_fixedLlr = log((1 - p) / p);
 	std::bernoulli_distribution b(p);

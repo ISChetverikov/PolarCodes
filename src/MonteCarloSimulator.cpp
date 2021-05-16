@@ -128,8 +128,8 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		///////////
 #endif //PARALLEL_DECODER
 
-		if (tests % 1000 == 0)
-			std::cout << tests << std::endl;
+		//if (tests % 1000 == 0)
+			//std::cout << tests << std::endl;
 		
 		if (decoded != word) {
 			wrong_dec += 1;

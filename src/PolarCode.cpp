@@ -20,23 +20,25 @@ PolarCode::PolarCode(int m, int k, std::vector<int> reliabilitySequence, std::ve
 
 	_k_extended = _k + _crcDeg;
 
-	// the mask and the set without crc
 	_bitsMask = std::vector<int>(_N, 0);
+	_maskWithCrc = std::vector<int>(_N, 0);
 	_unfrozenPolarSequence = std::vector<int>(k, 0);
 	for (size_t i = sequenceLength - k, j = 0; i < sequenceLength; i++, j++)
 	{
 		_bitsMask[reliabilitySequence[i]] = 1;
+		_maskWithCrc[reliabilitySequence[i]] = 1;
 		_unfrozenPolarSequence[j] = reliabilitySequence[i];
 	}
 	_unfrozenBits = _unfrozenPolarSequence;
 	sort(_unfrozenBits.begin(), _unfrozenBits.end());
 
 	// the mask and the set with crc
+	_crcMask = std::vector<int>(_N, 0);
 	if (IsCrcUsed()) {
-		_crcMask = std::vector<int>(_N, 0);
 		_crcUnfrozenPolarSequence = std::vector<int>(_crcDeg, 0);
 		for (size_t i = sequenceLength - _k_extended, j = 0; i < sequenceLength - k; i++, j++)
 		{
+			_maskWithCrc[reliabilitySequence[i]] = 1;
 			_crcMask[reliabilitySequence[i]] = 1;
 			_crcUnfrozenPolarSequence[j] = reliabilitySequence[i];
 		}
@@ -50,6 +52,7 @@ PolarCode::PolarCode(int m, int k, std::vector<int> reliabilitySequence, std::ve
 	sort(_unfrozenBitsWithCrc.begin(), _unfrozenBitsWithCrc.end());
 }
 
+// CRC is not supported yet
 PolarCode::PolarCode(int m, std::vector<int> usedBits) {
 	_crcPoly = {};
 	_crcDeg = 0;
@@ -110,6 +113,11 @@ std::vector<int> PolarCode::BitsMask() {
 
 std::vector<int> PolarCode::UnfrozenBits() {
 	return _unfrozenBits;
+}
+
+std::vector<int> PolarCode::BitsMaskWithCrc() {
+	
+	return _maskWithCrc;
 }
 
 std::vector<int> PolarCode::UnfrozenPolarSequence() {
