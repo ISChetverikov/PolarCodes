@@ -13,7 +13,7 @@ protected:
 	double _sigma;
 	std::vector<int> _codeword;
 
-	std::string _path;
+	std::string _pathTrace;
 	double _operationsCount;
 	int _normilizedComplexity;
 	int _normalizerOperationCount;

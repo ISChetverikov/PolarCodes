@@ -9,6 +9,7 @@ ScStackOptimizedDecoder::ScStackOptimizedDecoder(PolarCode * codePtr, int L, int
 	_D = D;
 
 	_kWithCrc = _codePtr->kExt();
+	_crcPtr = new CRC(_codePtr->CrcPoly());
 
 	_path_metrics = vector<double>(_D, 0.0);
 	_path_lengths = vector<size_t>(_D, 0);
@@ -23,12 +24,75 @@ ScStackOptimizedDecoder::ScStackOptimizedDecoder(PolarCode * codePtr, int L, int
 	}
 }
 
+void ScStackOptimizedDecoder::recursively_calc_alpha_stack(size_t lambda, size_t phi, bool isPathSwitched) {
+	_operationsCount += 1;
+
+	if (lambda == _m)
+		return;
+
+	_operationsCount += 4;
+
+	size_t lambda_big = 1 << lambda;
+	size_t lambda_next = lambda + 1;
+	size_t isPhiOdd = phi % 2;
+
+	if (!isPhiOdd || isPathSwitched)
+		recursively_calc_alpha(lambda_next, phi >> 1);
+
+	if (isPhiOdd) {
+		for (size_t i = 0; i < lambda_big; i++) {
+			_alpha[lambda][i] = g(_alpha[lambda_next][i], _alpha[lambda_next][i + lambda_big], _beta[!isPhiOdd][lambda][i]);
+			_operationsCount += 3;
+		}
+	}
+	else {
+
+		_operationsCount += 1;
+
+		for (size_t i = 0; i < lambda_big; i++) {
+			_alpha[lambda][i] = f(_alpha[lambda_next][i], _alpha[lambda_next][i + lambda_big]);
+
+			_operationsCount += 3;
+		}
+	}
+
+	return;
+}
+
 double ScStackOptimizedDecoder::calculate_step_metric(double newLlr, int decision) {
 	// economize operations
 	return (newLlr < 0 && decision == 0 || newLlr > 0 && decision == 1) ? fabs(newLlr) : 0;
 }
 
+// Here word without frozen bits, all crc bits are located in the begging of the word
+bool ScStackOptimizedDecoder::IsCrcPassed(vector<int> & codeword) {
+	size_t deg = _codePtr->CrcDeg();
+
+	vector<int> word(_k, 0);
+	vector<int> crc(deg, 0);
+
+	for (size_t i = 0; i < _k; i++)
+	{
+		word[i] = codeword[deg + i];
+	}
+	for (size_t i = 0; i < deg; i++)
+	{
+		crc[i] = codeword[i];
+	}
+
+	_crcPtr->ClearOperationsCount();
+	auto crcReal = _crcPtr->Calculate(word);
+
+	// operations count
+	_operationsCount += 1 + _crcPtr->GetLastOperationsCount();
+	///////////////////
+
+	return crc == crcReal;
+}
+
+
 std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
+	vector<int> result = vector<int>(_k, 0);
 
 	// variables
 	size_t T = 0;
@@ -37,6 +101,8 @@ std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 	bool isPathSwitched = false;
 	double pm0 = 0.0;
 	double pm1 = 0.0;
+	size_t phi = 0;
+	bool isPhiEven = false;
 
 	// init structures
 	for (size_t i = 0; i < _D; i++)
@@ -64,7 +130,7 @@ std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 	}
 
 	while (true) {
-		recursively_calc_alpha(0, _path_lengths[min_index]);
+		recursively_calc_alpha_stack(0, _path_lengths[min_index], isPathSwitched);
 
 		pm0 = _path_metrics[min_index] + calculate_step_metric(_alpha[0][0], 0);
 		pm1 = _path_metrics[min_index] + calculate_step_metric(_alpha[0][0], 1);
@@ -117,9 +183,33 @@ std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 		isPathSwitched = min_index == new_min_index;
 		min_index = new_min_index;
 		max_index = new_max_index;
+
+		// Update length info ?????
+		if (poped elemtns count length <= L)
+		// Check CRC and stack is empty
+		if (path == n and IsCrcPassed() and stack is empty)
+			break;
+
+		if (isPathSwitched)
+			LoadPath();
+
+		phi = _path_lengths[min_index] - 1;
+		_beta[phi % 2][0][0] = _paths[min_index][phi];
+		if (phi % 2 == 1)
+			recursively_calc_beta(0, phi);
 	}
 
-	// Update length info
-	// Check CRC and stack is empty
+	std::vector<int> codewordBits = _codePtr->UnfrozenBits();
+	for (size_t i = 0; i < codewordBits.size(); i++)
+	{
+		result[i] = _paths[min_index][codewordBits[i]];
 
+		// operations count
+		_operationsCount += 2;
+		///////////////////
+	}
+
+	_normalizerOperationCount++;
+
+	return result;
 }

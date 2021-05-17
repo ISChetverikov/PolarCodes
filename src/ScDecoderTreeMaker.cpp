@@ -75,7 +75,7 @@ bool CompareTree(PathNode first, PathNode second) {
 }
 
 std::vector<int> ScDecoderTreeMaker::Decode(std::vector<double> inP1) {
-	_path = "";
+	_pathTrace = "";
 	std::vector<PathNode> unorderedTree;
 
 	size_t n = inP1.size();
@@ -188,7 +188,7 @@ std::vector<int> ScDecoderTreeMaker::Decode(std::vector<double> inP1) {
 	sort(unorderedTree.begin(), unorderedTree.end(), CompareTree);
 	for (size_t i = 0; i < unorderedTree.size(); i++)
 	{
-		_path += unorderedTree[i].description + "\n";
+		_pathTrace += unorderedTree[i].description + "\n";
 	}
 	
 	return TakeResult();

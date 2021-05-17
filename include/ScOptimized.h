@@ -11,6 +11,7 @@ protected:
 	// _n = 2 ^ _m
 	size_t _m = 0;
 	size_t _n = 0;
+	size_t _k = 0;
 
 	vector<vector<double>> _alpha;
 	vector<vector<vector<int>>> _beta;
