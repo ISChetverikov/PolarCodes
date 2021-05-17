@@ -7,6 +7,7 @@
 ScOptimizedDecoder::ScOptimizedDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 	_m = _codePtr->m();
 	_n = _codePtr->N();
+
 	vector<vector<int>> _beta_temp;
 
 	for (size_t i = 0; i <= _m; i++)
