@@ -574,7 +574,7 @@ vector<int> ScStackDecoder::Decode(std::vector<double> inLlr) {
 		///////////////////
 	}
 
-	_normalizer++;
+	_normalizerOperationCount++;
 
 	return result;
 }

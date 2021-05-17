@@ -461,7 +461,7 @@ std::vector<int> ScListDecoder::Decode(std::vector<double> inLlr) {
 	DecodeListInternal(inLlr);
 
 	// for operations count
-	_normalizer++;
+	_normalizerOperationCount++;
 
 	return TakeListResult();
 }

@@ -3,8 +3,8 @@
       <ResultFile>C:\Users\ische\source\repos\PolarCodes\results\128\trash.results</ResultFile>
       <AdditionalFile>C:\Users\ische\source\repos\PolarCodes\results\OracleStats\dummy.stat</AdditionalFile>
       <Simulator type="MC">
-        <Param name="maxTestsCount">100000</Param>
-        <Param name="maxRejectionsCount">10000</Param>
+        <Param name="maxTestsCount">10000</Param>
+        <Param name="maxRejectionsCount">1000</Param>
         <Param name="isSigmaDependOnR">0</Param>
         <Param name="channel">BPSK-AWGN</Param>
         <Param name="channel1">BPSK-BSC</Param>
@@ -14,9 +14,9 @@
         <!--<Snr>-1.0</Snr>-->
       </SnrArray>
       <Code type="Polar">
-        <Param name="m">3</Param>
-        <Param name="k">4</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\8.txt</Param>
+        <Param name="m">6</Param>
+        <Param name="k">32</Param>
+        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\64.txt</Param>
         <Param name="CRC24">100000000000000001100011</Param>
         <Param name="CRC1">1000000000000101</Param>
         <Param name="CRC12">100000001111</Param>

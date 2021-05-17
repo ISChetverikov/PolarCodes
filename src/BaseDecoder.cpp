@@ -10,19 +10,19 @@ BaseDecoder::BaseDecoder(PolarCode * codePtr) {
 	
 
 	_operationsCount = 0;
-	_normalizer = 0;
+	_normalizerOperationCount = 0;
 }
 
 double BaseDecoder::GetOperationsCount() {
-	if (_normalizer == 0)
+	if (_normalizerOperationCount == 0)
 		return 0;
 
-	return (double)_operationsCount / _normalizer;
+	return (double)_operationsCount / _normalizerOperationCount;
 }
 
 void BaseDecoder::ClearOperationsCount() {
 	_operationsCount = 0;
-	_normalizer = 0;
+	_normalizerOperationCount = 0;
 }
 
 void BaseDecoder::SetSigma(double sigma) {

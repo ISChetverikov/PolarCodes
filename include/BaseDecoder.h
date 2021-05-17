@@ -16,7 +16,7 @@ protected:
 	std::string _path;
 	double _operationsCount;
 	int _normilizedComplexity;
-	int _normalizer;
+	int _normalizerOperationCount;
 
 	double f(double p1, double p2);
 	double g(double p1, double p2, int b);

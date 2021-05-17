@@ -4,10 +4,13 @@
 
 using std::vector;
 
-class ScOptimizedDecoder : public BaseDecoder {
+class ScStackOptimizedDecoder : public BaseDecoder {
 
 protected:
-	
+
+	size_t _L = 0;
+	size_t _D = 0;
+
 	// _n = 2 ^ _m
 	size_t _m = 0;
 	size_t _n = 0;
@@ -25,9 +28,9 @@ protected:
 	void recursively_calc_beta(size_t lambda, size_t phi);
 
 public:
-	ScOptimizedDecoder(PolarCode * codePtr);
+	ScStackOptimizedDecoder(PolarCode * codePtr, int L, int D);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
 
-	~ScOptimizedDecoder() {};
+	~ScStackOptimizedDecoder() {};
 };

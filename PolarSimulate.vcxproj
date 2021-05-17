@@ -22,6 +22,7 @@
     <ClCompile Include="src\CommonTransformations.cpp" />
     <ClCompile Include="src\ScOptimized.cpp" />
     <ClCompile Include="src\ScStackDecoder.cpp" />
+    <ClCompile Include="src\ScStackOptimizedDecoder.cpp" />
     <ClCompile Include="src\Test_AwgnBer.cpp" />
     <ClCompile Include="src\Test_ScTreeMaker.cpp" />
     <ClInclude Include="include\BaseSimulator.h" />
@@ -57,6 +58,7 @@
     <ClInclude Include="include\ScFlipDecoder.h" />
     <ClInclude Include="include\ScFlipProgDecoder.h" />
     <ClInclude Include="include\ScStackDecoder.h" />
+    <ClInclude Include="include\ScStackOptimizedDecoder.h" />
     <ClInclude Include="include\Simulate.h" />
     <ClInclude Include="include\SimulationParameters.h" />
     <ClInclude Include="include\SimulationType.h" />

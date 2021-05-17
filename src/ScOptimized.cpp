@@ -7,14 +7,16 @@
 ScOptimizedDecoder::ScOptimizedDecoder(PolarCode * codePtr) : BaseDecoder(codePtr) {
 	_m = _codePtr->m();
 	_n = _codePtr->N();
+	vector<vector<int>> _beta_temp;
 
 	for (size_t i = 0; i <= _m; i++)
 	{
-		vector<int> temp = vector<int>(1 << i, 0.0);
 		_alpha.push_back(vector<double>(1 << i, 0.0));
-		_beta_left.push_back(temp);
-		_beta_right.push_back(temp);
+		_beta_temp.push_back(vector<int>(1 << i, 0.0));
 	}
+
+	_beta.push_back(_beta_temp);
+	_beta.push_back(_beta_temp);
 
 	_mask = _codePtr->BitsMaskWithCrc();
 }
@@ -58,14 +60,15 @@ void ScOptimizedDecoder::recursively_calc_alpha(size_t lambda, size_t phi) {
 	if (lambda == _m)
 		return;
 	
-	_operationsCount += 3;
+	_operationsCount += 4;
 
 	size_t lambda_big = 1 << lambda;
 	size_t lambda_next = lambda + 1;
+	size_t isPhiOdd = phi % 2;
 
-	if (phi % 2) {
+	if (isPhiOdd) {
 		for (size_t i = 0; i < lambda_big; i++) {
-			_alpha[lambda][i] = g(_alpha[lambda_next][i], _alpha[lambda_next][i + lambda_big], _beta_left[lambda][i]);
+			_alpha[lambda][i] = g(_alpha[lambda_next][i], _alpha[lambda_next][i + lambda_big], _beta[!isPhiOdd][lambda][i]);
 			_operationsCount += 3;
 		}
 	}
@@ -86,33 +89,25 @@ void ScOptimizedDecoder::recursively_calc_alpha(size_t lambda, size_t phi) {
 
 void ScOptimizedDecoder::recursively_calc_beta(size_t lambda, size_t phi) {
 
-	_operationsCount += 1;
+	_operationsCount += 2;
 
-	if (!(phi % 2))
+	size_t isPhiOdd = phi % 2;
+	size_t isPhiEven = !isPhiOdd;
+	if (isPhiEven)
 		return;
 
 	_operationsCount += 5;
 
 	size_t lambda_big = 1 << lambda;
 	size_t lambda_next = lambda + 1;
+	size_t isHalfPhiOdd = (phi >> 1) % 2;
 
-	if ((phi >> 1) % 2) {
-		for (size_t i = 0; i < lambda_big; i++)
-		{
-			_beta_right[lambda_next][i] = _beta_left[lambda][i] ^ _beta_right[lambda][i];
-			_beta_right[lambda_next][lambda_big + i] = _beta_right[lambda][i];
+	for (size_t i = 0; i < lambda_big; i++)
+	{
+		_beta[isHalfPhiOdd][lambda_next][i] = _beta[isPhiEven][lambda][i] ^ _beta[isPhiOdd][lambda][i];
+		_beta[isHalfPhiOdd][lambda_next][lambda_big + i] = _beta[isPhiOdd][lambda][i];
 
-			_operationsCount += 4;
-		}
-	}
-	else {
-		for (size_t i = 0; i < lambda_big; i++)
-		{
-			_beta_left[lambda_next][i] = _beta_left[lambda][i] ^ _beta_right[lambda][i];
-			_beta_left[lambda_next][lambda_big + i] = _beta_right[lambda][i];
-			
-			_operationsCount += 4;
-		}
+		_operationsCount += 4;
 	}
 
 	recursively_calc_beta(lambda_next, phi >> 1);
@@ -136,20 +131,13 @@ std::vector<int> ScOptimizedDecoder::Decode(std::vector<double> llr) {
 		if (_mask[phi]) {
 			int hard_desicion = HD(_alpha[0][0]);
 
-			if (phi % 2)
-				_beta_right[0][0] = hard_desicion;
-			else
-				_beta_left[0][0] = hard_desicion;
-
+			_beta[phi % 2][0][0] = hard_desicion;
 			result[i++] = hard_desicion;
 
 			_operationsCount += 2;
 		}
 		else {
-			if (phi % 2)
-				_beta_right[0][0] = FROZEN_VALUE;
-			else
-				_beta_left[0][0] = FROZEN_VALUE;
+			_beta[phi % 2][0][0] = FROZEN_VALUE;
 
 			_operationsCount += 1;
 		}
@@ -159,7 +147,7 @@ std::vector<int> ScOptimizedDecoder::Decode(std::vector<double> llr) {
 		_operationsCount += 2;
 	}
 
-	_normalizer++;
+	_normalizerOperationCount++;
 
 	return result;
 }

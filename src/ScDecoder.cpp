@@ -247,7 +247,7 @@ std::vector<int> ScDecoder::Decode(std::vector<double> inLlr) {
 	
 	DecodeInternal(inLlr);
 
-	_normalizer++;
+	_normalizerOperationCount++;
 
 	return TakeResult();
 }
