@@ -30,6 +30,11 @@ protected:
 	double calculate_step_metric(double newLlr, int decision);
 	bool IsCrcPassed(vector<int> & word);
 
+	void KillPath(size_t index, size_t & T);
+	size_t ClonePath(size_t index, size_t & T);
+	void ExtendPath(size_t index, int bit, double pathMetric);
+	void LoadPath(size_t index);
+
 public:
 	ScStackOptimizedDecoder(PolarCode * codePtr, int L, int D);
 

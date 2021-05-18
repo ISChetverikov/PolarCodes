@@ -8,6 +8,7 @@
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScDecoder.h"
 #include "../include/ScListDecoder.h"
+#include "../include/ScStackDecoder.h"
 
 MonteCarloSimulator::MonteCarloSimulator(int maxTestsCount,
 	int maxRejectionsCount,
@@ -43,7 +44,7 @@ std::string VecToStr(std::vector<T> vec) {
 	return streamObj.str();
 }
 
-#ifdef PARALLEL_DECODER1
+#ifdef PARALLEL_DECODER
 std::vector<int> ReadSequenceFromFileParallel(std::string path) {
 	std::vector<int> seq;
 	std::string line;
@@ -81,11 +82,11 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	std::random_device randomDevice;
 	std::uniform_int_distribution<> uniform_discrete_dist(0, 1);
 
-#ifdef PARALLEL_DECODER1
+#ifdef PARALLEL_DECODER
 	// HERE parallel decoder
 	std::vector<int> parallelDecoded;
 	size_t m = _codePtr->m();
-	PolarCode * parallelCodePtr = new PolarCode(m, k, ReadSequenceFromFileParallel("C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\64.txt"), _codePtr->CrcPoly());
+	PolarCode * parallelCodePtr = new PolarCode(m, k, ReadSequenceFromFileParallel("C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\" + std::to_string(n) + ".txt"), _codePtr->CrcPoly());
 	ScListDecoder parallelDecoder(parallelCodePtr, 4);
 	//////
 #endif // PARALLEL_DECODER
@@ -105,15 +106,14 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		_decoderPtr->SetDecoderAnswer(_encoderPtr->PolarTransform(codeword));
 
 		channelOuput = _channelPtr->Pass(codeword);
-		//channelOuput = { 0.329743, 0.985975, 0.42671, 0.986302, 0.897901, 0.934186, 0.0314832, 0.920524, 0.3156, 0.999334, 0.0739367, 0.0675426, 0.768012, 0.0465154, 0.107217, 0.886003, 0.720386, 0.0229412, 0.0256804, 0.983113, 0.25506, 0.00888985, 0.774687, 0.531851, 0.949097, 0.067775, 0.46051, 0.991034, 0.562985, 0.0172786, 0.994695, 0.0232646, 0.923164, 0.00253434, 0.572565, 0.996648, 0.0493899, 0.0116553, 0.0222748, 0.980916, 0.164898, 0.00997484, 0.477853, 0.0343223, 0.107433, 0.903525, 0.239964, 0.00667712, 0.894375, 0.553225, 0.0861051, 0.161802, 0.265548, 0.00517327, 0.000367546, 0.990995, 0.908734, 0.945523, 0.999609, 0.000835719, 0.996292, 0.198833, 0.000519721, 0.984555, 
-		//};
+		//channelOuput = { 3.2307, -3.11039, -3.36801, -6.56322, 2.06576, 1.72037, 2.46457, 2.86076, -0.109397, -1.24382, -4.95555, 4.86218, 1.07354, 2.6011, -2.87971, -3.12015 };
 
 		decoded = _decoderPtr->Decode(channelOuput);
 
 #ifdef PARALLEL_DECODER1
 		// HERE parallel decoder to comparision, SC - worse decoder
 		parallelDecoded = parallelDecoder.Decode(channelOuput);
-
+		
 		if (word != decoded && parallelDecoded == word) {
 			std::cout << "Find" << std::endl;
 			std::string debugInfo = _decoderPtr->GetPathInfo();

@@ -13,6 +13,7 @@
 #include "../include/ScRecursiveDecoder.h"
 #include "../include/ScDecoder.h"
 #include "../include/ScOptimized.h"
+#include "../include/ScStackOptimizedDecoder.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
 #include "../include/ScFlipFanoDecoder.h"
@@ -209,6 +210,12 @@ BaseDecoder * BuildDecoder(
 		int L = ExtractInt(decoderParams, "L", "SCStack decoder");
 		int D = ExtractInt(decoderParams, "D", "SCStack decoder");
 		decoderPtr = new ScStackDecoder(codePtr, L, D);
+	}
+	break;
+	case decoderType::SCStackOptimized: {
+		int L = ExtractInt(decoderParams, "L", "SCStack decoder");
+		int D = ExtractInt(decoderParams, "D", "SCStack decoder");
+		decoderPtr = new ScStackOptimizedDecoder(codePtr, L, D);
 	}
 	break;
 	case decoderType::SCFlipProg: {

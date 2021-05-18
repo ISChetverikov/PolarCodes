@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "../include/PolarCode.h"
 #include "../include/ScStackOptimizedDecoder.h"
 
@@ -13,11 +15,11 @@ ScStackOptimizedDecoder::ScStackOptimizedDecoder(PolarCode * codePtr, int L, int
 
 	_path_metrics = vector<double>(_D, 0.0);
 	_path_lengths = vector<size_t>(_D, 0);
-	_path_lengths_hits = vector<size_t>(_D, 0);
+	_path_lengths_hits = vector<size_t>(_n + 1, 0);
 	//_inactive_path_indices = vector<size_t>(_D, 0);
 	_is_paths_active = vector<bool>(_D, false);
 
-	vector<int> temp = vector<int>(_kWithCrc, 0);
+	vector<int> temp = vector<int>(_n, 0);
 	for (size_t i = 0; i < _D; i++)
 	{
 		_paths.push_back(temp);
@@ -37,7 +39,7 @@ void ScStackOptimizedDecoder::recursively_calc_alpha_stack(size_t lambda, size_t
 	size_t isPhiOdd = phi % 2;
 
 	if (!isPhiOdd || isPathSwitched)
-		recursively_calc_alpha(lambda_next, phi >> 1);
+		recursively_calc_alpha_stack(lambda_next, phi >> 1, isPathSwitched);
 
 	if (isPhiOdd) {
 		for (size_t i = 0; i < lambda_big; i++) {
@@ -66,34 +68,74 @@ double ScStackOptimizedDecoder::calculate_step_metric(double newLlr, int decisio
 
 // Here word without frozen bits, all crc bits are located in the begging of the word
 bool ScStackOptimizedDecoder::IsCrcPassed(vector<int> & codeword) {
+	
 	size_t deg = _codePtr->CrcDeg();
 
-	vector<int> word(_k, 0);
-	vector<int> crc(deg, 0);
-
+	auto wordBits = _codePtr->UnfrozenBits();
+	std::vector<int> word(_k, 0);
 	for (size_t i = 0; i < _k; i++)
 	{
-		word[i] = codeword[deg + i];
+		word[i] = codeword[wordBits[i]];
 	}
+
+	auto crcBits = _codePtr->CrcUnfrozenBits();
+	std::vector<int> crc(deg, 0);
 	for (size_t i = 0; i < deg; i++)
 	{
-		crc[i] = codeword[i];
+		crc[i] = codeword[crcBits[i]];
 	}
 
 	_crcPtr->ClearOperationsCount();
 	auto crcReal = _crcPtr->Calculate(word);
 
-	// operations count
-	_operationsCount += 1 + _crcPtr->GetLastOperationsCount();
-	///////////////////
-
 	return crc == crcReal;
 }
 
+void ScStackOptimizedDecoder::KillPath(size_t index, size_t & T) {
+	_is_paths_active[index] = false;
+	_inactive_path_indices.push(index);
+	T--;
+}
+size_t ScStackOptimizedDecoder::ClonePath(size_t index, size_t & T) {
+	size_t new_index = _inactive_path_indices.top();
+	_inactive_path_indices.pop();
+
+	_is_paths_active[new_index] = true;
+	_path_metrics[new_index] = _path_metrics[index];
+	_path_lengths[new_index] = _path_lengths[index];
+	T++;
+
+	for (size_t i = 0; i < _path_lengths[index]; i++)
+	{
+		_paths[new_index][i] = _paths[index][i];
+	}
+
+	return new_index;
+}
+
+void ScStackOptimizedDecoder::ExtendPath(size_t index, int bit, double pathMetric) {
+	_paths[index][_path_lengths[index]] = bit;
+	
+	_path_lengths[index]++;
+	_path_metrics[index] = pathMetric;
+}
+
+void ScStackOptimizedDecoder::LoadPath(size_t index) {
+	size_t isPhiOdd;
+
+	for (size_t phi = 0; phi < _path_lengths[index]; phi++)
+	{
+		isPhiOdd = phi % 2;
+
+		_beta[isPhiOdd][0][0] = _paths[index][phi];
+		if (isPhiOdd)
+			recursively_calc_beta(0, phi);
+	}
+}
 
 std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 	vector<int> result = vector<int>(_k, 0);
-
+	vector<int> right_result = { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1 };
 	// variables
 	size_t T = 0;
 	size_t min_index = 0;
@@ -103,14 +145,19 @@ std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 	double pm1 = 0.0;
 	size_t phi = 0;
 	bool isPhiEven = false;
+	size_t passedLength = 0;
+	bool isTruncateNeeded = false;
 
 	// init structures
+	_inactive_path_indices = stack<size_t>();
 	for (size_t i = 0; i < _D; i++)
 	{
 		_inactive_path_indices.push(i);
 		_is_paths_active[i] = false;
+		_path_metrics[i] = 0.0;
+		_path_lengths[i] = 0;
 	}
-	for (size_t i = 0; i < _n; i++)
+	for (size_t i = 0; i < _n + 1; i++)
 	{
 		_path_lengths_hits[i] = 0;
 	}
@@ -128,38 +175,60 @@ std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 	{
 		_alpha[_m][phi] = llr[phi];
 	}
-
+	int checks = 0;
 	while (true) {
+		
 		recursively_calc_alpha_stack(0, _path_lengths[min_index], isPathSwitched);
-
+				
 		pm0 = _path_metrics[min_index] + calculate_step_metric(_alpha[0][0], 0);
 		pm1 = _path_metrics[min_index] + calculate_step_metric(_alpha[0][0], 1);
 
-		if (_mask[_path_lengths[min_index]]) {
-			if (T == _D && _path_metrics[max_index] > (pm0 > pm1 ? pm0 : pm1)) {
-				KillPath(max_index);
-			}
-			
-			if (pm0 < pm1) {
-				if (T < _D) {
-					max_index = ClonePath(min_index);
-					ExtendPath(max_index, 1, pm1);
+		// for checking poped up path on the condition of the width search L
+		passedLength = _path_lengths[min_index];
+		isTruncateNeeded = false;
+
+		if (passedLength < _n) {
+			if (_mask[_path_lengths[min_index]]) {
+				if (T == _D && _path_metrics[max_index] > (pm0 > pm1 ? pm0 : pm1)) {
+					KillPath(max_index, T);
 				}
 
-				ExtendPath(min_index, 0, pm0);
+				if (pm0 < pm1) {
+					if (T < _D) {
+						max_index = ClonePath(min_index, T);
+						ExtendPath(max_index, 1, pm1);
+					}
+
+					ExtendPath(min_index, 0, pm0);
+				}
+				else {
+					if (T < _D) {
+						max_index = ClonePath(min_index, T);
+						ExtendPath(max_index, 0, pm0);
+					}
+
+					ExtendPath(min_index, 1, pm1);
+				}
+
 			}
 			else {
-				if (T < _D) {
-					max_index = ClonePath(min_index);
-					ExtendPath(max_index, 0, pm0);
-				}
-
-				ExtendPath(min_index, 1, pm1);
+				ExtendPath(min_index, FROZEN_VALUE, pm0);
 			}
 
+			// Update length info
+			_path_lengths_hits[passedLength]++;
+			if (_path_lengths_hits[passedLength] >= _L)
+				isTruncateNeeded = true;
 		}
+		// Crc check
 		else {
-			ExtendPath(min_index, FROZEN_VALUE, pm0);
+			if (IsCrcPassed(_paths[min_index]))
+				break;
+
+			KillPath(min_index, T);
+			_path_lengths_hits[_n]++;
+			if (_path_lengths_hits[_n] >= _L)
+				break;
 		}
 
 		// loop for new indices
@@ -167,9 +236,17 @@ std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 		size_t new_max_index = 0;
 		double min_metric = MAX_METRIC;
 		double max_metric = -MAX_METRIC;
-		
+
 		for (size_t i = 0; i < _D; i++)
 		{
+			if (!_is_paths_active[i])
+				continue;
+
+			if (isTruncateNeeded && _path_lengths[i] <= passedLength) {
+				KillPath(i, T);
+				continue;
+			}
+
 			if (_path_metrics[i] < min_metric) {
 				min_metric = _path_metrics[i];
 				new_min_index = i;
@@ -178,20 +255,25 @@ std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 				max_metric = _path_metrics[i];
 				new_max_index = i;
 			}
-		}
+		}		
 
-		isPathSwitched = min_index == new_min_index;
+		isPathSwitched = min_index != new_min_index;
 		min_index = new_min_index;
 		max_index = new_max_index;
 
-		// Update length info ?????
-		if (poped elemtns count length <= L)
-		// Check CRC and stack is empty
-		if (path == n and IsCrcPassed() and stack is empty)
+		// stack is empty
+		if (_inactive_path_indices.size() == _D)
+		{
+			min_index = 0;
+			for (size_t i = 0; i < _n; i++)
+			{
+				_paths[min_index][i] = 0;
+			}
 			break;
+		}
 
 		if (isPathSwitched)
-			LoadPath();
+			LoadPath(min_index);
 
 		phi = _path_lengths[min_index] - 1;
 		_beta[phi % 2][0][0] = _paths[min_index][phi];
@@ -203,10 +285,6 @@ std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
 		result[i] = _paths[min_index][codewordBits[i]];
-
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 
 	_normalizerOperationCount++;

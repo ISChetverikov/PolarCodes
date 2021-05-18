@@ -3,4 +3,6 @@
 3) D > L, log D < n
 4) OPerations count for LLR and MINSUM
 5) define for operations counting`
-6) optimized decoder only with minsum LLR
+6) optimized SC and SCS decoder only with minsum LLR
+7) optimized SC decoder without CRC
+8) all versions of list and stack does not work with CRC

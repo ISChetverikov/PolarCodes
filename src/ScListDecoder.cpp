@@ -439,6 +439,16 @@ std::vector<int> ScListDecoder::TakeListResult() {
 	if (j < _L)
 		candidate = _candidates[maxInd];
 
+	//// test
+	//for (size_t i = 0; i <= _codePtr->m(); i++)
+	//{
+	//	for (size_t j = 0; j < _codePtr->N(); j++)
+	//	{
+	//		std::cout << _uhatTrees[maxInd][i][j] << " ";
+	//	}
+	//	std::cout << "\n";
+	//}
+
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
 		result[i] = candidate[codewordBits[i]];

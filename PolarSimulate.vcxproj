@@ -40,6 +40,7 @@
     <ClInclude Include="include\FlipStatistic512_256_CRC24.h" />
     <ClInclude Include="include\FlipStatisticNew256_128.h" />
     <ClInclude Include="include\GaussianApproximation.h" />
+    <ClInclude Include="include\OperationsCount.h" />
     <ClInclude Include="include\PolarCode.h" />
     <ClInclude Include="include\ConfigReading.h" />
     <ClInclude Include="include\DecoderType.h" />
