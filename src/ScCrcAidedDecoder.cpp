@@ -88,12 +88,7 @@ bool ScCrcAidedDecoder::IsCrcPassed(std::vector<int> codeword) {
 		crc[i] = codeword[crcBits[i]];
 	}
 
-	_crcPtr->ClearOperationsCount();
 	auto crcReal = _crcPtr->Calculate(word);
-
-	// operations count
-	_operationsCount += 1 + _crcPtr->GetLastOperationsCount();
-	///////////////////
 
 	return crc == crcReal;
 }

@@ -14,6 +14,7 @@
 #include "../include/ScDecoder.h"
 #include "../include/ScOptimized.h"
 #include "../include/ScStackOptimizedDecoder.h"
+#include "../include/ScStackOperationCounter.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScFlipDecoder.h"
 #include "../include/ScFlipFanoDecoder.h"
@@ -215,7 +216,7 @@ BaseDecoder * BuildDecoder(
 	case decoderType::SCStackOptimized: {
 		int L = ExtractInt(decoderParams, "L", "SCStack decoder");
 		int D = ExtractInt(decoderParams, "D", "SCStack decoder");
-		decoderPtr = new ScStackOptimizedDecoder(codePtr, L, D);
+		decoderPtr = new ScStackOperationCounter(codePtr, L, D);
 	}
 	break;
 	case decoderType::SCFlipProg: {

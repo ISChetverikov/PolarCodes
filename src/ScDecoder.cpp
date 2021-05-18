@@ -58,10 +58,6 @@ void ScDecoder::FillLeftMessageInTree(std::vector<double>::iterator leftIt,
 	for (size_t i = 0; i < n; i++, leftIt++, rightIt++, outIt++)
 	{
 		*outIt = f(*leftIt, *rightIt);
-
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 }
 
@@ -74,10 +70,6 @@ void ScDecoder::FillRightMessageInTree(std::vector<double>::iterator leftIt,
 	for (size_t i = 0; i < n; i++, leftIt++, rightIt++, outIt++, uhatIt++)
 	{
 		*outIt = g(*leftIt, *rightIt, *uhatIt);
-
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 }
 
@@ -88,10 +80,6 @@ size_t ScDecoder::FirstBitPos(size_t n) {
 	{
 		n = n >> 1;
 		m++;
-
-		// operations count
-		_operationsCount += 3;
-		///////////////////
 	}
 
 	return m;
@@ -106,10 +94,6 @@ void ScDecoder::PassDown(size_t iter) {
 	if (iter) {
 		iterXor = iter ^ (iter - 1);
 		level = m - FirstBitPos(iterXor);
-
-		// operations count
-		_operationsCount += 3;
-		///////////////////
 	}
 	else {
 		level = 0;
@@ -117,19 +101,11 @@ void ScDecoder::PassDown(size_t iter) {
 
 	//std::vector<int> binaryIter(m - level, 0);
 	int size = (int)(m - level);
-
-	// operations count
-	_operationsCount += 5;
-	///////////////////
 	size_t iterCopy = iter;
 	for (int i = size - 1; i >= 0; i--)
 	{
 		_binaryIter[i] = iterCopy % 2;
 		iterCopy = iterCopy >> 1;
-
-		// operations count
-		_operationsCount += 4;
-		///////////////////
 	}
 
 	size_t length = (size_t)1 << (m - level - 1);
@@ -154,10 +130,6 @@ void ScDecoder::PassDown(size_t iter) {
 		}
 
 		length = length / 2;
-
-		// operations count
-		_operationsCount += 7;
-		///////////////////
 	}
 }
 
@@ -175,10 +147,6 @@ void ScDecoder::PassUp(size_t iter) {
 		for (size_t i = 0; i < length; i++)
 		{
 			_uhatTree[level - 1][offset + i] = _uhatTree[level][offset + i] ^ _uhatTree[level][offset + length + i];
-
-			// operations count
-			_operationsCount += 4;
-			///////////////////
 		}
 		for (size_t i = 0; i < length; i++)
 		{
@@ -189,10 +157,6 @@ void ScDecoder::PassUp(size_t iter) {
 		bit = iterCopy % 2;
 		length *= 2;
 		level -= 1;
-
-		// operations count
-		_operationsCount += 6;
-		///////////////////
 	}
 }
 
@@ -203,10 +167,6 @@ void ScDecoder::DecodeInternal(std::vector<double> inLlr) {
 	for (size_t i = 0; i < n; i++)
 	{
 		_beliefTree[0][i] = inLlr[i];
-
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 	for (size_t i = 0; i < n; i++)
 	{
@@ -219,10 +179,6 @@ void ScDecoder::DecodeInternal(std::vector<double> inLlr) {
 		}
 		_uhatTree[m][i] = _x[i];
 		PassUp(i);
-
-		// operations count
-		_operationsCount += 3;
-		///////////////////
 	}
 
 	return;
@@ -234,10 +190,6 @@ std::vector<int> ScDecoder::TakeResult() {
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
 		result[i] = _x[codewordBits[i]];
-
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 
 	return result;
@@ -246,8 +198,6 @@ std::vector<int> ScDecoder::TakeResult() {
 std::vector<int> ScDecoder::Decode(std::vector<double> inLlr) {
 	
 	DecodeInternal(inLlr);
-
-	_normalizerOperationCount++;
 
 	return TakeResult();
 }

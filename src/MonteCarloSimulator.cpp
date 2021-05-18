@@ -3,6 +3,7 @@
 #include <fstream>
 #include <chrono>
 #include <exception>
+#include "../include/OperationsCount.h"
 #include "../include/SimulationParameters.h"
 #include "../include/MonteCarloSimulator.h"
 #include "../include/ScFanoDecoder.h"
@@ -140,13 +141,11 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 					wrong_bits += 1;
 			}*/
 		}
-
-		
 	}
 
 	//std::cout << "BER: " << (double)wrong_bits / n / tests << std::endl;
 
-	double operationsCount = _decoderPtr->GetOperationsCount();
+	OperationsCount operationsCount = _decoderPtr->GetOperationsCount();
 
 	auto t2 = std::chrono::steady_clock::now();
 

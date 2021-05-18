@@ -6,3 +6,4 @@
 6) optimized SC and SCS decoder only with minsum LLR
 7) optimized SC decoder without CRC
 8) all versions of list and stack does not work with CRC
+9) Cut off domain type

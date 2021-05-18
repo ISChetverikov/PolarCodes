@@ -30,39 +30,32 @@ double ScOptimizedDecoder::f(double left, double right) {
 		left = -left;
 		sign = -sign;
 
-		_operationsCount += 2;
 	}
 	if (right < 0) {
 		right = -right;
 		sign = -sign;
 
-		_operationsCount += 2;
 	}
 
-	_operationsCount += 4;
 
 	return ((left < right) ? left : right) * sign;
 }
 
 double ScOptimizedDecoder::g(double left, double right, int left_hard) {
-	_operationsCount += 3;
 
 	return right + (left_hard == 1 ? -1 : 1) * left;
 }
 
 int ScOptimizedDecoder::HD(double llr) {
-	_operationsCount += 1;
 
 	return llr < 0;
 }
 
 void ScOptimizedDecoder::recursively_calc_alpha(size_t lambda, size_t phi) {
-	_operationsCount += 1;
 
 	if (lambda == _m)
 		return;
 	
-	_operationsCount += 4;
 
 	size_t lambda_big = 1 << lambda;
 	size_t lambda_next = lambda + 1;
@@ -71,18 +64,15 @@ void ScOptimizedDecoder::recursively_calc_alpha(size_t lambda, size_t phi) {
 	if (isPhiOdd) {
 		for (size_t i = 0; i < lambda_big; i++) {
 			_alpha[lambda][i] = g(_alpha[lambda_next][i], _alpha[lambda_next][i + lambda_big], _beta[!isPhiOdd][lambda][i]);
-			_operationsCount += 3;
 		}
 	}
 	else {
 		recursively_calc_alpha(lambda_next, phi >> 1);
 
-		_operationsCount += 1;
 
 		for (size_t i = 0; i < lambda_big; i++) {
 			_alpha[lambda][i] = f(_alpha[lambda_next][i], _alpha[lambda_next][i + lambda_big]);
 
-			_operationsCount += 3;
 		}
 	}
 		
@@ -91,14 +81,12 @@ void ScOptimizedDecoder::recursively_calc_alpha(size_t lambda, size_t phi) {
 
 void ScOptimizedDecoder::recursively_calc_beta(size_t lambda, size_t phi) {
 
-	_operationsCount += 2;
 
 	size_t isPhiOdd = phi % 2;
 	size_t isPhiEven = !isPhiOdd;
 	if (isPhiEven)
 		return;
 
-	_operationsCount += 5;
 
 	size_t lambda_big = 1 << lambda;
 	size_t lambda_next = lambda + 1;
@@ -109,7 +97,6 @@ void ScOptimizedDecoder::recursively_calc_beta(size_t lambda, size_t phi) {
 		_beta[isHalfPhiOdd][lambda_next][i] = _beta[isPhiEven][lambda][i] ^ _beta[isPhiOdd][lambda][i];
 		_beta[isHalfPhiOdd][lambda_next][lambda_big + i] = _beta[isPhiOdd][lambda][i];
 
-		_operationsCount += 4;
 	}
 
 	recursively_calc_beta(lambda_next, phi >> 1);
@@ -123,7 +110,6 @@ std::vector<int> ScOptimizedDecoder::Decode(std::vector<double> llr) {
 	{
 		_alpha[_m][phi] = llr[phi];
 
-		_operationsCount += 2;
 	}
 
 	for (size_t phi = 0; phi < _n; phi++)
@@ -136,20 +122,14 @@ std::vector<int> ScOptimizedDecoder::Decode(std::vector<double> llr) {
 			_beta[phi % 2][0][0] = hard_desicion;
 			result[i++] = hard_desicion;
 
-			_operationsCount += 2;
 		}
 		else {
 			_beta[phi % 2][0][0] = FROZEN_VALUE;
 
-			_operationsCount += 1;
 		}
 
 		recursively_calc_beta(0, phi);
 
-		_operationsCount += 2;
 	}
-
-	_normalizerOperationCount++;
-
 	return result;
 }

@@ -53,16 +53,9 @@ double ScListDecoder::StepMetric(double belief, int decision) {
 #ifdef DOMAIN_LLR
 	
 #ifdef MINSUM
-	// operations count
-	_operationsCount += 8;
-	///////////////////
 
 	return (belief < 0 && decision == 0 || belief > 0 && decision == 1) ? -fabs(belief) : 0;
 #else
-	// operations count
-	_operationsCount += 5;
-	///////////////////
-
 	const double limit = 10000000.0;
 
 	if (belief < -limit)
@@ -78,10 +71,6 @@ double ScListDecoder::StepMetric(double belief, int decision) {
 #endif // MINSUM
 
 #elif DOMAIN_P1
-	// operations count
-	_operationsCount += 2;
-	///////////////////
-
 	return log((decision) ? belief : 1 - belief);
 #endif // DOMAIN
 }
@@ -95,10 +84,6 @@ void ScListDecoder::PassDownList(size_t iter) {
 	if (iter) {
 		iterXor = iter ^ (iter - 1);
 		level = m - FirstBitPos(iterXor);
-
-		// operations count
-		_operationsCount += 3;
-		///////////////////
 	}
 	else {
 		level = 0;
@@ -112,9 +97,6 @@ void ScListDecoder::PassDownList(size_t iter) {
 		_binaryIter[i] = iterCopy % 2;
 		iterCopy = iterCopy >> 1;
 
-		// operations count
-		_operationsCount += 4;
-		///////////////////
 	}
 
 	size_t length = (size_t)1 << (m - level - 1);
@@ -139,23 +121,11 @@ void ScListDecoder::PassDownList(size_t iter) {
 					_beliefTrees[j][i + 1].begin() + offset + length,
 					length);
 			}
-
-			// operations count
-			_operationsCount += 3;
-			///////////////////
-
 		}
 		
 		length = length / 2;
-
-		// operations count
-		_operationsCount += 6;
-		///////////////////
 	}
 
-	// operations count
-	_operationsCount += 4;
-	///////////////////
 }
 
 void ScListDecoder::PassUpList(size_t iter) {
@@ -175,22 +145,13 @@ void ScListDecoder::PassUpList(size_t iter) {
 			{
 				_uhatTrees[j][level - 1][offset + i] = _uhatTrees[j][level][offset + i] ^ _uhatTrees[j][level][offset + length + i];
 
-				// operations count
-				_operationsCount += 4;
-				///////////////////
 			}
 			for (size_t i = 0; i < length; i++)
 			{
 				_uhatTrees[j][level - 1][offset + length + i] = _uhatTrees[j][level][offset + length + i];
 
-				// operations count
-				_operationsCount += 2;
-				///////////////////
 			}
 
-			// operations count
-			_operationsCount += 2;
-			///////////////////
 		}
 		
 		iterCopy = iterCopy >> 1;
@@ -198,14 +159,8 @@ void ScListDecoder::PassUpList(size_t iter) {
 		length *= 2;
 		level -= 1;
 
-		// operations count
-		_operationsCount += 5;
-		///////////////////
 	}
 
-	// operations count
-	_operationsCount += 2;
-	///////////////////
 }
 
 void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
@@ -219,16 +174,9 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 
 		_metrics[j] = 0;
 
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 		
 	int logL = (int)FirstBitPos(_L) - 1;
-
-	// operations count
-	_operationsCount += 1;
-	///////////////////
 
 	// first log(_L) bits
 	size_t i_all = 0; // number of bit (j - number of condidate in list)
@@ -244,23 +192,14 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 				if ((j + 1) % (1 << i_unfrozen) == 0) // all paths at the logL first steps 
 					value = !value;
 
-				// operations count
-				_operationsCount += 7;
-				///////////////////
 			}
 			i_unfrozen++;
 
-			// operations count
-			_operationsCount += 2;
-			///////////////////
 		}
 		else {
 			for (size_t j = 0; j < _L; j++) {
 				_candidates[j][i_all] = FROZEN_VALUE;
 
-				// operations count
-				_operationsCount += 2;
-				///////////////////
 			}
 		}
 
@@ -268,18 +207,12 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 			_uhatTrees[j][m][i_all] = _candidates[j][i_all];
 			_metrics[j] += StepMetric(_beliefTrees[j][m][i_all], _candidates[j][i_all]);
 
-			// operations count
-			_operationsCount += 3;
-			///////////////////
 		}
 			
 		PassUpList(i_all);
 
 		i_all++;
 
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 	while (i_all < n)
 	{
@@ -288,10 +221,6 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 		if (_maskWithCrc[i_all]) {
 			FillListMask(i_all);
 			
-			// operations count
-			_operationsCount += 1;
-			///////////////////
-
 			for (size_t j = 0, i = 0; i < _L; i++) {
 				// add new path
 				if (_areTakenOne[j] && _areTakenZero[j]) {
@@ -318,11 +247,7 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 					j++;
 					continue;
 				}
-
-				// operations count
-				_operationsCount += 4;
-				///////////////////
-
+				
 				// delete path
 				_beliefTrees.erase(_beliefTrees.begin() + j);
 				_metrics.erase(_metrics.begin() + j);
@@ -336,9 +261,6 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 			for (size_t j = 0; j < _L; j++) {
 				_candidates[j][i_all] = FROZEN_VALUE;
 
-				// operations count
-				_operationsCount += 2;
-				///////////////////
 			}
 				
 		}
@@ -347,18 +269,12 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 			_uhatTrees[j][m][i_all] = _candidates[j][i_all];
 			_metrics[j] += StepMetric(_beliefTrees[j][m][i_all], _candidates[j][i_all]);
 
-			// operations count
-			_operationsCount += 3;
-			///////////////////
 		}
 			
 		PassUpList(i_all);
 
 		i_all++;
 
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 
 	return;
@@ -367,10 +283,6 @@ void ScListDecoder::DecodeListInternal(std::vector<double> inLlr) {
 void ScListDecoder::FillListMask(size_t iter) {
 	std::vector<int> indices(2 * _L, 0);
 	std::vector<double> metricsNew(2 * _L, 0);
-
-	// operations count
-	_operationsCount += 1;
-	///////////////////
 
 	size_t m = _codePtr->m();
 
@@ -388,9 +300,6 @@ void ScListDecoder::FillListMask(size_t iter) {
 		metricsNew[j] = _metrics[j] + step0;
 		metricsNew[j + _L] = _metrics[j] + step1;
 
-		// operations count
-		_operationsCount += 5;
-		///////////////////
 	}
 
 	for (size_t i = 0; i < _L; i++)
@@ -407,9 +316,6 @@ void ScListDecoder::FillListMask(size_t iter) {
 		
 		metricsNew.erase(metricsNew.begin() + maxInd);
 
-		// operations count
-		_operationsCount += (4 + _L * log(_L));
-		///////////////////
 	}
 }
 
@@ -431,37 +337,14 @@ std::vector<int> ScListDecoder::TakeListResult() {
 		
 		_metrics[maxInd] = -100000.0;
 
-		// operations count
-		_operationsCount += (_L * log(_L) + 2);
-		///////////////////
 	}
-
 	if (j < _L)
 		candidate = _candidates[maxInd];
-
-	//// test
-	//for (size_t i = 0; i <= _codePtr->m(); i++)
-	//{
-	//	for (size_t j = 0; j < _codePtr->N(); j++)
-	//	{
-	//		std::cout << _uhatTrees[maxInd][i][j] << " ";
-	//	}
-	//	std::cout << "\n";
-	//}
 
 	for (size_t i = 0; i < codewordBits.size(); i++)
 	{
 		result[i] = candidate[codewordBits[i]];
-
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
-
-	// operations count
-	_operationsCount += 1;
-	///////////////////
-
 	return result;
 }
 
@@ -469,9 +352,6 @@ std::vector<int> ScListDecoder::TakeListResult() {
 std::vector<int> ScListDecoder::Decode(std::vector<double> inLlr) {
 
 	DecodeListInternal(inLlr);
-
-	// for operations count
-	_normalizerOperationCount++;
 
 	return TakeListResult();
 }

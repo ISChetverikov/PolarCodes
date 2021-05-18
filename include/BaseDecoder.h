@@ -5,6 +5,7 @@
 
 #include "PolarCode.h"
 #include "Domain.h"
+#include "OperationsCount.h"
 
 class BaseDecoder {
 
@@ -14,9 +15,7 @@ protected:
 	std::vector<int> _codeword;
 
 	std::string _pathTrace;
-	double _operationsCount;
-	int _normilizedComplexity;
-	int _normalizerOperationCount;
+	OperationsCount _operationsCount;
 
 	double f(double p1, double p2);
 	double g(double p1, double p2, int b);
@@ -25,7 +24,7 @@ protected:
 public:
 	BaseDecoder(PolarCode * codePtr);
 
-	double GetOperationsCount();
+	OperationsCount GetOperationsCount();
 	void ClearOperationsCount();
 
 	virtual domain GetDomain();

@@ -8,6 +8,7 @@
 #include <vector>
 #include "DecoderType.h"
 #include "SimulationType.h"
+#include "OperationsCount.h"
 
 struct SimulationParams {
     simulatorType simulator;
@@ -77,18 +78,26 @@ struct SimulationIterationResults {
 
 	int rejectionsCount;
 	int testsCount;
-	double operationsCount;
+	OperationsCount operationsCount;
 	std::chrono::milliseconds elapsedTime;
 
 	static std::string GetHeader() {
-		return "SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms), operationsCount";
+		return "SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms), sums, muls, comps, xors, total";
 	}
 
 	std::string ToString() {
 		std::stringstream ss;
 		
+		double sums = (double)operationsCount.Sums / operationsCount.Normilizer;
+		double muls = (double)operationsCount.Muls / operationsCount.Normilizer;
+		double comps = (double)operationsCount.Comps / operationsCount.Normilizer;
+		double xors = (double)operationsCount.Xors / operationsCount.Normilizer;
+		double total = sums + muls + comps + xors;
+
+
 		ss << snr << ", " << ebn0 << ", " << sigma << ", " << fer << ", " << rejectionsCount
-			<< ", " << testsCount << ", " << elapsedTime.count() << ", " << operationsCount;
+			<< ", " << testsCount << ", " << elapsedTime.count() << ", " << sums 
+			<< ", " << muls << ", " << comps << ", " << xors << ", " << total;
 		
 		return ss.str();
 	}

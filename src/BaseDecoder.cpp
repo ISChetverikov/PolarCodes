@@ -3,26 +3,26 @@
 #include "../include/Exceptions.h"
 #include "../include/BaseDecoder.h"
 #include "../include/Domain.h"
+#include "../include/OperationsCount.h"
 
 BaseDecoder::BaseDecoder(PolarCode * codePtr) {
 	_codePtr = codePtr;
 	_sigma = 0;
 	
-
-	_operationsCount = 0;
-	_normalizerOperationCount = 0;
+	ClearOperationsCount();
 }
 
-double BaseDecoder::GetOperationsCount() {
-	if (_normalizerOperationCount == 0)
-		return 0;
-
-	return (double)_operationsCount / _normalizerOperationCount;
+OperationsCount BaseDecoder::GetOperationsCount() {
+	return _operationsCount;
 }
 
 void BaseDecoder::ClearOperationsCount() {
-	_operationsCount = 0;
-	_normalizerOperationCount = 0;
+
+	_operationsCount.Sums = 0;
+	_operationsCount.Muls = 0;
+	_operationsCount.Comps = 0;
+	_operationsCount.Xors = 0;
+	_operationsCount.Normilizer = 0;
 }
 
 void BaseDecoder::SetSigma(double sigma) {
@@ -50,23 +50,12 @@ double BaseDecoder::f(double x, double y) {
 	if (x < 0) {
 		sign *= -1;
 		x *= -1;
-
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 	if (y < 0) {
 		sign *= -1;
 		y *= -1;
-
-		// operations count
-		_operationsCount += 2;
-		///////////////////
 	}
 
-	// operations count
-	_operationsCount += 2;
-	///////////////////
 
 	return ((x < y) ? x : y) * sign;
 }
@@ -80,10 +69,6 @@ double BaseDecoder::f(double llr1, double llr2) {
 	if (prod < -limit)
 		prod = -limit;
 
-	// operations count
-	_operationsCount += 9;
-	///////////////////
-
 	return 2 * atanh(prod);
 }
 
@@ -91,36 +76,23 @@ double BaseDecoder::f(double llr1, double llr2) {
 
 double BaseDecoder::g(double x, double y, int b) {
 
-	// operations count
-	_operationsCount += 4;
-	///////////////////
-
 	return y + (1 - 2 * b) * x;
 }
 
 int BaseDecoder::L(double llr) {
-	// operations count
-	_operationsCount += 1;
-	///////////////////
-
+	
 	return llr < 0;
 }
 #elif DOMAIN_P1
 
 double BaseDecoder::f(double p1, double p2) {
-	// operations count
-	_operationsCount += 5;
-	///////////////////
-
+	
 	return p1 * (1 - p2) + p2 * (1 - p1);
 }
 
 double BaseDecoder::g(double p1, double p2, int b) {
 	double p1_b = f(b, p1);
 
-	// operations count
-	_operationsCount += 7;
-	///////////////////
 
 	if (p1_b == 0 && p2 == 1 || p2 == 0 && p1_b == 1)
 		return 1 / 2;
@@ -129,10 +101,6 @@ double BaseDecoder::g(double p1, double p2, int b) {
 }
 
 int BaseDecoder::L(double p1) {
-
-	// operations count
-	_operationsCount += 1;
-	///////////////////
 
 	return p1 >= (0.5);
 }
