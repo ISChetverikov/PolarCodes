@@ -365,7 +365,8 @@ std::vector<int> ScStackOperationCounter::Decode(std::vector<double> llr) {
 
 		for (size_t i = 0; i < _D; i++)
 		{
-			_operationsCount.Comps += 1;
+			_operationsCount.Comps += 2;
+			_operationsCount.Sums++;
 
 			if (!_is_paths_active[i])
 				continue;
