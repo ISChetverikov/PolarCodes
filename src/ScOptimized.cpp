@@ -69,7 +69,6 @@ void ScOptimizedDecoder::recursively_calc_alpha(size_t lambda, size_t phi) {
 	else {
 		recursively_calc_alpha(lambda_next, phi >> 1);
 
-
 		for (size_t i = 0; i < lambda_big; i++) {
 			_alpha[lambda][i] = f(_alpha[lambda_next][i], _alpha[lambda_next][i + lambda_big]);
 

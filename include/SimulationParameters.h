@@ -82,22 +82,22 @@ struct SimulationIterationResults {
 	std::chrono::milliseconds elapsedTime;
 
 	static std::string GetHeader() {
-		return "SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms), sums, muls, comps, xors, total";
+		return "SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms), sums, muls, comps, xors, total, iter";
 	}
 
 	std::string ToString() {
 		std::stringstream ss;
 		
-		double sums = (double)operationsCount.Sums / operationsCount.Normilizer;
-		double muls = (double)operationsCount.Muls / operationsCount.Normilizer;
-		double comps = (double)operationsCount.Comps / operationsCount.Normilizer;
-		double xors = (double)operationsCount.Xors / operationsCount.Normilizer;
+		double sums = (double)operationsCount.Sums / operationsCount.Normilizer / 1000;
+		double muls = (double)operationsCount.Muls / operationsCount.Normilizer / 1000;
+		double comps = (double)operationsCount.Comps / operationsCount.Normilizer / 1000;
+		double xors = (double)operationsCount.Xors / operationsCount.Normilizer / 1000;
 		double total = sums + muls + comps + xors;
-
+		double iterations = operationsCount.Iterations / operationsCount.Normilizer;
 
 		ss << snr << ", " << ebn0 << ", " << sigma << ", " << fer << ", " << rejectionsCount
 			<< ", " << testsCount << ", " << elapsedTime.count() << ", " << sums 
-			<< ", " << muls << ", " << comps << ", " << xors << ", " << total;
+			<< ", " << muls << ", " << comps << ", " << xors << ", " << total << ", " << iterations;
 		
 		return ss.str();
 	}

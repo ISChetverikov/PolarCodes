@@ -239,6 +239,7 @@ std::vector<int> ScStackOperationCounter::Decode(std::vector<double> llr) {
 	bool isPhiEven = false;
 	size_t passedLength = 0;
 	bool isTruncateNeeded = false;
+	int iterationsCount = 0;
 
 	// init structures
 	_inactive_path_indices = stack<size_t>();
@@ -278,6 +279,7 @@ std::vector<int> ScStackOperationCounter::Decode(std::vector<double> llr) {
 	
 	while (true) {
 
+		iterationsCount++;
 		recursively_calc_alpha_stack(0, _path_lengths[min_index], isPathSwitched);
 
 		pm0 = _path_metrics[min_index] + calculate_step_metric(_alpha[0][0], 0);
@@ -363,10 +365,12 @@ std::vector<int> ScStackOperationCounter::Decode(std::vector<double> llr) {
 
 		for (size_t i = 0; i < _D; i++)
 		{
-			_operationsCount.Comps += 4;
+			_operationsCount.Comps += 1;
 
 			if (!_is_paths_active[i])
 				continue;
+
+			_operationsCount.Comps += 1;
 
 			if (isTruncateNeeded) {
 
@@ -378,10 +382,15 @@ std::vector<int> ScStackOperationCounter::Decode(std::vector<double> llr) {
 				}
 			}
 
+			_operationsCount.Comps += 1;
+
 			if (_path_metrics[i] < min_metric) {
 				min_metric = _path_metrics[i];
 				new_min_index = i;
 			}
+
+			_operationsCount.Comps += 1;
+
 			if (_path_metrics[i] > max_metric) {
 				max_metric = _path_metrics[i];
 				new_max_index = i;
@@ -423,6 +432,7 @@ std::vector<int> ScStackOperationCounter::Decode(std::vector<double> llr) {
 		_operationsCount.Comps++;
 	}
 
+	_operationsCount.Iterations += (double) iterationsCount / _n;
 	_operationsCount.Normilizer++;
 
 	return result;

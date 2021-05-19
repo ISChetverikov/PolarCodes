@@ -23,6 +23,7 @@ void BaseDecoder::ClearOperationsCount() {
 	_operationsCount.Comps = 0;
 	_operationsCount.Xors = 0;
 	_operationsCount.Normilizer = 0;
+	_operationsCount.Iterations = 0;
 }
 
 void BaseDecoder::SetSigma(double sigma) {
