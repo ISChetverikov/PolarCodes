@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommonTransformations.cpp" />
+    <ClCompile Include="src\ScCreeperDecoder.cpp" />
     <ClCompile Include="src\ScOptimized.cpp" />
     <ClCompile Include="src\ScStackDecoder.cpp" />
     <ClCompile Include="src\ScStackOperationCounter.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="include\FlipStatistic512_256_CRC24.h" />
     <ClInclude Include="include\FlipStatisticNew256_128.h" />
     <ClInclude Include="include\GaussianApproximation.h" />
+    <ClInclude Include="include\ScCreeperDecoder.h" />
     <ClInclude Include="include\ScStackOperationCounter.h" />
     <ClInclude Include="include\OperationsCount.h" />
     <ClInclude Include="include\PolarCode.h" />

@@ -123,7 +123,6 @@ void ScStackOptimizedDecoder::LoadPath(size_t index) {
 
 std::vector<int> ScStackOptimizedDecoder::Decode(std::vector<double> llr) {
 	vector<int> result = vector<int>(_k, 0);
-	vector<int> right_result = { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1 };
 	// variables
 	size_t T = 0;
 	size_t min_index = 0;

@@ -5,6 +5,7 @@
 class ScListDecoder : public ScCrcAidedDecoder {
 protected:
 	int _L;
+	bool _isCA = false;
 	std::vector<std::vector<std::vector<double>>> _beliefTrees;
 	std::vector<std::vector<std::vector<int>>> _uhatTrees;
 	std::vector<std::vector<int>> _candidates;

@@ -15,7 +15,7 @@ decoderType decoderTypeFromString(std::string str) {
 		{"SCS", decoderType::SCStack},
 		{"SCOptimized", decoderType::SCOptimized},
 		{"SCSOptimized", decoderType::SCStackOptimized},
-
+		{"SCCreeper", decoderType::SCCreeper},
 	};
 
 	if (decoderTypeResolver.count(str) > 0)
@@ -40,6 +40,8 @@ std::string decoderTypeToString(decoderType type) {
 		{decoderType::SCStack, "SCS"},
 		{decoderType::SCOptimized, "SCOptimized"},
 		{decoderType::SCStackOptimized, "SCSOptimized"},
+		{decoderType::SCCreeper, "SCCreeper"},
+
 	};
 
 	return decoderTypeStringResolver[type];

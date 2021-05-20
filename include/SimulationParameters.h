@@ -80,9 +80,11 @@ struct SimulationIterationResults {
 	int testsCount;
 	OperationsCount operationsCount;
 	std::chrono::milliseconds elapsedTime;
-
+	static const bool includeOperations = false;
+	
 	static std::string GetHeader() {
-		return "SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms), sums, muls, comps, xors, total, iter";
+		return (std::string("SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms)")
+			+ ((includeOperations) ? ", sums, muls, comps, xors, total, iter" : ""));
 	}
 
 	std::string ToString() {
@@ -96,8 +98,10 @@ struct SimulationIterationResults {
 		double iterations = operationsCount.Iterations / operationsCount.Normilizer;
 
 		ss << snr << ", " << ebn0 << ", " << sigma << ", " << fer << ", " << rejectionsCount
-			<< ", " << testsCount << ", " << elapsedTime.count() << ", " << sums 
-			<< ", " << muls << ", " << comps << ", " << xors << ", " << total << ", " << iterations;
+			<< ", " << testsCount << ", " << elapsedTime.count();
+
+		if (includeOperations)
+			ss << ", " << sums << ", " << muls << ", " << comps << ", " << xors << ", " << total << ", " << iterations;
 		
 		return ss.str();
 	}

@@ -24,6 +24,7 @@
 #include "../include/ScListFlipOracleStatDecoder.h"
 #include "../include/ScListDecoder.h"
 #include "../include/ScStackDecoder.h"
+#include "../include/ScCreeperDecoder.h"
 #include "../include/ScFlipProgDecoder.h"
 #include "../include/BaseSimulator.h"
 #include "../include/ConfigReading.h"
@@ -174,6 +175,12 @@ BaseDecoder * BuildDecoder(
 		double T = ExtractDouble(decoderParams, "T", "SCFano decoder");
 		double delta = ExtractDouble(decoderParams, "delta", "SCFano decoder");
 		decoderPtr = new ScFanoDecoder(codePtr, T, delta);
+		return decoderPtr;
+	}
+		break;
+	case decoderType::SCCreeper: {
+		double delta = ExtractDouble(decoderParams, "delta", "SCFano decoder");
+		decoderPtr = new ScCreeperDecoder(codePtr, delta);
 		return decoderPtr;
 	}
 		break;
