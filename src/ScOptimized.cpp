@@ -23,6 +23,9 @@ ScOptimizedDecoder::ScOptimizedDecoder(PolarCode * codePtr) : BaseDecoder(codePt
 	_mask = _codePtr->BitsMaskWithCrc();
 }
 
+
+#ifdef DOMAIN_LLR
+
 double ScOptimizedDecoder::f(double left, double right) {
 	double sign = 1;
 
@@ -43,6 +46,7 @@ double ScOptimizedDecoder::f(double left, double right) {
 
 double ScOptimizedDecoder::g(double left, double right, int left_hard) {
 
+
 	return right + (left_hard == 1 ? -1 : 1) * left;
 }
 
@@ -50,6 +54,29 @@ int ScOptimizedDecoder::HD(double llr) {
 
 	return llr < 0;
 }
+
+#elif DOMAIN_P1
+
+double ScOptimizedDecoder::f(double p1, double p2) {
+
+	return p1 * (1 - p2) + p2 * (1 - p1);
+}
+
+double ScOptimizedDecoder::g(double p1, double p2, int b) {
+	double p1_b = f(b, p1);
+
+
+	if (p1_b == 0 && p2 == 1 || p2 == 0 && p1_b == 1)
+		return 1 / 2;
+
+	return p1_b * p2 / (p1_b * p2 + (1 - p1_b) * (1 - p2));
+}
+
+int ScOptimizedDecoder::HD(double p1) {
+
+	return p1 >= 0.5;
+}
+#endif
 
 void ScOptimizedDecoder::recursively_calc_alpha(size_t lambda, size_t phi) {
 
@@ -104,7 +131,7 @@ void ScOptimizedDecoder::recursively_calc_beta(size_t lambda, size_t phi) {
 std::vector<int> ScOptimizedDecoder::Decode(std::vector<double> llr) {
 	std::vector<int> result(_codePtr->k(), 0);
 	size_t i = 0;
-
+	int iterationsCount = 0;
 	for (size_t phi = 0; phi < _n; phi++)
 	{
 		_alpha[_m][phi] = llr[phi];
@@ -128,7 +155,11 @@ std::vector<int> ScOptimizedDecoder::Decode(std::vector<double> llr) {
 		}
 
 		recursively_calc_beta(0, phi);
-
+		iterationsCount++;
 	}
+
+	_operationsCount.Iterations += (double)iterationsCount / _n;
+	_operationsCount.Normilizer++;
+
 	return result;
 }

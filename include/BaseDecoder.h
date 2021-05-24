@@ -14,7 +14,7 @@ protected:
 	double _sigma;
 	std::vector<int> _codeword;
 
-	std::string _pathTrace;
+	//std::string _pathTrace;
 	OperationsCount _operationsCount;
 
 	double f(double p1, double p2);
@@ -36,7 +36,7 @@ public:
 	virtual std::string GetStatistic();
 	virtual void ClearStatistic();
 	
-	std::string GetPathInfo();
+	//virtual std::string GetPathInfo();
 
 	virtual ~BaseDecoder() {};
 };

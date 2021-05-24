@@ -22,5 +22,5 @@ double LlrToP1(double llr) {
 	if (llr < -300.0)
 		return 1.0;
 
-	return 1.0 / (1 + exp(llr));
+	return 1.0 / (1.0 + exp(llr));
 }

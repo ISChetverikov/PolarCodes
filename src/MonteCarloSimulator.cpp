@@ -4,12 +4,14 @@
 #include <chrono>
 #include <exception>
 #include "../include/OperationsCount.h"
+#include "../include/CommonTransformations.h"
 #include "../include/SimulationParameters.h"
 #include "../include/MonteCarloSimulator.h"
 #include "../include/ScFanoDecoder.h"
 #include "../include/ScDecoder.h"
 #include "../include/ScListDecoder.h"
 #include "../include/ScStackDecoder.h"
+#include "../include/ScFanoDecoder.h"
 
 MonteCarloSimulator::MonteCarloSimulator(int maxTestsCount,
 	int maxRejectionsCount,
@@ -85,10 +87,11 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 
 #ifdef PARALLEL_DECODER
 	// HERE parallel decoder
+	std::vector<double> channelOuput1(n, 0);
 	std::vector<int> parallelDecoded;
 	size_t m = _codePtr->m();
 	PolarCode * parallelCodePtr = new PolarCode(m, k, ReadSequenceFromFileParallel("C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\" + std::to_string(n) + ".txt"), _codePtr->CrcPoly());
-	ScListDecoder parallelDecoder(parallelCodePtr, 4);
+	ScFanoDecoder parallelDecoder(parallelCodePtr, 0.0, 1);
 	//////
 #endif // PARALLEL_DECODER
 
@@ -107,18 +110,27 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		_decoderPtr->SetDecoderAnswer(_encoderPtr->PolarTransform(codeword));
 
 		channelOuput = _channelPtr->Pass(codeword);
-		//channelOuput = { 3.2307, -3.11039, -3.36801, -6.56322, 2.06576, 1.72037, 2.46457, 2.86076, -0.109397, -1.24382, -4.95555, 4.86218, 1.07354, 2.6011, -2.87971, -3.12015 };
-
+		//channelOuput = { 0.91975, 0.00149736, 0.998306, 0.999511, 0.958257, 0.954386, 0.296819, 0.934197, 0.0126016, 0.432695, 0.236357, 0.332338, 7.6258e-05, 0.137163, 0.253909, 0.897426 };
 		decoded = _decoderPtr->Decode(channelOuput);
-
+		//try {
+		//	
+		//}
+		//catch (std::exception e) {
+		//	std::string filename = "C:\\Users\\ische\\source\\repos\\PolarCodes\\results\\Creeper.debug";
+		//	DumpInfo(filename, VecToStr<double>(channelOuput));
+		//	//break;
+		//}
 #ifdef PARALLEL_DECODER1
 		// HERE parallel decoder to comparision, SC - worse decoder
+		/*for (size_t i = 0; i < n; i++)
+		{
+			channelOuput1[i] = LlrToP1(channelOuput[i]);
+		}*/
 		parallelDecoded = parallelDecoder.Decode(channelOuput);
-		
 		if (word != decoded && parallelDecoded == word) {
 			std::cout << "Find" << std::endl;
-			std::string debugInfo = _decoderPtr->GetPathInfo();
-			std::string filename = "C:\\Users\\ische\\source\\repos\\PolarCodes\\results\\dump_SCS.debug";
+			std::string debugInfo = parallelDecoder.GetPathInfo();
+			std::string filename = "C:\\Users\\ische\\source\\repos\\PolarCodes\\results\\dump_SCS1.debug";
 			DumpInfo(filename, VecToStr<double>(channelOuput));
 			DumpInfo(filename, VecToStr<int>(word));
 			DumpInfo(filename, VecToStr<int>(decoded));

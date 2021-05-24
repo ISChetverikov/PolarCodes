@@ -64,6 +64,10 @@ struct PathNode {
 	std::string description;
 };
 
+std::string ScDecoderTreeMaker::GetPathInfo() {
+	return _pathTrace;
+}
+
 bool CompareTree(PathNode first, PathNode second) {
 	if (first.binaryPath.size() > second.binaryPath.size())
 		return false;

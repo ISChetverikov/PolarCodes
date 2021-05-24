@@ -115,6 +115,6 @@ void BaseDecoder::ClearStatistic() {
 	
 }
 
-std::string BaseDecoder::GetPathInfo() {
-	return _pathTrace;
-}
+//std::string BaseDecoder::GetPathInfo() {
+//	return "";
+//}

@@ -4,6 +4,7 @@
 
 #include "../include/ScDecoderTreeMaker.h"
 #include "../include/PolarCode.h"
+#include "../include/CommonTransformations.h"
 
 
 void DumpInfo1(std::string filename, std::string info) {
@@ -26,9 +27,13 @@ std::string VecToStr1(std::vector<double> vec) {
 }
 
 
-int main3() {
-	std::vector<double> output = { 0.010119, 0.269376, 0.714051, 0.025632, 0.421688, 0.062596, 0.928681, 0.009483, 0.929548, 0.969867, 0.948404, 0.005403, 0.266173, 0.957171, 0.011451, 0.715712, };
-	auto code = new PolarCode(4, 7, { 0, 1, 2, 4, 8, 3, 5, 9, 6, 10, 12, 7, 11, 13, 14, 15 }, {});
+int main0() {
+	std::vector<double> output = { 0.91975, 0.00149736, 0.998306, 0.999511, 0.958257, 0.954386, 0.296819, 0.934197, 0.0126016, 0.432695, 0.236357, 0.332338, 7.6258e-05, 0.137163, 0.253909, 0.897426 };
+	/*for (size_t i = 0; i < output.size(); i++)
+	{
+		output[i] = LlrToP1(output[i]);
+	}*/
+	auto code = new PolarCode(4, 8, { 0, 1, 2, 4, 8, 3, 5, 9, 6, 10, 12, 7, 11, 13, 14, 15 }, {});
 	auto decoderPtr = new ScDecoderTreeMaker(code, 1.0);
 	decoderPtr->Decode(output);
 	auto fullTree = decoderPtr->GetPathInfo();

@@ -36,6 +36,10 @@ void UpdateT(double & T, double & delta, double & tau) {
 		T += delta;
 }
 
+std::string ScFanoDecoder::GetPathInfo() {
+	return _pathTrace;
+}
+
 void ScFanoDecoder::BackwardMove(std::vector<double> & beta, std::vector<bool> & gamma, std::vector<int> & mask, int & i, double & T, double & delta, bool & B, int & j) {
 
 	while (true) {
@@ -50,7 +54,7 @@ void ScFanoDecoder::BackwardMove(std::vector<double> & beta, std::vector<bool> &
 		if (mu >= T) {
 			j--;
 			// HERE trace
-			_pathTrace += std::to_string(j) + ": " + std::to_string((j != -1) ? beta[j] : 0.0) + ", back, T=" + std::to_string(T) + "\n";
+			_pathTrace += std::to_string(j) + ": " + std::to_string((j > -1) ? beta[j] : 0.0) + ", back, T=" + std::to_string(T) + "\n";
 			///////
 			if (!gamma[j + 1])
 			{
@@ -87,6 +91,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 	std::vector<int> A = _codePtr->UnfrozenBits(); // info set
 	double T = _T;
 	double delta = _delta;
+	int iterationsCount = 0;
 
 	size_t firstInfoBit = 0;
 	for (size_t i = 0; i < n; i++)
@@ -98,6 +103,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 	}
 	while (i < n)
 	{
+		iterationsCount++;
 		PassDown(i); // get p1 metric in _beliefTree[m][i]
 		double p0 = 1 - _beliefTree[m][i];
 		double p1 = _beliefTree[m][i];
@@ -203,6 +209,9 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 		// _path += std::to_string(i) + ": " + std::to_string(metrics[i]) + "\n";
 		///////
 	}
+
+	_operationsCount.Iterations += (double)iterationsCount / n;
+	_operationsCount.Normilizer++;
 
 	return TakeResult();
 }
