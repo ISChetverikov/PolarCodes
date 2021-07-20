@@ -92,6 +92,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 	double T = _T;
 	double delta = _delta;
 	int iterationsCount = 0;
+	//int checksCount = 0;
 
 	size_t firstInfoBit = 0;
 	for (size_t i = 0; i < n; i++)
@@ -118,6 +119,25 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 
 			double min = (m1 > m0) ? m0 : m1;
 			int argmin = (m1 > m0) ? 0 : 1;
+
+			/*if ((i == n - 1) && (max > T)) {
+				if (!B) {
+					_x[i] = argmax;
+					if (IsCrcPassed(_x))
+						break;
+					else {
+						max = -1000000.0;
+					}
+				}
+				else {
+					_x[i] = argmin;
+					if (IsCrcPassed(_x))
+						break;
+					else {
+						min = -1000000.0;
+					}
+				}
+			}*/
 
 			if (max > T) {
 				if (!B) {

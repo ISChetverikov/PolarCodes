@@ -28,7 +28,6 @@ protected:
 
 	void recursively_calc_alpha_stack(size_t lambda, size_t phi, bool isPathSwitched);
 	double calculate_step_metric(double newLlr, int decision);
-	bool IsCrcPassed(vector<int> & word);
 
 	void KillPath(size_t index, size_t & T);
 	size_t ClonePath(size_t index, size_t & T);

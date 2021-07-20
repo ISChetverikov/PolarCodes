@@ -80,7 +80,7 @@ struct SimulationIterationResults {
 	int testsCount;
 	OperationsCount operationsCount;
 	std::chrono::milliseconds elapsedTime;
-	static const bool includeOperations = false;
+	static const bool includeOperations = true;
 	
 	static std::string GetHeader() {
 		return (std::string("SNR, EbN0, sigma, FER, rejectionsCount, testsCount, time(ms), iter")

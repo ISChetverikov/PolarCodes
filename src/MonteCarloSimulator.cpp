@@ -110,7 +110,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		_decoderPtr->SetDecoderAnswer(_encoderPtr->PolarTransform(codeword));
 
 		channelOuput = _channelPtr->Pass(codeword);
-		//channelOuput = { 0.91975, 0.00149736, 0.998306, 0.999511, 0.958257, 0.954386, 0.296819, 0.934197, 0.0126016, 0.432695, 0.236357, 0.332338, 7.6258e-05, 0.137163, 0.253909, 0.897426 };
+		//channelOuput = { 0.446035, 0.997261, 0.0692609, 0.0672047, 0.994517, 0.71172, 0.948817, 0.000515609, 0.145983, 0.00175451, 0.771573, 0.975468, 0.987648, 0.289571, 0.00332316, 0.96251 };
 		decoded = _decoderPtr->Decode(channelOuput);
 		//try {
 		//	
@@ -141,7 +141,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		///////////
 #endif //PARALLEL_DECODER
 
-		if (tests % 10000 == 0)
+		if (tests % 1000 == 0)
 			std::cout << tests << std::endl;
 		
 		if (decoded != word) {

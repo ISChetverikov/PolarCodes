@@ -8,11 +8,8 @@ class ScCrcAidedDecoder : public ScDecoder {
 
 protected:
 	
-	CRC * _crcPtr;
-
 	void DecodeFrom(int position);
 	void DecodeFromTo(int position, int endPosition);
-	bool IsCrcPassed(std::vector<int> codeword);
 
 public:
 	ScCrcAidedDecoder(PolarCode * code);

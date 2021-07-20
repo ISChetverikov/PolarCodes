@@ -14,8 +14,6 @@
 
 ScListDecoder::ScListDecoder(PolarCode * codePtr, int L) : ScCrcAidedDecoder(codePtr) {
 	_L = L;
-	_isCA = codePtr->CrcDeg() != 0;
-
 	size_t m = _codePtr->m();
 	size_t n = _codePtr->N();
 	_treeHeight = m + 1;
@@ -336,7 +334,7 @@ std::vector<int> ScListDecoder::TakeListResult() {
 		auto maxIt = std::max_element(_metrics.begin(), _metrics.end());
 		maxInd = (int)std::distance(_metrics.begin(), maxIt);
 
-		if (!_isCA || IsCrcPassed(_candidates[maxInd]))
+		if (IsCrcPassed(_candidates[maxInd]))
 			break;
 		
 		_metrics[maxInd] = -100000.0;

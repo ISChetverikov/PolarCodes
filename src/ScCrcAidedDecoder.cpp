@@ -16,7 +16,6 @@
 
 ScCrcAidedDecoder::ScCrcAidedDecoder(PolarCode * codePtr) : ScDecoder(codePtr) {
 	
-	_crcPtr = new CRC(_codePtr->CrcPoly());
 }
 
 void ScCrcAidedDecoder::DecodeFrom(int position) {
@@ -67,28 +66,4 @@ void ScCrcAidedDecoder::DecodeFromTo(int startPosition, int endPosition) {
 			_x[endPosition] = FROZEN_VALUE;
 		}
 	}
-}
-
-bool ScCrcAidedDecoder::IsCrcPassed(std::vector<int> codeword) {
-	size_t n = codeword.size();
-	size_t k = _codePtr->k();
-	size_t deg = _codePtr->CrcDeg();
-
-	auto wordBits = _codePtr->UnfrozenBits();
-	std::vector<int> word(k, 0);
-	for (size_t i = 0; i < k; i++)
-	{
-		word[i] = codeword[wordBits[i]];
-	}
-
-	auto crcBits = _codePtr->CrcUnfrozenBits();
-	std::vector<int> crc(deg, 0);
-	for (size_t i = 0; i < deg; i++)
-	{
-		crc[i] = codeword[crcBits[i]];
-	}
-
-	auto crcReal = _crcPtr->Calculate(word);
-
-	return crc == crcReal;
 }

@@ -54,15 +54,18 @@ double ScCreeperDecoder::calculate_step_metric_fano(double belief, int decision,
 #ifdef DOMAIN_LLR
 	double p1 = LlrToP1(belief);
 	double p0 = 1 - p1;
+	double abs = fabs(belief);
+	return (belief < 0 && decision == 0 || belief > 0 && decision == 1) ? -abs: 0.0;
+	//return log(((decision) ? p1 : p0)) - log(1 - pe);
 #elif DOMAIN_P1
 	double p0 = 1 - belief;
 	double p1 = belief;
-#endif
 	return log(((decision) ? p1 : p0)) - log(1 - pe);
-	//return (newLlr < 0 && decision == 0 || newLlr > 0 && decision == 1) ? -fabs(newLlr) : 0;
+#endif
 }
 
 double ScCreeperDecoder::Q(double x, double delta) {
+	//return x;
 	return floor(x / delta) * delta;
 }
 
@@ -85,7 +88,7 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 	int next_bit_pos = 0;
 	bool isPathSwitched = false;
 	double m = 0.0;
-	double m_max = 0.0;
+	double m_max = -1000000000.0;
 	double pm0 = 0.0;
 	double pm1 = 0.0;
 	double mx = 0.0;
@@ -96,6 +99,7 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 	int next_bit = 0;
 	pair<int, int> n_current = { 0, 0 };
 	int iterationsCount = 0;
+	vector<vector<int>> haveNotPassedCRC;
 
 	vector<int> result(_k, 0);
 	double approximationSigma = sqrt(pow(10, -1.0 / 10.0));
@@ -135,6 +139,7 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 	n_current = root;
 
 	std::string debug = "";
+	int checksCount = 0;
 
 	while (true) {
 		iterationsCount++;
@@ -163,6 +168,20 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 				my = pm0;
 				next_bit = 1;
 			}
+
+			// CRC check
+			//if (next_bit_pos == _n - 1) {
+			//	vector<int> temp = _path;
+			//	// Two CRC checks
+			//	if (T <= my) {
+			//		 
+			//	}
+			//	// One CRC check of mx
+			//	else {
+			//		
+			//	}
+			//}
+
 			// Perform one of six rules
 			if (T <= my) {
 				// First Rule
@@ -211,7 +230,6 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 							std::swap(_NP[0], _NP[1]);
 							_TP[0] = LOW_INFINITY;
 							debug += "4";
-
 						}
 						// Fifth Rule
 						else {

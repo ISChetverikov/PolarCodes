@@ -152,29 +152,6 @@ double ScStackOperationCounter::calculate_step_metric(double newLlr, int decisio
 	}
 }
 
-bool ScStackOperationCounter::IsCrcPassed(vector<int> & codeword) {
-
-	size_t deg = _codePtr->CrcDeg();
-
-	auto wordBits = _codePtr->UnfrozenBits();
-	std::vector<int> word(_k, 0);
-	for (size_t i = 0; i < _k; i++)
-	{
-		word[i] = codeword[wordBits[i]];
-	}
-
-	auto crcBits = _codePtr->CrcUnfrozenBits();
-	std::vector<int> crc(deg, 0);
-	for (size_t i = 0; i < deg; i++)
-	{
-		crc[i] = codeword[crcBits[i]];
-	}
-
-	auto crcReal = _crcPtr->Calculate(word);
-
-	return crc == crcReal;
-}
-
 void ScStackOperationCounter::KillPath(size_t index, size_t & T) {
 	_is_paths_active[index] = false;
 	_inactive_path_indices.push(index);

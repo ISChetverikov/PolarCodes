@@ -8,7 +8,9 @@
 BaseDecoder::BaseDecoder(PolarCode * codePtr) {
 	_codePtr = codePtr;
 	_sigma = 0;
-	
+
+	_crcPtr = new CRC(_codePtr->CrcPoly());
+
 	ClearOperationsCount();
 }
 
@@ -113,6 +115,34 @@ std::string BaseDecoder::GetStatistic() {
 }
 void BaseDecoder::ClearStatistic() {
 	
+}
+
+bool BaseDecoder::IsCrcPassed(std::vector<int> codeword) {
+	size_t n = codeword.size();
+	size_t k = _codePtr->k();
+	size_t deg = _codePtr->CrcDeg();
+
+	// if there is no CRC then all checks will be passed
+	if (deg == 0)
+		return true;
+
+	auto wordBits = _codePtr->UnfrozenBits();
+	std::vector<int> word(k, 0);
+	for (size_t i = 0; i < k; i++)
+	{
+		word[i] = codeword[wordBits[i]];
+	}
+
+	auto crcBits = _codePtr->CrcUnfrozenBits();
+	std::vector<int> crc(deg, 0);
+	for (size_t i = 0; i < deg; i++)
+	{
+		crc[i] = codeword[crcBits[i]];
+	}
+
+	auto crcReal = _crcPtr->Calculate(word);
+
+	return crc == crcReal;
 }
 
 //std::string BaseDecoder::GetPathInfo() {

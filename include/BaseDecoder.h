@@ -6,13 +6,15 @@
 #include "PolarCode.h"
 #include "Domain.h"
 #include "OperationsCount.h"
-
+#include "CRC.h"
 class BaseDecoder {
 
 protected:
 	PolarCode * _codePtr;
 	double _sigma;
 	std::vector<int> _codeword;
+
+	CRC * _crcPtr;
 
 	//std::string _pathTrace;
 	OperationsCount _operationsCount;
@@ -35,6 +37,8 @@ public:
 	void SetDecoderAnswer(std::vector<int> codeword);
 	virtual std::string GetStatistic();
 	virtual void ClearStatistic();
+
+	bool IsCrcPassed(std::vector<int> codeword);
 	
 	//virtual std::string GetPathInfo();
 
