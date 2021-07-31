@@ -55,8 +55,8 @@ double ScCreeperDecoder::calculate_step_metric_fano(double belief, int decision,
 	double p1 = LlrToP1(belief);
 	double p0 = 1 - p1;
 	double abs = fabs(belief);
-	return (belief < 0 && decision == 0 || belief > 0 && decision == 1) ? -abs: 0.0;
-	//return log(((decision) ? p1 : p0)) - log(1 - pe);
+	//return (belief < 0 && decision == 0 || belief > 0 && decision == 1) ? -abs: 0.0;
+	return log(((decision) ? p1 : p0)) - log(1 - pe);
 #elif DOMAIN_P1
 	double p0 = 1 - belief;
 	double p1 = belief;
@@ -141,16 +141,14 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 	std::string debug = "";
 	int checksCount = 0;
 
+	bool isFifthStep = false;// debug
 	while (true) {
 		iterationsCount++;
 		isPathSwitched = false;
 		next_bit_pos = n_current.first + 1;
-		//cout << next_bit_pos << "\n";
-		//cout << "ALPHA" << "\n";
 		recursively_calc_alpha_creeper(0, next_bit_pos, isPathSwitched);
 		pm0 = ((next_bit_pos != 0) ? _metric[next_bit_pos - 1] : 0)
 			+ calculate_step_metric_fano(_alpha[0][0], 0, p[next_bit_pos]);
-
 
 		if (_mask[next_bit_pos]) {
 			T = Q(_TP[1], _delta);
@@ -168,19 +166,6 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 				my = pm0;
 				next_bit = 1;
 			}
-
-			// CRC check
-			//if (next_bit_pos == _n - 1) {
-			//	vector<int> temp = _path;
-			//	// Two CRC checks
-			//	if (T <= my) {
-			//		 
-			//	}
-			//	// One CRC check of mx
-			//	else {
-			//		
-			//	}
-			//}
 
 			// Perform one of six rules
 			if (T <= my) {
@@ -241,6 +226,7 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 							_F.pop_front();
 							_F.pop_front();
 							debug += "5";
+							isFifthStep = true;
 						}
 					}
 					// Sixth Rule
@@ -271,11 +257,13 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 		}
 
 		phi = n_current.first;
-		//std::cout << debug << "\n";
+		
 		_path[phi] = _beta[phi % 2][0][0] = n_current.second;
 
 		if (phi == _n - 1) {
 			// here CRC check
+			if (isFifthStep)
+				std::cout << debug << "\n";
 			break;
 		}
 

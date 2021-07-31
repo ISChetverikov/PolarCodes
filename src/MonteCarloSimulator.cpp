@@ -47,7 +47,7 @@ std::string VecToStr(std::vector<T> vec) {
 	return streamObj.str();
 }
 
-#ifdef PARALLEL_DECODER
+#ifdef PARALLEL_DECODER1
 std::vector<int> ReadSequenceFromFileParallel(std::string path) {
 	std::vector<int> seq;
 	std::string line;
@@ -85,7 +85,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	std::random_device randomDevice;
 	std::uniform_int_distribution<> uniform_discrete_dist(0, 1);
 
-#ifdef PARALLEL_DECODER
+#ifdef PARALLEL_DECODER1
 	// HERE parallel decoder
 	std::vector<double> channelOuput1(n, 0);
 	std::vector<int> parallelDecoded;
@@ -111,6 +111,8 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 
 		channelOuput = _channelPtr->Pass(codeword);
 		//channelOuput = { 0.446035, 0.997261, 0.0692609, 0.0672047, 0.994517, 0.71172, 0.948817, 0.000515609, 0.145983, 0.00175451, 0.771573, 0.975468, 0.987648, 0.289571, 0.00332316, 0.96251 };
+		channelOuput = { 2995.41336494294, -3013.35534387100, -3044.97136616593, -2997.33560358008, 2946.57282761782, 2997.97709825946, 2977.83928017960, 2958.05823010378, 2942.86691749557, -3107.50244143779, -2942.69771009553, -2965.05754714817, 2925.56742136829, 3107.54188636563, -3003.08819043366, -2923.81156604213, -2971.15697300063, 2919.27050225658, -3028.75280661210, 3010.10814628387, -3133.55318745752, -2893.84767014759, -2952.86760652498, 2954.26455989276, 2910.91927110516, -3045.21603406567, 3034.01199506910, -3051.03916987710, 2940.26909546812, 3013.22405912085, -2957.76711880748, 2924.73999739717 };
+
 		decoded = _decoderPtr->Decode(channelOuput);
 		//try {
 		//	

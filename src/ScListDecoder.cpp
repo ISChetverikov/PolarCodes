@@ -337,7 +337,7 @@ std::vector<int> ScListDecoder::TakeListResult() {
 		if (IsCrcPassed(_candidates[maxInd]))
 			break;
 		
-		_metrics[maxInd] = -100000.0;
+		_metrics[maxInd] = -100000000.0;
 
 	}
 	if (j < _L)
